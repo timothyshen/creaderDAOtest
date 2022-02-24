@@ -25,34 +25,6 @@ Discuss the eth learning
 - [ ]  Check out eth
 - [ ]  Learn solidity
 
-# 12th Jan, 2022
-
-Column: January 12, 2022 1:32 PM
-
-# Goals
-
-- Understand depth of the project proposal
-- Whether the direction of doing copyright-related work is suitable
-
-# Discussion Items
-
-Discussed about the proposal, few requirements
-
-- Build something
-- user can upload the data
-- and only that user can access the data
-- you can do permission
-
-Discussion about different blockchain network
-
-Confirmed the direction
-
-Discuss the eth learning 
-
-# Action Items
-
-- [ ]  Check out eth
-- [ ]  Learn solidity
 
 # 27th Jan 2022
 
@@ -133,3 +105,23 @@ Column: February 17, 2022 10:12 AM
 - [ ]  Project title outline
 - [ ]  Build space
 - [ ]  Smart contract study
+
+# 24th Feb, 2022
+
+Column: February 24, 2022 10:12 AM
+
+# Goals
+
+- PP report Discussion
+
+# Discussion Items
+- Showcased the current PP report 
+    - Disscused the Preliminary Investigation how to write this section
+    - General overview of each section
+- Discussion about the demo showcased last week
+- Clarification of the draft deadline
+
+# Action Items
+
+-[ ] Demo debug
+-[ ] PP report writing
