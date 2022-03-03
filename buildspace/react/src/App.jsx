@@ -5,7 +5,7 @@ import abi from "./utils/WavePortal.json"
 
 const App = () => {
     const [currentAccount, setCurrentAccount] = useState("");
-    const contractAddress="0x5FbDB2315678afecb367f032d93F642f64180aa3";
+    const contractAddress="0x6724EA0d2C3473c2c68a91B3c329980a53Cc3128";
     const contractABI = abi.abi;
     const [allWaves, setAllWaves] = useState([]);
     const [tweetValue, setTweetValue] = React.useState("");

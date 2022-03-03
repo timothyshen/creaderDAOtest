@@ -123,5 +123,26 @@ Column: February 24, 2022 10:12 AM
 
 # Action Items
 
--[ ] Demo debug
+-[x] Demo debug
+-[x] PP report writing
+
+# 3rd Mar, 2022
+
+Column: March 3, 2022 10:00 AM
+
+# Goals
+
+- PP report Discussion
+- showcase the demo of the smart contract v2
+
+# Discussion Items
+- Discussed the further plan for the project
+- Explained the high level architecture of the demo
+  - Hardhat and truffle
+  - Vue and React
+  - State management for frontend framework
+
+# Action Items
+
+-[x] Latex upload to the gitLab
 -[ ] PP report writing
