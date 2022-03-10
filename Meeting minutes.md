@@ -123,8 +123,8 @@ Column: February 24, 2022 10:12 AM
 
 # Action Items
 
--[x] Demo debug
--[x] PP report writing
+- [x] Demo debug
+- [x] PP report writing
 
 # 3rd Mar, 2022
 
@@ -144,5 +144,23 @@ Column: March 3, 2022 10:00 AM
 
 # Action Items
 
--[x] Latex upload to the gitLab
--[ ] PP report writing
+- [x] Latex upload to the gitLab
+- [ ] PP report writing
+
+# 10th Mar, 2022
+
+# Goals
+
+- To discuss the current state of the PP report
+
+# Discussion Items
+
+- The depth of Preliminary Investigations
+    - How to write code snip shot explanation
+- Settaled the dead line for draft
+- Improve git commit message
+    - More meaningful
+
+# Action Items
+
+- [ ] PP report
