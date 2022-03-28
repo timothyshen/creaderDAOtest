@@ -163,4 +163,20 @@ Column: March 3, 2022 10:00 AM
 
 # Action Items
 
-- [ ] PP report
+- [x] PP report
+
+# 28th Mar, 2022
+
+# Goals
+
+- To discuss the version two of the PP report
+    - Discuss the quality of the report
+    - Further amendment requirement
+
+# Discussion Items
+
+- Improvement on the use of language
+- Change success criteria context to phase target
+- Move current criteria contesxt to proposal
+
+
