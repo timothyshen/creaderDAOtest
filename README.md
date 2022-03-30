@@ -9,3 +9,6 @@ Charaka Palansuriya
 For this project, we aims to create a subchain on the Ethereum network to support copyright protection. The primary usage will allow authors to upload the novel and generate copyright NFTs from the novel information.
 
 # Description 
+
+- Truffle: Consist a DAPP build using the Truffle compiler
+- Buildspace: Consist a DAPP build by using the Hardhat compiler
