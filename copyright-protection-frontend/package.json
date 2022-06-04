@@ -8,10 +8,22 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "vue": "^3.2.25"
+    "axios": "^0.27.2",
+    "element-plus": "^2.2.3",
+    "ethers": "^5.6.8",
+    "vue": "^3.2.25",
+    "vue-gtag": "^2.0.1",
+    "vuex": "^4.0.2"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^2.3.3",
+    "autoprefixer": "^10.4.7",
+    "postcss": "^8.4.14",
+    "postcss-import": "^14.1.0",
+    "sass": "^1.52.2",
+    "tailwindcss": "^3.0.24",
+    "unplugin-auto-import": "^0.8.7",
+    "unplugin-vue-components": "^0.19.6",
     "vite": "^2.9.9"
   }
 }
