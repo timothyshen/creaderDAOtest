@@ -12,12 +12,8 @@ import './assets/css/index.css'
 const app = createApp(App)
     .use(router)
     .use(store)
-    .use(ElementPlus)
-    .use(VueGtag, {
-        config: {id: process.env.VUE_APP_GA_ID},
-        enabled: true,
-        debug: true
-    });
+    .use(ElementPlus);
+
 
 
 app.mount('#app');

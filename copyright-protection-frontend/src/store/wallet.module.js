@@ -1,6 +1,7 @@
 // This is the wallet connection module. It will be used to connect the wallet to the application.
 
 import {ethers} from "ethers";
+import Web3Modal from "web3modal";
 
 
 const state = {
@@ -22,11 +23,18 @@ const getters = {
 
         return state.activeAccount;
     },
-    getActive(state) {
+    getActiveBalanceWei(state) {
+        return state.activeBalance;
+    },
+    getActiveBalanceEth(state) {
+        return state.web3.utils.fromWei(state.activeBalance, "ether");
+    },
+    getWeb3(state) {
         if (state.web3) {
             return state.web3;
         } else {
-            return new ethers.providers.Web3Provider(ethers.providers.Web3Provider.givenProvider);
+            const EthereumProvider = new ethers.providers.Web3Provider(window.ethereum);
+            return EthereumProvider.provider;
         }
     },
     getChainId(state) {
@@ -48,49 +56,34 @@ const getters = {
 
 const actions = {
     async initWeb3Modal({commit}) {
-        const providerOptions = {
-            walletconnect: {
-                package: 'walletconnect-v1',
-                options: {
-                    infuraId: "INFURA_ID" // required
-                }
-            },
-            coinbasewallet: {
-                package: CoinbaseWalletSDK, // Required
-                options: {
-                    appName: "My Awesome App", // Required
-                    infuraId: "INFURA_ID", // Required
-                    rpc: "", // Optional if `infuraId` is provided; otherwise it's required
-                    chainId: 1, // Optional. It defaults to 1 if not provided
-                    darkMode: false // Optional. Use dark theme, defaults to false
-                }
-            }
-        };
+        const providerOptions = {};
 
-        const w3mObject = new Web3Modal({
+        const web3Modal = new Web3Modal({
             providerOptions,
             cacheProvider: true,
         });
 
-        window.ethereum.autoRefreshOnNetworkChange = false;
-
         if (localStorage.getItem('isConnected') === 'true') {
-            let providerW3m = await w3mObject.connect();
+            let providerW3m = await web3Modal.connect();
+            let provider = new ethers.providers.Web3Provider(providerW3m);
             commit('setIsConnected', true);
             commit('setActiveAccount', window.ethereum.selectedAddress);
-            commit('setChainId', window.ethereum.chainId);
-            commit('setWeb3Provider', providerW3m);
+            commit('setChainData', window.ethereum.chainId);
+            commit('setWeb3Provider', provider);
             actions.fetchActiveBalance({commit});
         }
+        commit("setWeb3ModalInstance", web3Modal);
     },
 
     async connectWeb3Modal({commit}) {
         let providerW3m = await state.web3Modal.connect();
+        let provider = new ethers.providers.Web3Provider(providerW3m);
+
         commit('setIsConnected', true);
 
         commit('setActiveAccount', window.ethereum.selectedAddress);
-        commit('setChainId', window.ethereum.chainId);
-        commit('setWeb3Provider', providerW3m);
+        commit('setChainData', window.ethereum.chainId);
+        commit('setWeb3Provider', provider);
         actions.fetchActiveBalance({commit});
     },
 
@@ -103,25 +96,26 @@ const actions = {
 
         window.ethereum.on('accountsChanged', (accounts) => {
             if (state.isConnected) {
+                let provider = new ethers.providers.Web3Provider(state.providerW3m);
                 commit("setActiveAccount", accounts[0]);
-                commit("setWeb3Provider", state.providerW3m);
+                commit("setWeb3Provider", provider);
                 actions.fetchActiveBalance({commit});
             }
         });
 
         window.ethereum.on('chainChanged', (chainId) => {
+            let provider = new ethers.providers.Web3Provider(state.providerW3m);
             commit("setChainData", chainId);
-            commit("setWeb3Provider", state.providerW3m);
+            commit("setWeb3Provider", provider);
             actions.fetchActiveBalance({commit});
         });
 
     },
 
     async fetchActiveBalance({commit}) {
-        let activeAccount = state.activeAccount;
-        let web3 = state.web3;
-        let balance = await web3.eth.getBalance(activeAccount);
-        commit('setActiveBalance', balance);
+        let balance_eth = await state.providerW3m.getBalance(state.activeAccount);
+        let balance_wei = ethers.utils.formatEther(balance_eth);
+        commit('setActiveBalance', balance_wei);
     }
 }
 
@@ -150,7 +144,7 @@ const mutations = {
     setChainData(state, chainId) {
         state.chainId = chainId;
 
-        switch(chainId) {
+        switch (chainId) {
             case "0x1":
                 state.chainName = "Mainnet";
                 break;
@@ -176,7 +170,8 @@ const mutations = {
 
     async setWeb3Provider(state, providerW3m) {
         state.providerW3m = providerW3m;
-        state.web3 = new Web3(providerW3m);
+        const EthereumProvider = new ethers.providers.Web3Provider(window.ethereum);
+        state.web3 = EthereumProvider.provider;
     },
 
     setIsConnected(state, isConnected) {

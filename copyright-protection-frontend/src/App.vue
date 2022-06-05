@@ -1,12 +1,15 @@
 <script setup>
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
+import ConnectWallet from "./components/ConnectWallet.vue";
 </script>
 
 <template>
-<h1>Hello World</h1>
+  <div id="app">
+    <connect-wallet></connect-wallet>
+  </div>
 
-<!--  <connect-wallet></connect-wallet>-->
+
 </template>
 
 <style>
