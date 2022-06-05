@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 
 
-contract Novel {
+contract Copyright {
 
     struct novel{
         address author;

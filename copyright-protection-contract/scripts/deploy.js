@@ -4,26 +4,42 @@
 // When running the script with `npx hardhat run <script>` you'll find the Hardhat
 // Runtime Environment's members available in the global scope.
 const hre = require("hardhat");
+const path = require("path");
+const fs = require("fs");
+
+const contract = ['Copyright'];
+
+async function publishContract(contractName) {
+
+    const ContractFactory = await hre.ethers.getContractFactory(contractName);
+    const contract = await ContractFactory.deploy();
+    const address = contract.address;
+    await contract.deployed();
+    console.log(contractName + " contract address: " + address);
+
+    // copy the contract JSON file to front-end and add the address field in it
+    fs.copyFileSync(
+        path.join(__dirname, "../artifacts/contracts/" + contractName + ".sol/" + contractName + ".json"), //source
+        path.join(__dirname, "../../copyright-protection-frontend/src/contracts/" + contractName + ".json") // destination
+    );
+
+}
 
 async function main() {
-  // Hardhat always runs the compile task when running scripts with its command
-  // line interface.
-  //
-  // If this script is run directly using `node` you may want to call compile
-  // manually to make sure everything is compiled
-  // await hre.run('compile');
-
-  const Copyright = await hre.ethers.getContractFactory("Copyright");
-  const copyright = await Copyright.deploy();
-
-  await copyright.deployed();
-  console.log("Copyright contract address:", copyright.address);
-
+    // Hardhat always runs the compile task when running scripts with its command
+    // line interface.
+    //
+    // If this script is run directly using `node` you may want to call compile
+    // manually to make sure everything is compiled
+    // await hre.run('compile');
+    for (cont of contract) {
+        await publishContract(cont);
+    }
 }
 
 // We recommend this pattern to be able to use async/await everywhere
 // and properly handle errors.
 main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
+    console.error(error);
+    process.exitCode = 1;
 });
