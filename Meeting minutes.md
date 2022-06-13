@@ -179,4 +179,37 @@ Column: March 3, 2022 10:00 AM
 - Change success criteria context to phase target
 - Move current criteria contesxt to proposal
 
+# 31st May 2022
 
+# Goals
+
+- Discuss the Presentation 
+- Initialise the implementation phase
+
+# Discussion Items
+- Progress for next week
+    - Completion of smart contract
+- Send through Powerpoint
+
+# 6th June, 2022
+
+# Goals
+- Discuss the progress
+
+Last Week progress
+-	Copyright registration contract [Complete]
+-	Wallet Connection [Complete]
+Next week:
+-	V1 interface shall complete
+-	Test cases for the Copyright contract
+-	Content contract
+
+# 13th June, 2022
+
+# Discussion
+- Vuex state management system
+- Rinkeby and local testing cases
+- Alchemy blockchain node explained
+
+# Next week
+- Complete process
