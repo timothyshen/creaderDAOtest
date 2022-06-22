@@ -32,10 +32,9 @@ const getters = {
 const actions = {
     async getCovers({commit, rootState}) {
         try {
-            console.log(rootState.wallet.web3Modal);
+            // console.log(rootState.wallet.web3Modal);
             const provider = await getProviderOrSigner(false, rootState.wallet.web3Modal);
             const contract = getCopyrightContract(provider);
-            const numberOfCovers = await contract.getAllcover();
 
         } catch (error) {
             console.log(error);
@@ -44,12 +43,12 @@ const actions = {
     async getCoverNum({commit}) {
         try {
             const provider = await getProviderOrSigner(false);
-            console.log(provider);
+            // console.log("provider", provider);
             const contract = getCopyrightContract(provider);
-            const numberOfCovers = await contract.numCovers();
-            commit('setNumberOfCovers', numberOfCovers);
+            const number = contract.numCovers();
         } catch (error) {
             console.log(error);
+            console.error(error);
         }
     }
 }

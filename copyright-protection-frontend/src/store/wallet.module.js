@@ -59,8 +59,9 @@ const actions = {
         const providerOptions = {};
 
         const web3Modal = new Web3Modal({
+            network: "rinkeby",
             providerOptions,
-            cacheProvider: true,
+            disableInjectedProvider: false,
         });
 
         if (localStorage.getItem('isConnected') === 'true') {

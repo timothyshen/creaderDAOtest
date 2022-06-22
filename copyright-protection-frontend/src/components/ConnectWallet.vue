@@ -19,6 +19,9 @@ export default {
     this.$store.dispatch("wallet/initWeb3Modal");
     this.$store.dispatch("wallet/ethereumListener");
   },
+  watch:{
+    "$store.state.wallet.isconn"
+  },
   methods: {
     ...mapActions("wallet", ["connectWeb3Modal", "disconnectWeb3Modal"]),
   }
