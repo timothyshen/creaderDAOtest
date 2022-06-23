@@ -42,13 +42,13 @@ const actions = {
     },
     async getCoverNum({commit}) {
         try {
-            const provider = await getProviderOrSigner(false);
-            // console.log("provider", provider);
+            const provider = await getProviderOrSigner();
             const contract = getCopyrightContract(provider);
-            const number = contract.numCovers();
+            console.log("contract", contract);
+            const number = contract.numCovers;
+            console.log("number", number);
         } catch (error) {
             console.log(error);
-            console.error(error);
         }
     }
 }

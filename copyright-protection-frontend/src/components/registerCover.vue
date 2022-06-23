@@ -53,11 +53,20 @@ export default {
     }
   },
   computed: {
-    ...mapGetters("wallet", ["getActiveAccount"]),
+    ...mapGetters("wallet", ["getActiveAccount", "getWeb3","getWeb3Modal"]),
     ...mapGetters("cover", ["getNumberOfCovers"]),
   },
   created() {
-    this.$store.dispatch("cover/getCoverNum");
+    if (!this.getWeb3) {
+
+      this.$store.dispatch("cover/getCoverNum");
+    } else {
+
+      this.$store.dispatch("wallet/initWeb3Modal");
+      this.$store.dispatch("wallet/ethereumListener");
+      console.log(this.getWeb3Modal);
+      this.$store.dispatch("cover/getCoverNum");
+    }
   },
   methods: {
     async register() {

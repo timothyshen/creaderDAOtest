@@ -13,17 +13,17 @@ export const getCopyrightContract = async (providerOrSigner) => {
 }
 
 export const getProviderOrSigner = async (needSigner = false) => {
+    console.log(store.state.wallet.web3Modal)
     const provider = await store.state.wallet.web3Modal.connect();
-    console.log("provider", provider);
     const Web3Provider = new providers.Web3Provider(provider);
-    // console.log(Web3Provider);
+    console.log(Web3Provider);
     const {chainId} = await Web3Provider.getNetwork();
     if (chainId !== 4) {
         window.alert("Please connect to the Rinkeby test network");
         throw new Error("Only Ethereum Rinkeby test network is supported");
     }
     if (needSigner) {
-        return provider.getSigner();
+        return Web3Provider.getSigner();
     }
-    return provider;
+    return Web3Provider;
 }

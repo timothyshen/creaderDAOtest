@@ -2,6 +2,7 @@
 
 import {ethers} from "ethers";
 import Web3Modal from "web3modal";
+import {getProviderOrSigner} from "../utils/support";
 
 
 const state = {
@@ -73,19 +74,18 @@ const actions = {
             commit('setWeb3Provider', provider);
             actions.fetchActiveBalance({commit});
         }
-        commit("setWeb3ModalInstance", web3Modal);
+        commit("setWeb3Modal", web3Modal);
     },
 
     async connectWeb3Modal({commit}) {
         let providerW3m = await state.web3Modal.connect();
+        console.log("provider", providerW3m);
         let provider = new ethers.providers.Web3Provider(providerW3m);
-
+        console.log("provider", provider);
         commit('setIsConnected', true);
-
         commit('setActiveAccount', window.ethereum.selectedAddress);
         commit('setChainData', window.ethereum.chainId);
         commit('setWeb3Provider', provider);
-        actions.fetchActiveBalance({commit});
     },
 
     async disconnectWeb3Modal({commit}) {
@@ -181,8 +181,8 @@ const mutations = {
         localStorage.setItem('isConnected', isConnected);
     },
 
-    setWeb3ModalInstance(state, w3mObject) {
-        state.web3Modal = w3mObject;
+    setWeb3Modal(state, web3Modal) {
+        state.web3Modal = web3Modal;
     }
 }
 

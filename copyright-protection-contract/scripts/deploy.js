@@ -20,7 +20,7 @@ async function publishContract(contractName) {
     // copy the contract JSON file to front-end and add the address field in it
     fs.copyFileSync(
         path.join(__dirname, "../artifacts/contracts/" + contractName + ".sol/" + contractName + ".json"), //source
-        path.join(__dirname, "../../copyright-protection-frontend/src/contracts/" + contractName + ".json") // destination
+        path.join(__dirname, "../../copyright-protection-frontend/src/api/" + contractName + ".json") // destination
     );
 
 }
