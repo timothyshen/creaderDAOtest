@@ -1,8 +1,18 @@
-import {abi} from './api/Copyright.json';
-
-export const COPY_RIGHT_CONTRACT_ADDRESS = "0xbe6D02FbB192FDf0F74A2F435b14987fd12460D5";
-export let COPY_RIGHT_CONTRACT_ABI;
-COPY_RIGHT_CONTRACT_ABI = [
+export const COPY_RIGHT_CONTRACT_ADDRESS = "0x10c90105fdefA92B242a23b66F04Fce406D28c29";
+export const COPY_RIGHT_CONTRACT_ABI = [
+    {
+        "inputs": [],
+        "name": "copyright_id",
+        "outputs": [
+            {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
     {
         "inputs": [
             {
@@ -25,19 +35,6 @@ COPY_RIGHT_CONTRACT_ABI = [
             }
         ],
         "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "copyright_id",
-        "outputs": [
-            {
-                "internalType": "string",
-                "name": "",
-                "type": "string"
-            }
-        ],
-        "stateMutability": "view",
         "type": "function"
     },
     {

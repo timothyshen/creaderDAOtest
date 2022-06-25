@@ -6,6 +6,8 @@
 const hre = require("hardhat");
 const path = require("path");
 const fs = require("fs");
+require("@nomiclabs/hardhat-etherscan");
+require("dotenv").config({ path: ".env" });
 
 const contract = ['Copyright'];
 
@@ -17,12 +19,22 @@ async function publishContract(contractName) {
     await contract.deployed();
     console.log(contractName + " contract address: " + address);
 
+    await sleep(10000);
+    await hre.run("verify:verify", {
+        address: address,
+        constructorArguments: [],
+    });
+
     // copy the contract JSON file to front-end and add the address field in it
     fs.copyFileSync(
         path.join(__dirname, "../artifacts/contracts/" + contractName + ".sol/" + contractName + ".json"), //source
         path.join(__dirname, "../../copyright-protection-frontend/src/api/" + contractName + ".json") // destination
     );
 
+}
+
+function sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 async function main() {

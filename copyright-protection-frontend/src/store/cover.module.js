@@ -1,4 +1,4 @@
-import {Contract, providers} from "ethers";
+import {Contract, providers, BigNumber} from "ethers";
 import store from "./store";
 import {
     getCopyrightContract,
@@ -32,9 +32,11 @@ const getters = {
 const actions = {
     async getCovers({commit, rootState}) {
         try {
-            // console.log(rootState.wallet.web3Modal);
-            const provider = await getProviderOrSigner(false, rootState.wallet.web3Modal);
+            const provider = await getProviderOrSigner();
             const contract = getCopyrightContract(provider);
+            const cover = await contract.getAllcover();
+            console.log("cover",cover);
+            commit("setCovers", cover);
 
         } catch (error) {
             console.log(error);
@@ -45,8 +47,9 @@ const actions = {
             const provider = await getProviderOrSigner();
             const contract = getCopyrightContract(provider);
             console.log("contract", contract);
-            const number = contract.numCovers;
+            const number = await contract.numCovers();
             console.log("number", number);
+            commit("setNumberOfCovers", number.toString());
         } catch (error) {
             console.log(error);
         }

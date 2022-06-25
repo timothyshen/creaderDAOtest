@@ -29,14 +29,14 @@ module.exports = {
   networks: {
     rinkeby: {
       url: ALCHEMY_API_KEY_URL,
-      accounts: [RINKEBY_PRIVATE_KEY],
-    },
+      accounts: [RINKEBY_PRIVATE_KEY]
+    }
   },
   gasReporter: {
     enabled: process.env.REPORT_GAS !== undefined,
-    currency: "USD",
+    currency: "USD"
   },
   etherscan: {
-    apiKey: process.env.ETHERSCAN_API_KEY,
-  },
+    apiKey: process.env.ETHERSCAN_API_KEY
+  }
 };
