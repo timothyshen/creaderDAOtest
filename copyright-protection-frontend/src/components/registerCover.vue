@@ -32,7 +32,7 @@
 
 <script>
 
-import {mapGetters} from "vuex";
+import {mapGetters, } from "vuex";
 import {getCopyrightContract, getProviderOrSigner} from "../utils/support";
 
 export default {
@@ -74,9 +74,9 @@ export default {
               this.bookform.title,
               this.bookform.shortDescription
           );
-          this.$store.cover.setLoading('setLoading', true);
+          this.$store.commit("cover/setLoading", true);
           await txn.wait();
-          this.$store.cover.setLoading('setLoading', false);
+          this.$store.commit("cover/setLoading", false);
         } catch (error) {
           console.log(error);
         }
