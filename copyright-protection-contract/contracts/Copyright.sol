@@ -27,13 +27,18 @@ contract Copyright {
     }
 
 
-
     mapping(uint256 => Cover) public covers;
 
     mapping(uint256 => Chapter) public chapters;
 
     uint256 public numCovers;
     uint256 public numChapters;
+
+    // modifier
+    modifier onlyOwner(uint256 _id) {
+        require(covers[_id].owner == msg.sender);
+        _;
+    }
 
     // create a new cover
     // @param _title: string - title of the cover
@@ -55,7 +60,7 @@ contract Copyright {
     // @param _context: string - context of the chapter
     // @param _cover: uint256 - id of the cover
     // @returns uint256 - id of the chapter
-    function createChapter(uint256 _coverId, string memory _title, string memory _context) external returns (uint256) {
+    function createChapter(uint256 _coverId, string memory _title, string memory _context) external onlyOwner(_coverId) returns (uint256) {
         require(covers[_coverId].id == 0, "error");
         Chapter memory newChapter = Chapter({
         id : numChapters,
@@ -86,13 +91,13 @@ contract Copyright {
         }
         Cover[] memory result = new Cover[](resultCount);
         uint j;
-        for(uint256 i = 0; i < numCovers; i++) {
+        for (uint256 i = 0; i < numCovers; i++) {
             if (covers[i].owner == msg.sender) {
-                result[j] = tickets[i];
+                result[j] = covers[i];
                 j++;
             }
         }
-        return covers;
+        return result;
     }
 
     // get a chapter by id
@@ -116,7 +121,7 @@ contract Copyright {
     // @param _title: string - title of the chapter
     // @param _description: string - context of the chapter
     // @returns uint - id of the chapter
-    function updateChapter(uint256 _id, string memory _title, string memory _context) external returns (uint256) {
+    function updateChapter(uint256 _id, string memory _title, string memory _context) external onlyOwner(_id) returns (uint256) {
         Chapter storage chapter = chapters[_id];
         chapter.title = _title;
         chapter.context = _context;
@@ -128,7 +133,7 @@ contract Copyright {
     // @param _title: string - title of the cover
     // @param _description: string - description of the cover
     // @returns uint - id of the cover
-    function updateCover(uint256 _id, string memory _title, string memory _description) external returns (uint256) {
+    function updateCover(uint256 _id, string memory _title, string memory _description) external onlyOwner(_id) returns (uint256)  {
         Cover storage cover = covers[_id];
         cover.title = _title;
         cover.description = _description;
