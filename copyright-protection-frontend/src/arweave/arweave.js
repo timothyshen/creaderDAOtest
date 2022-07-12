@@ -87,7 +87,7 @@ export const getArweaveData = async (id) => {
     });
 }
 
-const getData = async (txId: string) => {
+const getData = async (txId) => {
     const buffer = (await arweave.transactions.getData(txId, {
         decode: true,
         string: true,
@@ -98,38 +98,37 @@ const getData = async (txId: string) => {
     };
 };
 
-export default async function (
-    _req: NextApiRequest,
-    res: NextApiResponse<DataT[] | string>,
-): Promise<any> {
-    try {
-        const {query} = _req.query;
+export const x = async () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const {query} = _req.query;
 
-        // Initialize ArDB
-        // More information about ArDB can be found here: https://www.npmjs.com/package/ardb
+            // Initialize ArDB
+            // More information about ArDB can be found here: https://www.npmjs.com/package/ardb
 
-        const ardb = new ArDB(arweave);
-        const tags = [{name: 'App-Name', values: [process.env.APP_NAME]}];
+            const ardb = new ArDB(arweave);
+            const tags = [{name: 'App-Name', values: [process.env.APP_NAME]}];
 
-        // Retrieve searchAddress
-        const searchAddress = query && query[0];
-        // Build tags
+            // Retrieve searchAddress
+            const searchAddress = query && query[0];
+            // Build tags
 
-        if (searchAddress) {
-            tags.push({name: 'Address', values: [searchAddress]});
+            if (searchAddress) {
+                tags.push({name: 'Address', values: [searchAddress]});
+            }
+
+            // Search for transaction withs App-Name and Address (optional) tags
+            // More information can be found here: https://www.npmjs.com/package/ardb
+            const txs = await ardb.search('transactions').tags(tags).limit(10).find();
+
+            const promises = txs.map((tx) => getData(tx._id));
+            const data = await Promise.all(promises);
+
+            await res.status(200).json(data);
+        } catch (error) {
+            const errorMessage =
+                error instanceof Error ? error.message : 'Unknown Error';
+            await res.status(500).json(errorMessage);
         }
-
-        // Search for transaction withs App-Name and Address (optional) tags
-        // More information can be found here: https://www.npmjs.com/package/ardb
-        const txs = await ardb.search('transactions').tags(tags).limit(10).find();
-
-        const promises = txs.map((tx: any) => getData(tx._id));
-        const data = await Promise.all(promises);
-
-        await res.status(200).json(data);
-    } catch (error) {
-        const errorMessage =
-            error instanceof Error ? error.message : 'Unknown Error';
-        await res.status(500).json(errorMessage);
-    }
-}
+    });
+};

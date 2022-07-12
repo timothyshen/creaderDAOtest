@@ -1,14 +1,13 @@
 <template>
-  <ul class="navbar-nav px-3">
-    <li class="nav-item text-nowrap">
-      <a class="nav-link" href="#" v-if="!getIsConnected" @click="connectWeb3Modal">Connect your wallet</a>
-      <a class="nav-link" href="#" v-if="getIsConnected" @click="disconnectWeb3Modal">Disconnect {{getActiveAccount.substring(0, 7)}}...</a>
-    </li>
-  </ul>
+  <div class="buttons">
+    <a class="btn btn-login" href="#" v-if="!getIsConnected" @click="connectWeb3Modal">Connect your wallet</a>
+    <a class="btn btn-logout" href="#" v-if="getIsConnected" @click="disconnectWeb3Modal">Disconnect
+      {{ getActiveAccount.substring(0, 7) }}...</a>
+  </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import {mapGetters, mapActions} from "vuex";
 
 export default {
   name: "connect wallet",
@@ -19,9 +18,7 @@ export default {
     this.$store.dispatch("wallet/initWeb3Modal");
     this.$store.dispatch("wallet/ethereumListener");
   },
-  watch:{
-
-  },
+  watch: {},
   methods: {
     ...mapActions("wallet", ["connectWeb3Modal", "disconnectWeb3Modal"]),
   }
@@ -29,5 +26,7 @@ export default {
 </script>
 
 <style scoped>
+  .buttons {
 
+  }
 </style>
