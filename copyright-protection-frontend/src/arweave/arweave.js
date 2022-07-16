@@ -82,7 +82,7 @@ export const getArweaveData = async (id) => {
         } catch (error) {
             const errorMessage =
                 error instanceof Error ? error.message : "Unknown Error";
-            await reject.status(500).json(errorMessage);
+            await reject(errorMessage);
         }
     });
 }
@@ -98,37 +98,27 @@ const getData = async (txId) => {
     };
 };
 
-export const x = async () => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            const {query} = _req.query;
+const searchArweave = async (query) => {
+  return new Promise(async (resolve, reject) => {
+     try {
+         const {query} = request.query;
+         const ardb = new ArDB(arweave);
+         const tags = [{name: 'App-Name', values: [process.env.APP_NAME]}];
+         const searchAddress = query && query[0];
+         if (searchAddress) {
+             tags.push({name: 'Address', values: [searchAddress]});
+         }
+         const txs = await ardb.search('transactions').tags(tags).limit(10).find();
 
-            // Initialize ArDB
-            // More information about ArDB can be found here: https://www.npmjs.com/package/ardb
+         const promises = txs.map((tx) => getData(tx._id));
+         const data = await Promise.all(promises);
 
-            const ardb = new ArDB(arweave);
-            const tags = [{name: 'App-Name', values: [process.env.APP_NAME]}];
-
-            // Retrieve searchAddress
-            const searchAddress = query && query[0];
-            // Build tags
-
-            if (searchAddress) {
-                tags.push({name: 'Address', values: [searchAddress]});
-            }
-
-            // Search for transaction withs App-Name and Address (optional) tags
-            // More information can be found here: https://www.npmjs.com/package/ardb
-            const txs = await ardb.search('transactions').tags(tags).limit(10).find();
-
-            const promises = txs.map((tx) => getData(tx._id));
-            const data = await Promise.all(promises);
-
-            await res.status(200).json(data);
-        } catch (error) {
-            const errorMessage =
-                error instanceof Error ? error.message : 'Unknown Error';
-            await res.status(500).json(errorMessage);
-        }
-    });
+         await res.status(200).json(data);
+     } catch (error) {
+         const errorMessage =
+             error instanceof Error ? error.message : "Unknown Error";
+         await rejecstt(errorMessage);
+     }
+  });
 };
+
