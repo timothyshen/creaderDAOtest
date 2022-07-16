@@ -21,18 +21,22 @@
     </el-form-item>
   </el-form>
   <h1>Number of covers: {{ getNumberOfCovers }}</h1>
-  <div>
-    <div class="container" v-for="cover in this.getCover" key="cover.id.toString()">
-      <p>Author: <span>{{ cover.owner }}</span></p>
-      <p>Title: <span>{{ cover.title }}</span></p>
-      <p>Short description: <span>{{ cover.description }}</span></p>
-    </div>
-  </div>
+  <el-table :data="this.getCover" style="width:100%">
+    <el-table-column label="ID" prop="id"></el-table-column>
+    <el-table-column label="Author" prop="owner"></el-table-column>
+    <el-table-column label="Title" prop="title"></el-table-column>
+    <el-table-column label="Short description" prop="description"></el-table-column>
+    <el-table-column label="Edit" width="120">
+      <template #default>
+        <el-button link type="primary" size="small">Edit</el-button>
+      </template>
+    </el-table-column>
+  </el-table>
 </template>
 
 <script>
 
-import {mapGetters, } from "vuex";
+import { mapGetters, } from "vuex";
 import {getCopyrightContract, getProviderOrSigner} from "../utils/support";
 
 export default {
