@@ -1,5 +1,11 @@
 {
   "name": "hardhat-project",
+  "scripts": {
+    "web3:test": "npx hardhat test",
+    "web3:compile": "npx hardhat compile",
+    "web3:deploy:testnet": "npx hardhat run web3/scripts/deploy.js --network rinkeby",
+    "web3:verify:testnet": "npx hardhat verify --network rinkeby"
+  },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.6",
     "@nomiclabs/hardhat-etherscan": "^3.1.0",
