@@ -8,6 +8,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "ardb": "^1.1.8",
+    "arweave": "^1.10.18",
     "@coinbase/wallet-sdk": "^3.2.0",
     "axios": "^0.27.2",
     "cors": "^2.8.5",
