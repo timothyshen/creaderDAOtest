@@ -4,10 +4,12 @@
 import ConnectWallet from "./components/ConnectWallet.vue";
 import RegisterCover from "./components/registerCover.vue";
 import DisplayBook from "./components/DisplayBook.vue";
+import PageHeader from "./components/Global/PageHeader.vue";
 </script>
 
 <template>
   <div id="app">
+    <PageHeader></PageHeader>
     <connect-wallet></connect-wallet>
     <register-cover></register-cover>
     <display-book></display-book>
@@ -23,6 +25,5 @@ import DisplayBook from "./components/DisplayBook.vue";
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>

@@ -19,11 +19,7 @@ async function publishContract(contractName) {
     await contract.deployed();
     console.log(contractName + " contract address: " + address);
 
-    await sleep(10000);
-    await hre.run("verify:verify", {
-        address: address,
-        constructorArguments: [],
-    });
+
 
     // copy the contract JSON file to front-end and add the address field in it
     fs.copyFileSync(

@@ -1,8 +1,8 @@
 <template>
   <div class="buttons">
-    <a class="btn btn-login" href="#" v-if="!getIsConnected" @click="connectWeb3Modal">Connect your wallet</a>
-    <a class="btn btn-logout" href="#" v-if="getIsConnected" @click="disconnectWeb3Modal">Disconnect
-      {{ getActiveAccount.substring(0, 7) }}...</a>
+    <el-button type="Primary" plain v-if="!getIsConnected" @click="connectWeb3Modal">Connect wallet</el-button>
+    <el-button type="Primary" plain v-if="getIsConnected" @click="disconnectWeb3Modal">Disconnect
+      {{ getActiveAccount.substring(0, 7) }}...</el-button>
   </div>
 </template>
 

@@ -8,7 +8,7 @@ import {
 import {
     COPY_RIGHT_CONTRACT_ADDRESS,
     COPY_RIGHT_CONTRACT_ABI
-} from "../constants";
+} from "../constant";
 
 
 const state = {
@@ -34,7 +34,8 @@ const actions = {
         try {
             const provider = await getProviderOrSigner();
             const contract = getCopyrightContract(provider);
-            const cover = await contract.getAllcover();
+            const cover = await contract.getAllCoypright();
+
             console.log("cover",cover);
             commit("setCovers", cover);
 
@@ -46,9 +47,7 @@ const actions = {
         try {
             const provider = await getProviderOrSigner();
             const contract = getCopyrightContract(provider);
-            console.log("contract", contract);
             const number = await contract.numCovers();
-            console.log("number", number);
             commit("setNumberOfCovers", number.toString());
         } catch (error) {
             console.log(error);
