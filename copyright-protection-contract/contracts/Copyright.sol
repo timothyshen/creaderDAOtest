@@ -72,6 +72,13 @@ contract Copyright {
         numChapters++;
         return numChapters - 1;
     }
+    function getAllCoypright() public view returns (Cover[] memory) {
+        Cover[] memory result = new Cover[](numCovers);
+        for (uint256 i = 0; i < numCovers; i++) {
+            result[i] = covers[i];
+        }
+        return result;
+    }
 
     // get the cover by id
     // @param _id: uint256 - id of the cover

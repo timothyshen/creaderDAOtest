@@ -27,8 +27,8 @@
     <el-table-column label="Title" prop="title"></el-table-column>
     <el-table-column label="Short description" prop="description"></el-table-column>
     <el-table-column label="Edit" width="120">
-      <template #default>
-        <el-button link type="primary" size="small">Edit</el-button>
+      <template #default="scope">
+        <el-button link type="primary" size="small" @click="handleEdit(scope.row)">Edit</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -62,7 +62,6 @@ export default {
 
       this.$store.dispatch("wallet/initWeb3Modal");
       this.$store.dispatch("wallet/ethereumListener");
-      console.log(this.getWeb3Modal);
       this.$store.dispatch("cover/getCoverNum");
       this.$store.dispatch("cover/getCovers");
     }
@@ -71,19 +70,29 @@ export default {
     async register() {
         try {
           const provider = await getProviderOrSigner(true);
-          console.log(provider);
           const contract = getCopyrightContract(provider);
-          console.log(contract);
           const txn = await contract.createCopyright(
               this.bookform.title,
               this.bookform.shortDescription
           );
           this.$store.commit("cover/setLoading", true);
           await txn.wait();
+          console.log(txn.hash);
+          await this.$store.dispatch("cover/getCoverNum");
+          await this.$store.dispatch("cover/getCovers");
           this.$store.commit("cover/setLoading", false);
         } catch (error) {
           console.log(error);
         }
+    },
+    handleEdit(row) {
+      console.log(toString(row.id));
+      this.$router.push({
+        name: "chapter",
+        params: {
+          id: row.id
+        }
+      });
     }
   }
 }
