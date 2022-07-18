@@ -1,8 +1,16 @@
 <template>
-  <div class="buttons">
-    <el-button type="Primary" plain v-if="!getIsConnected" @click="connectWeb3Modal">Connect wallet</el-button>
-    <el-button type="Primary" plain v-if="getIsConnected" @click="disconnectWeb3Modal">Disconnect
-      {{ getActiveAccount.substring(0, 7) }}...</el-button>
+  <div class="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
+    <a href="#"
+       class="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-amber-300 hover:bg-amber-500"
+       v-if="!getIsConnected" @click="connectWeb3Modal">
+      Connect wallet
+    </a>
+    <a href="#"
+       class="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-amber-300 hover:bg-amber-500"
+       v-if="getIsConnected"
+       @click="disconnectWeb3Modal">
+      Disconnect {{ getActiveAccount.substring(0, 7) }}...
+    </a>
   </div>
 </template>
 
@@ -26,7 +34,11 @@ export default {
 </script>
 
 <style scoped>
-  .buttons {
-
-  }
+#metamask-login {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+}
 </style>

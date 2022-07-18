@@ -1,11 +1,11 @@
 <template>
   <div class="container">
     <el-form>
-      <el-form-item label="标题">
-        <el-input v-model="title" placeholder="请输入标题"></el-input>
+      <el-form-item label="Title">
+        <el-input v-model="title" placeholder="Please insert title"></el-input>
       </el-form-item>
-      <el-form-item label="简介">
-        <el-input v-model="context" placeholder="请输入简介"></el-input>
+      <el-form-item label="Context">
+        <el-input v-model="context" placeholder="Context"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button @click="register()">{{ create }}</el-button>
@@ -16,6 +16,7 @@
 
 <script>
 import {getCopyrightContract, getProviderOrSigner} from "../../utils/support";
+import {mapGetters} from "vuex";
 
 export default {
   name: "ChapterCreateForm",
@@ -26,9 +27,15 @@ export default {
       create: 'create',
     }
   },
+  params: {
+    id:{
+      type: Number,
+      required: true,
+    },
+  },
   computed: {
     ...mapGetters("wallet", ["getActiveAccount", "getWeb3", "getWeb3Modal"]),
-    ...mapGetters("cover", ["getNumberOfCovers", "getCover", "getLoading"]),
+    ...mapGetters("chapter", ["getChapter", "getChapterLoading", "getLoading"]),
   },
   watch: {
     getLoading() {
@@ -49,20 +56,25 @@ export default {
   },
   methods: {
     async register() {
-      const provider = await getProviderOrSigner(true);
-      const contract = getCopyrightContract(provider);
-      const txn = await contract.createCopyright(
-          this.$route.params.id,
-          this.title,
-          this.context
-      );
-      this.$store.commit("cover/setLoading", true);
-      await txn.wait();
-      console.log(txn.hash);
-      await this.$store.dispatch("cover/getCoverNum");
-      await this.$store.dispatch("cover/getCovers");
-      this.$store.commit("cover/setLoading", false);
-
+      try {
+        if(this.getActiveAccount){
+          const provider = await getProviderOrSigner(true);
+          const contract = await getCopyrightContract(provider);
+          const txn = await contract.createChapter(
+              this.$route.params.id,
+              this.title,
+              this.context
+          ).send({from: getActiveAccount});
+          this.$store.commit("chapter/setLoading", true);
+          await txn.wait();
+          console.log(txn.hash);
+          this.$store.commit("cover/setLoading", false);
+        } else {
+          window.alert("Please connect to a wallet");
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 }

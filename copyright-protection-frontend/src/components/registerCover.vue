@@ -1,37 +1,39 @@
 <template>
-  <h1>Register</h1>
-  <el-form ref="form" :model="bookform" label-width="80px">
-    <el-form-item label="Title">
-      <el-input v-model="bookform.title"></el-input>
-    </el-form-item>
-    <el-form-item label="Short description">
-      <el-input v-model="bookform.shortDescription"></el-input>
-    </el-form-item>
-<!--    <el-form-item label="Short description">-->
-<!--      <el-input v-model="bookform.longDescription"-->
-<!--                maxlength="200"-->
-<!--                show-word-limit-->
-<!--                type="textarea"></el-input>-->
-<!--    </el-form-item>-->
-<!--    <el-form-item label="Cover image">-->
-<!--      <el-input v-model="bookform.imageHash"></el-input>-->
-<!--    </el-form-item>-->
-    <el-form-item>
-      <el-button @click="register()">Register</el-button>
-    </el-form-item>
-  </el-form>
-  <h1>Number of covers: {{ getNumberOfCovers }}</h1>
-  <el-table :data="this.getCover" style="width:100%">
-    <el-table-column label="ID" prop="id"></el-table-column>
-    <el-table-column label="Author" prop="owner"></el-table-column>
-    <el-table-column label="Title" prop="title"></el-table-column>
-    <el-table-column label="Short description" prop="description"></el-table-column>
-    <el-table-column label="Edit" width="120">
-      <template #default="scope">
-        <el-button link type="primary" size="small" @click="handleEdit(scope.row)">Edit</el-button>
-      </template>
-    </el-table-column>
-  </el-table>
+  <div class="container">
+    <h1>Register</h1>
+    <el-form ref="form" :model="bookform" label-width="80px">
+      <el-form-item label="Title">
+        <el-input v-model="bookform.title"></el-input>
+      </el-form-item>
+      <el-form-item label="Short description">
+        <el-input v-model="bookform.shortDescription"></el-input>
+      </el-form-item>
+      <!--    <el-form-item label="Short description">-->
+      <!--      <el-input v-model="bookform.longDescription"-->
+      <!--                maxlength="200"-->
+      <!--                show-word-limit-->
+      <!--                type="textarea"></el-input>-->
+      <!--    </el-form-item>-->
+      <!--    <el-form-item label="Cover image">-->
+      <!--      <el-input v-model="bookform.imageHash"></el-input>-->
+      <!--    </el-form-item>-->
+      <el-form-item>
+        <el-button @click="register()">Register</el-button>
+      </el-form-item>
+    </el-form>
+    <h1>Number of covers: {{ getNumberOfCovers }}</h1>
+    <el-table :data="this.getCover" style="width:100%">
+      <el-table-column label="ID" prop="id"></el-table-column>
+      <el-table-column label="Author" prop="owner"></el-table-column>
+      <el-table-column label="Title" prop="title"></el-table-column>
+      <el-table-column label="Short description" prop="description"></el-table-column>
+      <el-table-column label="Edit" width="120">
+        <template #default="scope">
+          <el-button link type="primary" size="small" @click="handleEdit(scope.row)">Edit</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+  </div>
 </template>
 
 <script>

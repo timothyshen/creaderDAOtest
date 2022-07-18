@@ -1,18 +1,11 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract Copyright {
+contract Copyright_arweave {
     // copyright is a string of bytes, unqiuely assigned to each cover
     string public copyright_id;
 
-    // Chapter is a struct that contains the title, context, and address of the cover
-    // Representing a chapter in the book(cover)
-    struct Chapter {
-        uint256 id;
-        string title;
-        string context;
-        string status;
-    }
+
 
     // Cover is a struct that contains the title, description, and address of the cover
     // Representing a cover in the book(cover) also the data for NFT
@@ -23,13 +16,11 @@ contract Copyright {
         address owner;
         string status;
 
-        Chapter[] chapters;
+        string[] chapters;
     }
 
 
     mapping(uint256 => Cover) public covers;
-
-    mapping(uint256 => Chapter) public chapters;
 
     uint256 public numCovers;
     uint256 public numChapters;
@@ -51,7 +42,6 @@ contract Copyright {
         cover.title = _title;
         cover.description = _description;
         cover.owner = msg.sender;
-        cover.status = "Active";
         numCovers++;
         return numCovers - 1;
     }
@@ -61,19 +51,12 @@ contract Copyright {
     // @param _context: string - context of the chapter
     // @param _cover: uint256 - id of the cover
     // @returns uint256 - id of the chapter
-    function createChapter(uint256 _coverId, string memory _title, string memory _context) external onlyOwner(_coverId) returns (uint256) {
-        require(covers[_coverId].id == 0, "error");
-        Chapter memory newChapter = Chapter({
-        id : numChapters,
-        title : _title,
-        context : _context,
-        status : "active"
-        });
-        covers[_coverId].chapters.push(newChapter);
+    function createChapter(uint256 _coverId, string calldata _chapterId) external onlyOwner(_coverId) returns (uint256) {
+        Cover storage cover = covers[_coverId];
+        cover.chapters.push(_chapterId);
         numChapters++;
         return numChapters - 1;
     }
-
 
     function getAllCoypright() public view returns (Cover[] memory) {
         Cover[] memory result = new Cover[](numCovers);
@@ -86,7 +69,7 @@ contract Copyright {
     // get the cover by id
     // @param _id: uint256 - id of the cover
     // @returns Cover - cover with the id
-    function getCopyright(uint256 _id) external view returns (string memory, string memory, address, uint256, address, string memory, Chapter[] memory) {
+    function getCopyright(uint256 _id) external view returns (string memory, string memory, address, uint256, address, string memory, string[] memory) {
         Cover storage cover = covers[_id];
         return (cover.title, cover.description, cover.owner, block.timestamp, block.coinbase, cover.status, cover.chapters);
     }
@@ -108,34 +91,6 @@ contract Copyright {
             }
         }
         return result;
-    }
-
-    // get a chapter by id
-    // @param _id: uint256 - id of the chapter
-    // @returns Chapter - chapter struct
-    function getChapter(uint256 _id) external view returns (string memory, string memory, uint256, address) {
-        Chapter storage chapter = chapters[_id];
-        return (chapter.title, chapter.context, block.timestamp, block.coinbase);
-    }
-
-    // get all the chapters for specific cover
-    // @param _id: uint256 - id of the cover
-    // @returns Chapter[] - array of chapters
-    function getChapters(uint256 _coverId) external view returns (Chapter[] memory) {
-        Cover storage cover = covers[_coverId];
-        return cover.chapters;
-    }
-
-    // update the information of a chapter
-    // @param _id: uint256 - id of the chapter
-    // @param _title: string - title of the chapter
-    // @param _description: string - context of the chapter
-    // @returns uint - id of the chapter
-    function updateChapter(uint256 _id, string memory _title, string memory _context) external onlyOwner(_id) returns (uint256) {
-        Chapter storage chapter = chapters[_id];
-        chapter.title = _title;
-        chapter.context = _context;
-        return _id;
     }
 
     // update the information of a cover

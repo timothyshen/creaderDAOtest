@@ -1,9 +1,9 @@
 <template>
-  <div>
-    <div>
-      hi
-    </div>
-  </div>
+  <el-row :gutter="10">
+   <el-col :span="6">
+
+   </el-col>
+  </el-row>
 </template>
 
 <script>

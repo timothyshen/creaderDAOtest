@@ -52,6 +52,16 @@ const actions = {
         } catch (error) {
             console.log(error);
         }
+    },
+    async getAuthorCover({commit}) {
+        try {
+            const provider = await getProviderOrSigner();
+            const contract = getCopyrightContract(provider);
+            const cover = await contract.getAuthorCover();
+            commit("setCovers", cover);
+        } catch (error) {
+            console.log(error);
+        }
     }
 }
 
