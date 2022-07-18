@@ -1,6 +1,6 @@
 import abi from '../api/Copyright.json';
 
-export const COPY_RIGHT_CONTRACT_ADDRESS = "0x9450B4B987FaEbDc4B4d0f218518dCf66aD548AC";
+export const COPY_RIGHT_CONTRACT_ADDRESS = "0xB597b5664A97674d41A96a4a229AD43a4E933eFa";
 export const COPY_RIGHT_CONTRACT_ABI = [
     {
         "inputs": [
@@ -506,4 +506,4 @@ export const COPY_RIGHT_CONTRACT_ABI = [
         "type": "function"
     }
 ];
-export const RPC_URL = "https://rinkeby.infura.io/v3/aab4917f4f0f405a87088e800ef555bc";
+export const WEBSOCKET = "wss://eth-rinkeby.alchemyapi.io/v2/7PLCrh-h9RCXFZD4_yngC7EBIZm1kXdn";

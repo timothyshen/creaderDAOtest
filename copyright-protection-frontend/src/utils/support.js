@@ -1,5 +1,5 @@
 import { Contract, providers } from "ethers";
-import {COPY_RIGHT_CONTRACT_ABI, COPY_RIGHT_CONTRACT_ADDRESS, RPC_URL} from "../constant";
+import {COPY_RIGHT_CONTRACT_ABI, COPY_RIGHT_CONTRACT_ADDRESS, WEBSOCKET} from "../constant";
 import store from "../store/store";
 
 export const getCopyrightContract = (providerOrSigner) => {

@@ -10,9 +10,7 @@ import PageHeader from "./components/Global/PageHeader.vue";
 <template>
   <div id="app">
     <PageHeader></PageHeader>
-    <connect-wallet></connect-wallet>
     <register-cover></register-cover>
-    <display-book></display-book>
   </div>
 
 

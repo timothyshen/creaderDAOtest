@@ -9,7 +9,7 @@ const TransactionStatusE = {
 
 }
 
-export const initArweave = async (data) => {
+export const initArweave = async (data, address) => {
     return new Promise(async (resolve, reject) => {
         try {
             const wallet = await JSON.parse(process.env.ARWEAVE_WALLET);
