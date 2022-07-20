@@ -26,7 +26,7 @@ const getters = {
 }
 
 const actions = {
-    async getChapter({commit}, id) {
+    async retrieveChapter({commit}, id) {
         try {
             const provider = await getProviderOrSigner();
             const contract = getCopyrightContract(provider);

@@ -1,19 +1,14 @@
-import {Contract, providers, BigNumber} from "ethers";
-import store from "./store";
+import {ethers} from "ethers";
 import {
     getCopyrightContract,
     getProviderOrSigner
 } from "../utils/support";
 
-import {
-    COPY_RIGHT_CONTRACT_ADDRESS,
-    COPY_RIGHT_CONTRACT_ABI
-} from "../constant";
-
 
 const state = {
     numberOfCovers: 0,
     covers: [],
+    authorCovers: [],
     loading: false,
 }
 
@@ -24,19 +19,23 @@ const getters = {
     getCover(state) {
         return state.covers;
     },
+    getAuthorCovers(state) {
+        return state.authorCovers;
+    },
     getLoading(state) {
         return state.loading;
     }
 }
 
 const actions = {
-    async getCovers({commit, rootState}) {
+    async getCovers({commit}) {
         try {
-            const provider = await getProviderOrSigner();
+            const { ethereum } = window;
+            const provider = await new ethers.providers.Web3Provider(ethereum);
+            // const provider = await getProviderOrSigner();
             const contract = getCopyrightContract(provider);
             const cover = await contract.getAllCoypright();
 
-            console.log("cover",cover);
             commit("setCovers", cover);
 
         } catch (error) {
@@ -55,10 +54,10 @@ const actions = {
     },
     async getAuthorCover({commit}) {
         try {
-            const provider = await getProviderOrSigner();
-            const contract = getCopyrightContract(provider);
+            const signer = await getProviderOrSigner(true);
+            const contract = getCopyrightContract(signer);
             const cover = await contract.getAuthorCover();
-            commit("setCovers", cover);
+            commit("setAuthorCovers", cover);
         } catch (error) {
             console.log(error);
         }
@@ -74,6 +73,9 @@ const mutations = {
     },
     setLoading(state, loading) {
         state.loading = loading;
+    },
+    setAuthorCovers(state, authorCovers) {
+        state.authorCovers = authorCovers;
     }
 }
 

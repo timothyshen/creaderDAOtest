@@ -5,12 +5,17 @@
        v-if="!getIsConnected" @click="connectWeb3Modal">
       Connect wallet
     </a>
-    <a href="#"
-       class="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-amber-300 hover:bg-amber-500"
-       v-if="getIsConnected"
-       @click="disconnectWeb3Modal">
-      Disconnect {{ getActiveAccount.substring(0, 7) }}...
-    </a>
+    <!--    <vue-gravatar email="timtitm" :size="150" default-image="mp"/>-->
+    <div v-if="getIsConnected">
+      <img class="inline-block h-10 w-10 rounded-full ring-2 ring-white"
+                 src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
+                 alt="user avatar">
+      <a href="#"
+         class="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-amber-300 hover:bg-amber-500"
+         @click="disconnectWeb3Modal">
+        Disconnect {{ getActiveAccount.substring(0, 7) }}...
+      </a>
+    </div>
   </div>
 </template>
 
@@ -34,11 +39,4 @@ export default {
 </script>
 
 <style scoped>
-#metamask-login {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 0;
-  height: 0;
-}
 </style>
