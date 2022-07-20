@@ -1,7 +1,9 @@
 <template>
-  <div class="container mx-auto">
+  <el-row :gutter="20">
+    <el-col :span="12" :offset="6">
     <ChapterCreateForm></ChapterCreateForm>
-  </div>
+    </el-col>
+  </el-row>
 </template>
 
 <script>

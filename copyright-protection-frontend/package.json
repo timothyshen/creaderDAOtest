@@ -8,9 +8,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@coinbase/wallet-sdk": "^3.2.0",
+    "@element-plus/icons-vue": "^2.0.6",
     "ardb": "^1.1.8",
     "arweave": "^1.10.18",
-    "@coinbase/wallet-sdk": "^3.2.0",
     "axios": "^0.27.2",
     "body-parse": "^0.1.0",
     "cors": "^2.8.5",
@@ -22,7 +23,6 @@
     "morgan": "^1.10.0",
     "rollup-plugin-polyfill-node": "^0.9.0",
     "vue": "^3.2.25",
-    "vue-gravatar": "^1.4.1",
     "vue-gtag": "^2.0.1",
     "vue-router": "^4.0.15",
     "vuex": "^4.0.2",
