@@ -11,7 +11,11 @@
         <el-button @click="register()">{{ create }}</el-button>
       </el-form-item>
     </el-form>
-
+    <div>
+      <el-button @click="clickArweaveData('6ddzHMhMQvQbU0JqMsz_e8vsvBWsvgpKsgdokSIpLq0')">{{ create }}</el-button>
+      {{ arweave_chapter }}
+      <el-button @click="clickforlist">{{ create }}</el-button>
+    </div>
     <div>
 
     </div>
@@ -22,6 +26,9 @@
 import {getCopyrightContract, getProviderOrSigner} from "../../utils/support";
 import {mapGetters} from "vuex";
 import { postChapterCreate } from "../../api/local_db";
+import { getArweaveData, searchArweave } from "../../arweave/arweave";
+import axios from "axios";
+import Arweave from "arweave";
 
 export default {
   name: "ChapterCreateForm",
@@ -30,7 +37,9 @@ export default {
       title: '',
       context: '',
       create: 'Submit',
-      loading: false
+      loading: false,
+      arweave_chapter:{},
+      arweave_chapter_id: {},
     }
   },
   params: {
@@ -68,35 +77,47 @@ export default {
     async register() {
       try {
         if (this.getActiveAccount) {
-          console.log(this.$route.params.id);
-          const provider = await getProviderOrSigner(true);
-          const contract = await getCopyrightContract(provider);
-          const txn = await contract.createChapter(
-              this.$route.params.id,
-              this.title,
-              this.context
-          );
-          this.loading = true;
-          await txn.wait();
-          console.log(txn.hash);
-          this.loading = false;
-          this.$message({
-            message: `Success fully created chapter ${this.title}\n
-            Transaction hash: ${txn.hash}`,
-            type: 'success'
-          });
-
-          await postChapterCreate({
-            bookID: this.$route.params.id,
-            arID: 'U7ATwmfXm2_Qoe86mKaaFlB5iRd4_OzixHz5mANFagU',
+          const chapterData = JSON.stringify({
             title: this.title,
-            body: this.context,
-            isAuthed: true,
-          }, this.$route.params.id).then(res => {
-            console.log(res);
-          }).catch(err => {
-            console.log(err);
-          });
+            context: this.context,
+          })
+          const response = await createArweaveTrans(chapterData, this.getActiveAccount);
+
+          console.log(response);
+          /*
+           this is the part for etherum transaction to create a new chapter
+           */
+          // console.log(this.$route.params.id);
+          // const provider = await getProviderOrSigner(true);
+          // const contract = await getCopyrightContract(provider);
+          // const txn = await contract.createChapter(
+          //     this.$route.params.id,
+          //     this.title,
+          //     this.context
+          // );
+          // this.loading = true;
+          // await txn.wait();
+          // console.log(txn.hash);
+          // this.loading = false;
+          // this.$message({
+          //   message: `Success fully created chapter ${this.title}\n
+          //   Transaction hash: ${txn.hash}`,
+          //   type: 'success'
+          // });
+          /*
+            this is the part for local db transaction to create a new chapter
+           */
+          // await postChapterCreate({
+          //   bookID: this.$route.params.id,
+          //   arID: 'U7ATwmfXm2_Qoe86mKaaFlB5iRd4_OzixHz5mANFagU',
+          //   title: this.title,
+          //   body: this.context,
+          //   isAuthed: true,
+          // }, this.$route.params.id).then(res => {
+          //   console.log(res);
+          // }).catch(err => {
+          //   console.log(err);
+          // });
         } else {
           window.alert("Please connect to a wallet");
         }
@@ -104,6 +125,22 @@ export default {
         console.log(error);
 
       }
+    },
+    clickArweaveData(id) {
+      getArweaveData(id).then(res => {
+        this.arweave_chapter = res;
+      }).catch(err => {
+        console.log(err);
+      });
+    },
+    clickforlist(){
+      const user = this.getActiveAccount;
+      searchArweave(user).then(res => {
+        this.arweave_chapter_id = res;
+        console.log(res);
+      }).catch(err => {
+        console.log(err);
+      });
     }
   }
 }

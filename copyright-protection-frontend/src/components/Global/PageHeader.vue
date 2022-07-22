@@ -5,7 +5,7 @@
         <div class="flex justify-start lg:w-0 lg:flex-1">
           <router-link to="/">
             <span class="sr-only">Workflow</span>
-            <img class="h-8 w-auto sm:h-10" src="src/assets/logo.jpg" alt=""/>
+            <img class="h-8 w-auto sm:h-10" src="../../assets/images/logo.jpg" alt=""/>
           </router-link>
         </div>
         <div class="hidden md:flex space-x-10">
@@ -13,15 +13,15 @@
                        class="font-medium px-3 py-2 text-slate-700 rounded-lg hover:bg-slate-100 hover:text-slate-900">
             Home
           </router-link>
-          <router-link to="/team"
+          <router-link to="/"
                        class="font-medium px-3 py-2 text-slate-700 rounded-lg hover:bg-slate-100 hover:text-slate-900">
             Team
           </router-link>
-          <router-link to="/projects"
+          <router-link to="/"
                        class="font-medium px-3 py-2 text-slate-700 rounded-lg hover:bg-slate-100 hover:text-slate-900">
             Projects
           </router-link>
-          <router-link to="/reports"
+          <router-link to="/"
                        class="font-medium px-3 py-2 text-slate-700 rounded-lg hover:bg-slate-100 hover:text-slate-900">
             Reports
           </router-link>

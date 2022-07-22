@@ -23,7 +23,7 @@ contract Copyright {
         address owner;
         string status;
 
-        Chapter[] chapters;
+        Chapter[] chapter;
     }
 
 
@@ -36,7 +36,7 @@ contract Copyright {
 
     // modifier
     modifier onlyOwner(uint256 _id) {
-        require(covers[_id].owner == msg.sender);
+        require(covers[_id].owner == msg.sender, "Caller is not the owner");
         _;
     }
 
@@ -69,7 +69,8 @@ contract Copyright {
         context : _context,
         status : "active"
         });
-        covers[_coverId].chapters.push(newChapter);
+        chapters[numChapters] = newChapter;
+        covers[_coverId].chapter.push(newChapter);
         numChapters++;
         return numChapters - 1;
     }
@@ -88,7 +89,7 @@ contract Copyright {
     // @returns Cover - cover with the id
     function getCopyright(uint256 _id) external view returns (string memory, string memory, address, uint256, address, string memory, Chapter[] memory) {
         Cover storage cover = covers[_id];
-        return (cover.title, cover.description, cover.owner, block.timestamp, block.coinbase, cover.status, cover.chapters);
+        return (cover.title, cover.description, cover.owner, block.timestamp, block.coinbase, cover.status, cover.chapter);
     }
 
     // get all the covers for specific user
@@ -123,7 +124,7 @@ contract Copyright {
     // @returns Chapter[] - array of chapters
     function getChapters(uint256 _coverId) external view returns (Chapter[] memory) {
         Cover storage cover = covers[_coverId];
-        return cover.chapters;
+        return cover.chapter;
     }
 
     // update the information of a chapter

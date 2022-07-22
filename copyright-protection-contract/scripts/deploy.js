@@ -28,6 +28,13 @@ async function publishContract(contractName) {
     );
 
 }
+async function NFTcontract() {
+    const ContractFactory = await hre.ethers.getContractFactory("New_Copyright");
+    const contract = await ContractFactory.deploy("https://creader.io/","CreaderDAO Copyright", "CRD");
+    const address = contract.address;
+    await contract.deployed();
+    console.log("Copyright NFT contract address: " + address);
+}
 
 function sleep(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
@@ -40,9 +47,10 @@ async function main() {
     // If this script is run directly using `node` you may want to call compile
     // manually to make sure everything is compiled
     // await hre.run('compile');
-    for (cont of contract) {
-        await publishContract(cont);
-    }
+    // for (cont of contract) {
+    //     await publishContract(cont);
+    // }
+    await NFTcontract();
 }
 
 // We recommend this pattern to be able to use async/await everywhere
