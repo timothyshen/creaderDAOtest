@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 
 import "hardhat/console.sol";
 
-contract MirrorClone is ERC721, ERC721Enumerable, ERC721URIStorage {
+contract CopyrightNFT is ERC721, ERC721Enumerable, ERC721URIStorage {
     using Counters for Counters.Counter;
     using Strings for uint256;
     Counters.Counter _tokenIds;

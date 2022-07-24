@@ -2,8 +2,6 @@
 pragma solidity ^0.8.0;
 
 contract Copyright {
-    // copyright is a string of bytes, unqiuely assigned to each cover
-    string public copyright_id;
 
     // Chapter is a struct that contains the title, context, and address of the cover
     // Representing a chapter in the book(cover)
@@ -17,13 +15,13 @@ contract Copyright {
     // Cover is a struct that contains the title, description, and address of the cover
     // Representing a cover in the book(cover) also the data for NFT
     struct Cover {
+        address owner;
         uint256 id;
         string title;
         string description;
-        address owner;
         string status;
 
-        Chapter[] chapters;
+        Chapter[] chapter;
     }
 
 
@@ -34,9 +32,39 @@ contract Copyright {
     uint256 public numCovers;
     uint256 public numChapters;
 
+    // event
+    event CoverCreation(
+        string title,
+        string description,
+        address owner,
+        string status,
+        uint256 indexed CoverId
+    );
+
+    event CoverUpdate(
+        uint256 indexed CoverId,
+        string title,
+        string description,
+        string status
+    );
+
+    event ChapterCreation(
+        string title,
+        string context,
+        string status,
+        uint256 indexed ChapterId
+    );
+
+    event ChapterUpdate(
+        uint256 indexed ChapterId,
+        string title,
+        string context,
+        string status
+    );
+
     // modifier
     modifier onlyOwner(uint256 _id) {
-        require(covers[_id].owner == msg.sender);
+        require(covers[_id].owner == msg.sender, "Caller is not the owner");
         _;
     }
 
@@ -45,14 +73,18 @@ contract Copyright {
     // @param _description: string - description of the cover
     // @param _owner: address - address of the owner of the cover
     // @returns uint256 - id of the cover
-    function createCopyright(string memory _title, string memory _description) external returns (uint256) {
+    function createCopyright(
+        string memory _title,
+        string memory _description
+    ) external {
         Cover storage cover = covers[numCovers];
         cover.id = numCovers;
         cover.title = _title;
         cover.description = _description;
         cover.owner = msg.sender;
+        cover.status = "Active";
+        emit CoverCreation(_title, _description, msg.sender, "active", numCovers);
         numCovers++;
-        return numCovers - 1;
     }
 
     // create a new chapter
@@ -60,7 +92,11 @@ contract Copyright {
     // @param _context: string - context of the chapter
     // @param _cover: uint256 - id of the cover
     // @returns uint256 - id of the chapter
-    function createChapter(uint256 _coverId, string memory _title, string memory _context) external onlyOwner(_coverId) returns (uint256) {
+    function createChapter(
+        uint256 _coverId,
+        string memory _title,
+        string memory _context
+    ) external onlyOwner(_coverId) {
         require(covers[_coverId].id == 0, "error");
         Chapter memory newChapter = Chapter({
         id : numChapters,
@@ -68,9 +104,19 @@ contract Copyright {
         context : _context,
         status : "active"
         });
-        covers[_coverId].chapters.push(newChapter);
+        chapters[numChapters] = newChapter;
+        covers[_coverId].chapter.push(newChapter);
+        emit ChapterCreation(_title, _context, "active", _coverId);
         numChapters++;
-        return numChapters - 1;
+    }
+
+
+    function getAllCoypright() public view returns (Cover[] memory) {
+        Cover[] memory result = new Cover[](numCovers);
+        for (uint256 i = 0; i < numCovers; i++) {
+            result[i] = covers[i];
+        }
+        return result;
     }
 
     // get the cover by id
@@ -78,7 +124,7 @@ contract Copyright {
     // @returns Cover - cover with the id
     function getCopyright(uint256 _id) external view returns (string memory, string memory, address, uint256, address, string memory, Chapter[] memory) {
         Cover storage cover = covers[_id];
-        return (cover.title, cover.description, cover.owner, block.timestamp, block.coinbase, cover.status, cover.chapters);
+        return (cover.title, cover.description, cover.owner, block.timestamp, block.coinbase, cover.status, cover.chapter);
     }
 
     // get all the covers for specific user
@@ -113,7 +159,7 @@ contract Copyright {
     // @returns Chapter[] - array of chapters
     function getChapters(uint256 _coverId) external view returns (Chapter[] memory) {
         Cover storage cover = covers[_coverId];
-        return cover.chapters;
+        return cover.chapter;
     }
 
     // update the information of a chapter
@@ -125,6 +171,8 @@ contract Copyright {
         Chapter storage chapter = chapters[_id];
         chapter.title = _title;
         chapter.context = _context;
+
+        emit ChapterUpdate(_id, _title, _context, "active");
         return _id;
     }
 
@@ -137,6 +185,7 @@ contract Copyright {
         Cover storage cover = covers[_id];
         cover.title = _title;
         cover.description = _description;
+        emit CoverUpdate(_id, _title, _description, "active");
         return _id;
     }
 }
