@@ -42,6 +42,7 @@ export default {
   computed: {
     ...mapGetters("wallet", ["getActiveAccount", "getWeb3","getWeb3Modal"]),
     ...mapGetters("cover", ["getNumberOfCovers", "getCover"]),
+
   },
   created() {
     if (!this.getWeb3) {
