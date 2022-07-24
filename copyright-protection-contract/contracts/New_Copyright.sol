@@ -1,25 +1,24 @@
 // SPDX-License-Identifier: GPL-3.0
 
-pragma solidity >=0.7.0 <0.9.0;
+pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-
+import "@openzeppelin/contracts/utils/Strings.sol";
 /**
  * @title SampleERC721
  * @dev Create a sample ERC721 standard token
  */
 contract NewCopyright is ERC721 {
-
+    using Strings for string;
 
     //Struct
-
     struct Cover {
         string title;
         string description;
         address owner;
         string status;
-
     }
+
     // URI
     string internal baseURI;
 
@@ -40,10 +39,16 @@ contract NewCopyright is ERC721 {
         uint256 indexed CoverId
     );
 
-    event EditionPurchased(
+    event CoverUpdate(
+        uint256 indexed CoverId,
+        string title,
+        string description,
+        string status
+    );
+
+    event CoverMint(
         uint256 indexed CoverId,
         uint256 indexed tokenId,
-    // The account that paid for and received the NFT.
         address indexed author
     );
 
@@ -51,38 +56,41 @@ contract NewCopyright is ERC721 {
         baseURI = baseURI_;
     }
 
+    modifier onlyOwner(uint256 _id) {
+        require(covers[_id].owner == msg.sender, "Caller is not the owner");
+        _;
+    }
+
     function createCopyright(
         string memory _title,
         string memory _description,
         string memory _status
     ) external {
-
-        covers[nextCoverId] = Cover({
+        uint256 _coverId = nextCoverId;
+        covers[_coverId] = Cover({
         title: _title,
         description: _description,
         owner: msg.sender,
         status: _status
         });
 
-        emit CoverCreation(_title, _description, msg.sender, _status, nextCoverId);
+        emit CoverCreation(_title, _description, msg.sender, _status, _coverId);
 
-        mintCopyright(nextCoverId);
+        mintCopyright(_coverId++);
 
-        nextCoverId++;
+        nextCoverId = _coverId;
     }
 
     function mintCopyright(uint256 coverId) public returns (uint) {
         // Check that the Cover exists.
         require(bytes(covers[coverId].title).length > 0, "Cover does not exist");
 
-        // Increment the number of tokens sold for this edition.
-        // covers[coverId].numSold++;
         // Mint a new token for the sender, using the `nextTokenId`.
         _mint(msg.sender, nextTokenId);
-        // Store the mapping of token id to the edition being purchased.
+        // Store the mapping of token id to the Copyright being purchased.
         tokenToCover[nextTokenId] = coverId;
 
-        emit EditionPurchased(
+        emit CoverMint(
             coverId,
             nextTokenId,
             msg.sender
@@ -92,53 +100,39 @@ contract NewCopyright is ERC721 {
         return nextTokenId;
     }
 
-    // Returns e.g. https://mirror-api.com/editions/[editionId]/[tokenId]
+    function updateCover(uint256 _id, string memory _title, string memory _description) external onlyOwner(_id) returns (uint256)  {
+        Cover storage cover = covers[_id];
+        cover.title = _title;
+        cover.description = _description;
+        emit CoverUpdate(_id, _title, _description, "active");
+        return _id;
+    }
+
+    // Returns e.g. https://creader.io/Copyright/[CopyrightId]/[tokenId]
     function tokenURI(uint256 tokenId)
     public
     view
     override
     returns (string memory)
     {
-        // If the token does not map to an edition, it'll be 0.
+        // If the token does not map to an Copyright, it'll be 0.
         require(tokenToCover[tokenId] > 0, "Token has not been sold yet");
-        // Concatenate the components, baseURI, editionId and tokenId, to create URI.
+        // Concatenate the components, baseURI, Copyright and tokenId, to create URI.
         return
         string(
             abi.encodePacked(
                 baseURI,
-                _toString(tokenToCover[tokenId]),
+                Strings.toString(tokenToCover[tokenId]),
                 "/",
-                _toString(tokenId)
+                Strings.toString(tokenId)
             )
         );
     }
 
-    // Returns e.g. https://mirror-api.com/editions/metadata
+    // Returns e.g. https://mirror-api.com/Copyright/metadata
     function contractURI() public view returns (string memory) {
-        // Concatenate the components, baseURI, editionId and tokenId, to create URI.
+        // Concatenate the components, baseURI, CopyrightId and tokenId, to create URI.
         return string(abi.encodePacked(baseURI, "metadata"));
-    }
-
-    function _toString(uint256 value) internal pure returns (string memory) {
-        // Inspired by OraclizeAPI's implementation - MIT licence
-        // https://github.com/oraclize/ethereum-api/blob/b42146b063c7d6ee1358846c198246239e9360e8/oraclizeAPI_0.4.25.sol
-
-        if (value == 0) {
-            return "0";
-        }
-        uint256 temp = value;
-        uint256 digits;
-        while (temp != 0) {
-            digits++;
-            temp /= 10;
-        }
-        bytes memory buffer = new bytes(digits);
-        while (value != 0) {
-            digits -= 1;
-            buffer[digits] = bytes1(uint8(48 + uint256(value % 10)));
-            value /= 10;
-        }
-        return string(buffer);
     }
 
 }
