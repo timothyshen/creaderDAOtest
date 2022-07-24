@@ -19,11 +19,7 @@ async function publishContract(contractName) {
     await contract.deployed();
     console.log(contractName + " contract address: " + address);
 
-    await sleep(10000);
-    await hre.run("verify:verify", {
-        address: address,
-        constructorArguments: [],
-    });
+
 
     // copy the contract JSON file to front-end and add the address field in it
     fs.copyFileSync(
@@ -32,10 +28,21 @@ async function publishContract(contractName) {
     );
 
 }
-
-function sleep(ms) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
+async function NFTcontract() {
+    const ContractFactory = await hre.ethers.getContractFactory("NewCopyright");
+    const contract = await ContractFactory.deploy("https://creader.io/","CreaderDAO Copyright", "CRD");
+    const address = contract.address;
+    await contract.deployed();
+    console.log("Copyright NFT contract address: " + address);
+    fs.copyFileSync(
+        path.join(__dirname, "../artifacts/contracts/" + "New_Copyright" + ".sol/" + "New_Copyright" + ".json"), //source
+        path.join(__dirname, "../../copyright-protection-frontend/src/api/" + "New_Copyright" + ".json") // destination
+    );
 }
+
+// function sleep(ms) {
+//     return new Promise((resolve) => setTimeout(resolve, ms));
+// }
 
 async function main() {
     // Hardhat always runs the compile task when running scripts with its command
@@ -47,6 +54,7 @@ async function main() {
     for (cont of contract) {
         await publishContract(cont);
     }
+    await NFTcontract();
 }
 
 // We recommend this pattern to be able to use async/await everywhere
