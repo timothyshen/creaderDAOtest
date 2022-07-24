@@ -29,16 +29,20 @@ async function publishContract(contractName) {
 
 }
 async function NFTcontract() {
-    const ContractFactory = await hre.ethers.getContractFactory("New_Copyright");
+    const ContractFactory = await hre.ethers.getContractFactory("NewCopyright");
     const contract = await ContractFactory.deploy("https://creader.io/","CreaderDAO Copyright", "CRD");
     const address = contract.address;
     await contract.deployed();
     console.log("Copyright NFT contract address: " + address);
+    fs.copyFileSync(
+        path.join(__dirname, "../artifacts/contracts/" + "New_Copyright" + ".sol/" + "New_Copyright" + ".json"), //source
+        path.join(__dirname, "../../copyright-protection-frontend/src/api/" + "New_Copyright" + ".json") // destination
+    );
 }
 
-function sleep(ms) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-}
+// function sleep(ms) {
+//     return new Promise((resolve) => setTimeout(resolve, ms));
+// }
 
 async function main() {
     // Hardhat always runs the compile task when running scripts with its command
@@ -47,9 +51,9 @@ async function main() {
     // If this script is run directly using `node` you may want to call compile
     // manually to make sure everything is compiled
     // await hre.run('compile');
-    // for (cont of contract) {
-    //     await publishContract(cont);
-    // }
+    for (cont of contract) {
+        await publishContract(cont);
+    }
     await NFTcontract();
 }
 
