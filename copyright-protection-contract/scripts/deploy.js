@@ -35,8 +35,8 @@ async function NFTcontract() {
     await contract.deployed();
     console.log("Copyright NFT contract address: " + address);
     fs.copyFileSync(
-        path.join(__dirname, "../artifacts/contracts/" + "New_Copyright" + ".sol/" + "New_Copyright" + ".json"), //source
-        path.join(__dirname, "../../copyright-protection-frontend/src/api/" + "New_Copyright" + ".json") // destination
+        path.join(__dirname, "../artifacts/contracts/" + "NewCopyright" + ".sol/" + "NewCopyright" + ".json"), //source
+        path.join(__dirname, "../../copyright-protection-frontend/src/api/" + "NewCopyright" + ".json") // destination
     );
 }
 

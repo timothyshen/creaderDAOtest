@@ -2,16 +2,19 @@
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 import PageHeader from "./components/Global/PageHeader.vue";
+import footer_component from "./components/Global/footer_component.vue";
 </script>
 
 <template>
   <div id="app">
     <PageHeader></PageHeader>
-    <transition name="fade" mode="out-in">
-      <router-view />
-    </transition>
+    <router-view v-slot="{ Component }">
+      <transition name="fade" mode="out-in">
+        <component :is="Component" />
+      </transition>
+    </router-view>
     <el-backtop :right="100" :bottom="100" />
-
+    <footer_component></footer_component>
   </div>
 
 
