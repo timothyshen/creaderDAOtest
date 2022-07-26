@@ -76,34 +76,30 @@ export default {
   methods: {
     async register() {
       try {
+        this.loading = true;
         if (this.getActiveAccount) {
-          const chapterData = JSON.stringify({
-            title: this.title,
-            context: this.context,
-          })
-          const response = await createArweaveTrans(chapterData, this.getActiveAccount);
 
-          console.log(response);
           /*
            this is the part for etherum transaction to create a new chapter
            */
-          // console.log(this.$route.params.id);
-          // const provider = await getProviderOrSigner(true);
-          // const contract = await getCopyrightContract(provider);
-          // const txn = await contract.createChapter(
-          //     this.$route.params.id,
-          //     this.title,
-          //     this.context
-          // );
-          // this.loading = true;
-          // await txn.wait();
-          // console.log(txn.hash);
-          // this.loading = false;
-          // this.$message({
-          //   message: `Success fully created chapter ${this.title}\n
-          //   Transaction hash: ${txn.hash}`,
-          //   type: 'success'
-          // });
+          const provider = await getProviderOrSigner(true);
+          const contract = await getCopyrightContract(provider);
+
+          const txn = await contract.createChapter(
+              this.$route.params.id,
+              this.title,
+              this.context
+          );
+          this.loading = true;
+          await txn.wait();
+          console.log(txn.hash);
+          this.loading = false;
+          this.$message({
+            message: `Success fully created chapter ${this.title}\n
+            Transaction hash: ${txn.hash}`,
+            type: 'success'
+          });
+
           /*
             this is the part for local db transaction to create a new chapter
            */

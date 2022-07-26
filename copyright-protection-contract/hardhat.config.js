@@ -28,8 +28,16 @@ module.exports = {
   solidity: "0.8.4",
   networks: {
     rinkeby: {
-      url: ALCHEMY_API_KEY_URL,
-      accounts: [RINKEBY_PRIVATE_KEY]
+      url: process.env.ALCHEMY_API_KEY_URL_RINKEBY,
+      accounts: [process.env.PRIVATE_KEY]
+    },
+    mumbai: {
+      url: process.env.ALCHEMY_API_KEY_URL_MUMBAI,
+      accounts: [process.env.PRIVATE_KEY]
+    },
+    goerli: {
+      url: process.env.ALCHEMY_API_KEY_URL_GOERLI,
+      accounts: [process.env.PRIVATE_KEY]
     }
   },
   gasReporter: {

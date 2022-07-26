@@ -18,7 +18,7 @@
       <!--      <el-input v-model="bookform.imageHash"></el-input>-->
       <!--    </el-form-item>-->
       <el-form-item>
-        <el-button @click="register()">Register</el-button>
+        <el-button @click="register()" :loading="loading">{{ create }}</el-button>
       </el-form-item>
     </el-form>
     <h1>Number of covers: {{ getNumberOfCovers }}</h1>
@@ -37,9 +37,9 @@
 </template>
 
 <script>
-
-import { mapGetters, } from "vuex";
-import {getCopyrightContract, getProviderOrSigner} from "../utils/support";
+import {ethers} from "ethers";
+import {mapGetters,} from "vuex";
+import {getCopyrightContract, getProviderOrSigner, getCopyrightNFTContract} from "../../utils/support";
 
 export default {
   name: "registerCover",
@@ -50,10 +50,12 @@ export default {
         shortDescription: '',
       },
       novel: {},
+      create: 'Submit',
+      loading: false,
     }
   },
   computed: {
-    ...mapGetters("wallet", ["getActiveAccount", "getWeb3","getWeb3Modal"]),
+    ...mapGetters("wallet", ["getActiveAccount", "getWeb3", "getWeb3Modal"]),
     ...mapGetters("cover", ["getAuthorCovers", "getNumberOfCovers"]),
   },
   created() {
@@ -68,24 +70,45 @@ export default {
       this.$store.dispatch("cover/getAuthorCover");
     }
   },
+  watch: {
+    loading(newVal) {
+      if (!this.getActiveAccount) {
+        this.create = "Connect Your Wallet!";
+      }
+      if (newVal) {
+        this.create = 'Loading...';
+      } else {
+        this.create = 'Submit';
+      }
+    },
+  },
   methods: {
     async register() {
-        try {
-          const provider = await getProviderOrSigner(true);
-          const contract = getCopyrightContract(provider);
-          const txn = await contract.createCopyright(
-              this.bookform.title,
-              this.bookform.shortDescription
-          );
-          this.$store.commit("cover/setLoading", true);
-          await txn.wait();
-          console.log(txn.hash);
-          await this.$store.dispatch("cover/getCoverNum");
-          await this.$store.dispatch("cover/getAuthorCover");
-          this.$store.commit("cover/setLoading", false);
-        } catch (error) {
-          console.log(error);
-        }
+      try {
+        let coverId;
+        this.loading = true;
+        const provider = await getProviderOrSigner(true);
+        const contract = getCopyrightContract(provider);
+        const txn = await contract.createCopyright(
+            this.bookform.title,
+            this.bookform.shortDescription
+        );
+        await txn.wait();
+        console.log(txn);
+        contract.on("CoverCreation", async (title, description, owner, status, CoverId) => {
+          coverId = CoverId.toNumber();
+          const contractNFT = getCopyrightNFTContract(provider);
+          console.log(coverId);
+          const txnNFT = await contractNFT.mintCopyright(coverId);
+          await txnNFT.wait();
+          console.log(txnNFT);
+        })
+        await this.$store.dispatch("cover/getCoverNum");
+        await this.$store.dispatch("cover/getAuthorCover");
+        this.loading = false;
+      } catch (error) {
+        console.log(error);
+      }
     },
     handleEdit(row) {
       this.$router.push({
