@@ -8,7 +8,7 @@
 
 <script>
 
-import RegisterCover from "../components/registerCover.vue";
+import RegisterCover from "../components/Cover/registerCover.vue";
 export default {
   name: "Home",
   components: {RegisterCover}

@@ -21,7 +21,6 @@ describe("Copyright contract", function () {
 
     describe("Check default value at deployement", function () {
 
-
         it("Total covers should be 0", async function () {
             expect(await copyrightContract.numCovers()).to.equal(0);
         });

@@ -1,5 +1,5 @@
 import { Contract, providers } from "ethers";
-import {COPY_RIGHT_CONTRACT_ABI, COPY_RIGHT_CONTRACT_ADDRESS, WEBSOCKET} from "../constant";
+import * as constant from "../constant";
 import store from "../store/store";
 
 export const getCopyrightContract = (providerOrSigner) => {
@@ -7,8 +7,16 @@ export const getCopyrightContract = (providerOrSigner) => {
     // console.log("COPY_RIGHT_CONTRACT_ADDRESS", COPY_RIGHT_CONTRACT_ADDRESS);
     // console.log("abi", COPY_RIGHT_CONTRACT_ABI);
     return new Contract(
-        COPY_RIGHT_CONTRACT_ADDRESS,
-        COPY_RIGHT_CONTRACT_ABI,
+        constant.COPY_RIGHT_CONTRACT_ADDRESS,
+        constant.COPY_RIGHT_CONTRACT_ABI,
+        providerOrSigner
+    );
+}
+
+export const getCopyrightNFTContract = (providerOrSigner) => {
+    return new Contract(
+        constant.COPYRIGHT_NFT_CONTRACT_ADDRESS,
+        constant.COPYRIGHT_NFT_CONTRACT_ABI,
         providerOrSigner
     );
 }

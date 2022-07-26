@@ -79,9 +79,7 @@ const actions = {
 
     async connectWeb3Modal({commit}) {
         let providerW3m = await state.web3Modal.connect();
-        console.log("provider", providerW3m);
         let provider = new ethers.providers.Web3Provider(providerW3m);
-        console.log("provider", provider);
         commit('setIsConnected', true);
         commit('setActiveAccount', window.ethereum.selectedAddress);
         commit('setChainData', window.ethereum.chainId);

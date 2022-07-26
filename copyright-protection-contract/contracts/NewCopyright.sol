@@ -66,7 +66,9 @@ contract NewCopyright is ERC721 {
         string memory _description,
         string memory _status
     ) external {
+
         uint256 _coverId = nextCoverId;
+
         covers[_coverId] = Cover({
         title: _title,
         description: _description,
