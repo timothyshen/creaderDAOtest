@@ -85,24 +85,18 @@ export default {
   methods: {
     async register() {
       try {
-        let coverId;
         this.loading = true;
         const provider = await getProviderOrSigner(true);
-        const contract = getCopyrightContract(provider);
+        const contract = getCopyrightNFTContract(provider);
+        console.log(contract);
         const txn = await contract.createCopyright(
             this.bookform.title,
-            this.bookform.shortDescription
+            this.bookform.shortDescription,
+            "active"
         );
         await txn.wait();
         console.log(txn);
-        contract.on("CoverCreation", async (title, description, owner, status, CoverId) => {
-          coverId = CoverId.toNumber();
-          const contractNFT = getCopyrightNFTContract(provider);
-          console.log(coverId);
-          const txnNFT = await contractNFT.mintCopyright(coverId);
-          await txnNFT.wait();
-          console.log(txnNFT);
-        })
+
         await this.$store.dispatch("cover/getCoverNum");
         await this.$store.dispatch("cover/getAuthorCover");
         this.loading = false;

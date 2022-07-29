@@ -1,5 +1,5 @@
 import {
-    getCopyrightContract,
+    getCopyrightContract, getCopyrightNFTContract,
     getProviderOrSigner
 } from "../utils/support";
 
@@ -29,7 +29,7 @@ const actions = {
     async retrieveChapter({commit}, id) {
         try {
             const provider = await getProviderOrSigner();
-            const contract = getCopyrightContract(provider);
+            const contract = getCopyrightNFTContract(provider);
             const chapters = await contract.getChapters(id);
             commit("setChapter", chapters);
         } catch (error) {
@@ -39,7 +39,7 @@ const actions = {
      async getSpecificChapter({commit}, id) {
         try {
             const provider = await getProviderOrSigner();
-            const contract = getCopyrightContract(provider);
+            const contract = getCopyrightNFTContract(provider);
             const chapter = await contract.getChapter(id);
             commit("setChapter", chapter);
         } catch (error) {

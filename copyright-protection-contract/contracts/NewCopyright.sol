@@ -3,12 +3,15 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
+
 /**
  * @title SampleERC721
  * @dev Create a sample ERC721 standard token
  */
-contract NewCopyright is ERC721 {
+contract NewCopyright is ERC721URIStorage {
     using Strings for string;
 
     //Struct
@@ -29,7 +32,7 @@ contract NewCopyright is ERC721 {
 
     uint256 private nextTokenId;
 
-    uint256 private nextCoverId = 1;
+    uint256 public nextCoverId = 1;
 
     event CoverCreation(
         string title,
@@ -66,6 +69,9 @@ contract NewCopyright is ERC721 {
         string memory _description,
         string memory _status
     ) external {
+        require(bytes(_title).length > 0, "Title must be non-empty");
+        require(bytes(_description).length > 0, "Description must be non-empty");
+        require(bytes(_status).length > 0, "Status must be non-empty");
 
         uint256 _coverId = nextCoverId;
 
@@ -86,6 +92,8 @@ contract NewCopyright is ERC721 {
     function mintCopyright(uint256 coverId) public returns (uint) {
         // Check that the Cover exists.
         require(bytes(covers[coverId].title).length > 0, "Cover does not exist");
+        require(covers[coverId].owner == msg.sender, "Caller is not the owner");
+        require(tokenToCover[coverId] != 0, "Cover already has a token");
 
         // Mint a new token for the sender, using the `nextTokenId`.
         _mint(msg.sender, nextTokenId);
@@ -102,6 +110,7 @@ contract NewCopyright is ERC721 {
         return nextTokenId;
     }
 
+
     function updateCover(uint256 _id, string memory _title, string memory _description) external onlyOwner(_id) returns (uint256)  {
         Cover storage cover = covers[_id];
         cover.title = _title;
@@ -110,6 +119,58 @@ contract NewCopyright is ERC721 {
         return _id;
     }
 
+    function getAllCoypright() public view returns (Cover[] memory) {
+        Cover[] memory result = new Cover[](nextCoverId);
+        for (uint256 i = 0; i < nextCoverId; i++) {
+            result[i] = covers[i];
+        }
+        return result;
+    }
+
+    function getCover(uint256 _id) public view returns (Cover memory) {
+        return covers[_id];
+    }
+
+    function getCoverByToken(uint256 _tokenId) public view returns (Cover memory) {
+        return covers[tokenToCover[_tokenId]];
+    }
+
+    function getAuthorCover() external view returns (Cover[] memory){
+        uint256 resultCount;
+        for (uint256 i = 0; i < nextCoverId; i++) {
+            if (covers[i].owner == msg.sender) {
+                resultCount++;
+            }
+        }
+        Cover[] memory result = new Cover[](resultCount);
+        uint j;
+        for (uint256 i = 0; i < nextCoverId; i++) {
+            if (covers[i].owner == msg.sender) {
+                result[j] = covers[i];
+                j++;
+            }
+        }
+        return result;
+    }
+
+    function fetchUserNFT() public view returns (uint256[] memory) {
+        uint totalNFTCount = nextTokenId;
+        uint itemCount = 0;
+        uint currentIndex = 0;
+        for (uint256 i = 0; i < totalNFTCount; i++) {
+            if (covers[tokenToCover[i]].owner == msg.sender) {
+                itemCount++;
+            }
+        }
+        uint256[] memory result = new uint256[](itemCount);
+        for (uint256 i = 0; i < totalNFTCount; i++) {
+            if (covers[tokenToCover[i]].owner == msg.sender) {
+                result[currentIndex] = i;
+                currentIndex++;
+            }
+        }
+        return result;
+    }
     // Returns e.g. https://creader.io/Copyright/[CopyrightId]/[tokenId]
     function tokenURI(uint256 tokenId)
     public

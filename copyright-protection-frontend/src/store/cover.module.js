@@ -1,6 +1,6 @@
 import {ethers} from "ethers";
 import {
-    getCopyrightContract,
+    getCopyrightContract, getCopyrightNFTContract,
     getProviderOrSigner
 } from "../utils/support";
 
@@ -33,7 +33,7 @@ const actions = {
             const { ethereum } = window;
             const provider = await new ethers.providers.Web3Provider(ethereum);
             // const provider = await getProviderOrSigner();
-            const contract = getCopyrightContract(provider);
+            const contract = getCopyrightNFTContract(provider);
             const cover = await contract.getAllCoypright();
 
             commit("setCovers", cover);
@@ -45,7 +45,7 @@ const actions = {
     async getCoverNum({commit}) {
         try {
             const provider = await getProviderOrSigner();
-            const contract = getCopyrightContract(provider);
+            const contract = getCopyrightNFTContract(provider);
             const number = await contract.numCovers();
             commit("setNumberOfCovers", number.toString());
         } catch (error) {
@@ -55,7 +55,7 @@ const actions = {
     async getAuthorCover({commit}) {
         try {
             const signer = await getProviderOrSigner(true);
-            const contract = getCopyrightContract(signer);
+            const contract = getCopyrightNFTContract(signer);
             const cover = await contract.getAuthorCover();
             commit("setAuthorCovers", cover);
         } catch (error) {
