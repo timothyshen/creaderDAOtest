@@ -78,42 +78,14 @@ export default {
       try {
         this.loading = true;
         if (this.getActiveAccount) {
+          const chapterData = JSON.stringify({
+            title: this.title,
+            context: this.context,
+          })
+          const response = await createArweaveTrans(chapterData, this.getActiveAccount);
 
-          /*
-           this is the part for etherum transaction to create a new chapter
-           */
-          const provider = await getProviderOrSigner(true);
-          const contract = await getCopyrightContract(provider);
+          console.log(response);
 
-          const txn = await contract.createChapter(
-              this.$route.params.id,
-              this.title,
-              this.context
-          );
-          this.loading = true;
-          await txn.wait();
-          console.log(txn.hash);
-          this.loading = false;
-          this.$message({
-            message: `Success fully created chapter ${this.title}\n
-            Transaction hash: ${txn.hash}`,
-            type: 'success'
-          });
-
-          /*
-            this is the part for local db transaction to create a new chapter
-           */
-          // await postChapterCreate({
-          //   bookID: this.$route.params.id,
-          //   arID: 'U7ATwmfXm2_Qoe86mKaaFlB5iRd4_OzixHz5mANFagU',
-          //   title: this.title,
-          //   body: this.context,
-          //   isAuthed: true,
-          // }, this.$route.params.id).then(res => {
-          //   console.log(res);
-          // }).catch(err => {
-          //   console.log(err);
-          // });
         } else {
           window.alert("Please connect to a wallet");
         }

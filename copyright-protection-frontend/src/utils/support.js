@@ -3,9 +3,6 @@ import * as constant from "../constant";
 import store from "../store/store";
 
 export const getCopyrightContract = (providerOrSigner) => {
-    // console.log("provider-contract", providerOrSigner);
-    // console.log("COPY_RIGHT_CONTRACT_ADDRESS", COPY_RIGHT_CONTRACT_ADDRESS);
-    // console.log("abi", COPY_RIGHT_CONTRACT_ABI);
     return new Contract(
         constant.COPY_RIGHT_CONTRACT_ADDRESS,
         constant.COPY_RIGHT_CONTRACT_ABI,
@@ -17,6 +14,14 @@ export const getCopyrightNFTContract = (providerOrSigner) => {
     return new Contract(
         constant.COPYRIGHT_NFT_CONTRACT_ADDRESS,
         constant.COPYRIGHT_NFT_CONTRACT_ABI,
+        providerOrSigner
+    );
+}
+
+export const getAccessTokenContract = (providerOrSigner) => {
+    return new Contract(
+        constant.ACCESS_TOKEN_CONTRACT_ADDRESS,
+        constant.ACCESS_TOKEN_CONTRACT_ABI,
         providerOrSigner
     );
 }

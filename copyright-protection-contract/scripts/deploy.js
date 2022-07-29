@@ -29,14 +29,28 @@ async function publishContract(contractName) {
 
 }
 async function NFTcontract() {
+    const metadata = "ipfs://bafkreihdl5mexbqpc7yn5bcjfd7qdzqtoicynujp3gfvbhpvusdua3quue;"
     const ContractFactory = await hre.ethers.getContractFactory("NewCopyright");
-    const contract = await ContractFactory.deploy("https://creader.io/","CreaderDAO Copyright", "CRD");
+    const contract = await ContractFactory.deploy(metadata,"CreaderDAO Copyright", "CRD");
     const address = contract.address;
     await contract.deployed();
     console.log("Copyright NFT contract address: " + address);
     fs.copyFileSync(
         path.join(__dirname, "../artifacts/contracts/" + "NewCopyright" + ".sol/" + "NewCopyright" + ".json"), //source
         path.join(__dirname, "../../copyright-protection-frontend/src/api/" + "NewCopyright" + ".json") // destination
+    );
+}
+
+async function AccessToken() {
+    const metadata = "ipfs://bafkreihdl5mexbqpc7yn5bcjfd7qdzqtoicynujp3gfvbhpvusdua3quue;"
+    const ContractFactory = await hre.ethers.getContractFactory("AccessToken");
+    const contract = await ContractFactory.deploy(metadata,"CreaderDAOAccess", "CRDAT");
+    const address = contract.address;
+    await contract.deployed();
+    console.log("Copyright NFT contract address: " + address);
+    fs.copyFileSync(
+        path.join(__dirname, "../artifacts/contracts/" + "AccessToken" + ".sol/" + "AccessToken" + ".json"), //source
+        path.join(__dirname, "../../copyright-protection-frontend/src/api/" + "AccessToken" + ".json") // destination
     );
 }
 
@@ -51,10 +65,11 @@ async function main() {
     // If this script is run directly using `node` you may want to call compile
     // manually to make sure everything is compiled
     // await hre.run('compile');
-    for (cont of contract) {
-        await publishContract(cont);
-    }
-    await NFTcontract();
+    // for (cont of contract) {
+    //     await publishContract(cont);
+    // }
+    // await NFTcontract();
+    await AccessToken();
 }
 
 // We recommend this pattern to be able to use async/await everywhere
