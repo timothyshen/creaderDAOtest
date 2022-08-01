@@ -213,3 +213,52 @@ Next week:
 
 # Next week
 - Complete process
+
+
+# 8th, July, 2022
+
+# Progress
+- Completed Arweave decentralization storage
+- Implemented the Arweave API gateway in project
+- Completed the Introduction section
+
+# Target next week
+
+- Explore storage on Ethereum
+- Aim to complete the background theory by mid of the week
+
+# 11th, July, 2022
+
+# Progress
+-	ETH version storage
+-	Background Theory
+
+#Disscusion item:
+-	Analysis
+    -	Security of the smart contract attack
+        -	Analysis on accessibility failure such as wallet inaccessible
+        -	Mnemonic Phrase and private key
+        -	Scam website attack
+    -	Compare full on-chain storage solution and hybrid on-chain and off-chain storage
+-	Implementation 
+    -	Keep on working Arweave Storage
+    -	And add local storage option to ETH storage for hybrid
+    -	Possible code optimization analysis on gas
+-	Process diagram
+ 
+# Action item
+-	Storage investigation
+-	Arweave local node and ETH local node
+
+# 22nd July, 2022
+
+# Last week:
+-	Completed the local database set up and API injection
+-	Linked the chapter contract part to frontend
+-	Improved the frontend UI
+-	80% completed with the Background knowledge section.
+
+# This week:
+-	Inject Arweave solution
+-	Complete Chapter 1 & 2
+-	Work on NFT as proof of ownership
