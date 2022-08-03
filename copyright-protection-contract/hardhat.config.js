@@ -4,6 +4,8 @@ require("@nomiclabs/hardhat-etherscan");
 require("@nomiclabs/hardhat-waffle");
 require("hardhat-gas-reporter");
 require("solidity-coverage");
+require("@nomiclabs/hardhat-ganache");
+
 
 const ALCHEMY_API_KEY_URL = process.env.ALCHEMY_API_KEY_URL;
 const RINKEBY_PRIVATE_KEY = process.env.RINKEBY_PRIVATE_KEY;
@@ -27,6 +29,11 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
 module.exports = {
   solidity: "0.8.4",
   networks: {
+    ganache: {
+      url:"HTTP://127.0.0.1:7545",
+      gasLimit: 6000000000,
+      defaultBalanceEther: 10
+    },
     rinkeby: {
       url: process.env.ALCHEMY_API_KEY_URL_RINKEBY,
       accounts: [process.env.PRIVATE_KEY]

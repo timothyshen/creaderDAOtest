@@ -30,7 +30,7 @@ contract NewCopyright is ERC721URIStorage {
 
     mapping(uint256 => uint256) public tokenToCover;
 
-    uint256 private nextTokenId;
+    uint256 private nextTokenId = 1;
 
     uint256 public nextCoverId = 1;
 
@@ -84,16 +84,19 @@ contract NewCopyright is ERC721URIStorage {
 
         emit CoverCreation(_title, _description, msg.sender, _status, _coverId);
 
-        mintCopyright(_coverId++);
+        mintCopyright(_coverId);
+
+        _coverId++;
 
         nextCoverId = _coverId;
     }
 
-    function mintCopyright(uint256 coverId) public returns (uint) {
+    function mintCopyright(uint256 coverId) public  {
         // Check that the Cover exists.
         require(bytes(covers[coverId].title).length > 0, "Cover does not exist");
         require(covers[coverId].owner == msg.sender, "Caller is not the owner");
-        require(tokenToCover[coverId] != 0, "Cover already has a token");
+        require(nextTokenId > tokenToCover[coverId], "Cover NFT exists");
+
 
         // Mint a new token for the sender, using the `nextTokenId`.
         _mint(msg.sender, nextTokenId);
@@ -107,7 +110,6 @@ contract NewCopyright is ERC721URIStorage {
         );
 
         nextTokenId++;
-        return nextTokenId;
     }
 
 
@@ -153,7 +155,7 @@ contract NewCopyright is ERC721URIStorage {
         return result;
     }
 
-    function fetchUserNFT() public view returns (uint256[] memory) {
+    function fetchUserNFT() public view returns (Cover[] memory) {
         uint totalNFTCount = nextTokenId;
         uint itemCount = 0;
         uint currentIndex = 0;
@@ -162,10 +164,10 @@ contract NewCopyright is ERC721URIStorage {
                 itemCount++;
             }
         }
-        uint256[] memory result = new uint256[](itemCount);
+        Cover[] memory result = new Cover[](itemCount);
         for (uint256 i = 0; i < totalNFTCount; i++) {
             if (covers[tokenToCover[i]].owner == msg.sender) {
-                result[currentIndex] = i;
+                result[currentIndex] = covers[tokenToCover[i]];
                 currentIndex++;
             }
         }

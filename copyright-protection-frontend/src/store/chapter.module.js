@@ -1,5 +1,5 @@
 import {
-    getCopyrightContract, getCopyrightNFTContract,
+    getCopyrightNFTContract,
     getProviderOrSigner
 } from "../utils/support";
 
@@ -36,7 +36,7 @@ const actions = {
             console.log(error);
         }
     },
-     async getSpecificChapter({commit}, id) {
+    async getSpecificChapter({commit}, id) {
         try {
             const provider = await getProviderOrSigner();
             const contract = getCopyrightNFTContract(provider);
