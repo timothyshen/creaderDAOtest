@@ -97,6 +97,10 @@ export default {
         await txn.wait();
         console.log(txn);
 
+        contract.on("CoverCreation", (title, description, owner, status, CoverId) => {
+          console.log(title, description, owner, status, CoverId);
+        });
+
         await this.$store.dispatch("cover/getCoverNum");
         await this.$store.dispatch("cover/getAuthorCover");
         this.loading = false;

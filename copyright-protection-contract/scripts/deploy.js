@@ -47,7 +47,7 @@ async function AccessToken() {
     const contract = await ContractFactory.deploy(metadata,"CreaderDAOAccess", "CRDAT");
     const address = contract.address;
     await contract.deployed();
-    console.log("Copyright NFT contract address: " + address);
+    console.log("AccessToken NFT contract address: " + address);
     fs.copyFileSync(
         path.join(__dirname, "../artifacts/contracts/" + "AccessToken" + ".sol/" + "AccessToken" + ".json"), //source
         path.join(__dirname, "../../copyright-protection-frontend/src/api/" + "AccessToken" + ".json") // destination
@@ -68,8 +68,8 @@ async function main() {
     // for (cont of contract) {
     //     await publishContract(cont);
     // }
-    // await NFTcontract();
-    await AccessToken();
+    await NFTcontract();
+    // await AccessToken();
 }
 
 // We recommend this pattern to be able to use async/await everywhere

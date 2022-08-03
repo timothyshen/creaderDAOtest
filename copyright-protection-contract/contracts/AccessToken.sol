@@ -4,6 +4,7 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
 
+
 contract AccessToken is ERC721 {
 
 
@@ -83,7 +84,7 @@ contract AccessToken is ERC721 {
     ) external {
 
         memberships[nextMembershipId] = Membership({
-        coverId: coverId,
+        coverId : coverId,
         quantity : quantity,
         price : price,
         fundingRecipient : fundingRecipient,
@@ -144,21 +145,6 @@ contract AccessToken is ERC721 {
         _sendFunds(memberships[membershipId].fundingRecipient, remainingForMembership);
     }
 
-    function currentHoldings(address user) public view returns (Membership[] memory) {
-        uint256 numberOfToken;
-        for (uint256 i = 0; i < nextTokenId; i++) {
-            if (userToToken[user] == i) {
-                numberOfToken++;
-            }
-        }
-        Membership[] memory holdings = new Membership[](numberOfToken);
-        for (uint256 i = 0; i < nextTokenId; i++) {
-            if (userToToken[user] == i) {
-                holdings[i] = memberships[tokenToMembership[i]];
-            }
-        }
-        return holdings;
-    }
 
     // ============ NFT Methods ============
 
@@ -189,6 +175,16 @@ contract AccessToken is ERC721 {
         return string(abi.encodePacked(baseURI, "metadata"));
     }
 
+    function getMembership(uint id) public view returns (Membership memory) {
+        Membership memory membership;
+        for (uint256 i = 1; i < nextMembershipId; i++) {
+            if (memberships[i].coverId == id) {
+                membership = memberships[i];
+            }
+        }
+        return membership;
+    }
+
     function totalSupply(uint id) public view returns (uint256) {
         return memberships[id].quantity;
     }
@@ -203,6 +199,21 @@ contract AccessToken is ERC721 {
         return numberOfToken;
     }
 
+    function currentHoldings(address user) public view returns (Membership[] memory) {
+        uint256 numberOfToken;
+        for (uint256 i = 0; i < nextTokenId; i++) {
+            if (userToToken[user] == i) {
+                numberOfToken++;
+            }
+        }
+        Membership[] memory holdings = new Membership[](numberOfToken);
+        for (uint256 i = 0; i < nextTokenId; i++) {
+            if (userToToken[user] == i) {
+                holdings[i] = memberships[tokenToMembership[i]];
+            }
+        }
+        return holdings;
+    }
 
     // ============ Private Methods ============
 
