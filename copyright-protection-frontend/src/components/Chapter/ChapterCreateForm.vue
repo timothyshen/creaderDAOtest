@@ -51,6 +51,7 @@ export default {
   computed: {
     ...mapGetters("wallet", ["getActiveAccount", "getWeb3", "getWeb3Modal"]),
     ...mapGetters("chapter", ["getChapter", "getLoading"]),
+    ...mapGetters("cover", ["getCover", "getSpecicCover"]),
   },
   watch: {
     loading(newVal) {
@@ -71,6 +72,7 @@ export default {
       this.$store.dispatch("wallet/initWeb3Modal");
       this.$store.dispatch("wallet/ethereumListener");
       this.$store.dispatch("chapter/retrieveChapter", this.$route.params.id);
+      this.$store.dispatch("cover/getSpecicCover", this.$route.params.id);
     }
   },
   methods: {
@@ -82,7 +84,7 @@ export default {
             title: this.title,
             context: this.context,
           })
-          const response = await createArweaveTrans(chapterData, this.getActiveAccount);
+          const response = await createArweaveTrans(chapterData, this.getActiveAccount, this.getCover.title);
 
           console.log(response);
 

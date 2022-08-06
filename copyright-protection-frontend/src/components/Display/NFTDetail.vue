@@ -4,7 +4,8 @@
 
 <script>
 export default {
-  name: "NFTDetail"
+  name: "NFTDetail",
+
 }
 </script>
 

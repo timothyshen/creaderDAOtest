@@ -6,7 +6,7 @@ const arweave = initialize();
 const MIN_NUMBER_OF_CONFIRMATIONS = 2;
 
 
-export const createArweaveTrans = async (data, ethAddress) => {
+export const createArweaveTrans = async (data, ethAddress, bookTitle) => {
     try {
         const transaction = await arweave.createTransaction({
             data: data, arweave_wallet
@@ -15,6 +15,9 @@ export const createArweaveTrans = async (data, ethAddress) => {
         // transaction.addTag('Book-Title')
         transaction.addTag('Content-Type', 'application/json');
         transaction.addTag('Address', ethAddress);
+        transaction.addTag('Book-Title', bookTitle);
+
+        // transaction.addTag('Content-digest', contentDigest);
 
         await arweave.transactions.sign(transaction, arweave_wallet);
         let uploader = await arweave.transactions.getUploader(transaction);

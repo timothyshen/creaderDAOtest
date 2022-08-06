@@ -6,10 +6,10 @@
       </el-header>
       <el-container>
         <el-aside width="200px">
-          <BookSideDisplay></BookSideDisplay>
+          <Book-side-display></Book-side-display>
         </el-aside>
         <el-main>
-          <cover-setting></cover-setting>
+          <chapter-list-display></chapter-list-display>
         </el-main>
       </el-container>
     </el-container>
@@ -17,20 +17,15 @@
 </template>
 
 <script>
-import BookSideDisplay from "../components/Global/BookSideDisplay.vue";
 import ProfileDisplay from "../components/Global/ProfileDisplay.vue";
-import CoverSetting from "../components/Cover/Setting/CoverSetting.vue";
-
+import ChapterListDisplay from "../components/Chapter/ChapterListDisplay.vue";
+import BookSideDisplay from "../components/Global/BookSideDisplay.vue";
 export default {
-  name: "CoverSettingPage",
-  components: {CoverSetting, ProfileDisplay, BookSideDisplay},
+  name: "DisplayProfileChapter",
+  components: {ChapterListDisplay, ProfileDisplay, BookSideDisplay},
 }
 </script>
 
 <style scoped>
-.container-setting{
-  height: 100%;
-  width: 1080px;
-  margin: 0 auto;
-}
+
 </style>
