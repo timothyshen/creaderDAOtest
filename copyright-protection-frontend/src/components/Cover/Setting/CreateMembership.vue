@@ -1,6 +1,13 @@
 <template>
   <div>
-    <el-switch v-model="isMembershipCreated"></el-switch>
+    <el-switch
+        v-model="isMembershipCreated"
+        :disabled="membershipCreated"
+        active-text="NFT"
+    ></el-switch>
+    <div v-if="membershipCreated">
+      Your collection has already been created!
+    </div>
     <el-dialog v-model="dialogFormVisible">
       <div>Create your Memership Collection!</div>
       <el-form>
@@ -10,20 +17,22 @@
         <el-form-item label="Price">
           <el-input v-model="membership.title"></el-input>
         </el-form-item>
-        <template #footer>
-      <span class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">Cancel</el-button>
-      </span>
-        </template>
       </el-form>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="handleCreate">Create</el-button>
+          <el-button @click="dialogFormVisible = false">Cancel</el-button>
+        </span>
+      </template>
     </el-dialog>
   </div>
 </template>
 
 <script>
 import {mapGetters} from "vuex";
-import ethers from "ethers";
+import {ethers} from "ethers";
 import {getProviderOrSigner, getAccessTokenContract} from "../../../utils/support";
+import {ElMessageBox} from "element-plus";
 
 export default {
   name: "CreateMembership",
@@ -31,6 +40,7 @@ export default {
     return {
       isMembershipCreated: false,
       dialogFormVisible: false,
+      membershipCreated: false,
       membership: {
         title: '',
         price: '',
@@ -46,7 +56,12 @@ export default {
   },
   computed: {
     ...mapGetters("wallet", ["getActiveAccount", "getWeb3", "getWeb3Modal"]),
-    ...mapGetters("accessToken", ["getAccessToken", ]),
+    ...mapGetters("accessToken", ["getAccessToken",]),
+    checkMembership() {
+      if (this.getAccessToken) {
+        this.membershipCreated = true;
+      }
+    },
   },
   methods: {
     async createMembershipCollection() {
@@ -58,13 +73,23 @@ export default {
             this.membership.title,
             this.membership.price,
             this.getActiveAccount,
-
         );
         await txn.wait();
 
       } catch (error) {
         console.log(error);
       }
+    },
+    handleCreate() {
+      ElMessageBox.confirm('Are you sure to close this dialog?')
+          .then(() => {
+            this.dialogFormVisible = false;
+            this.isMembershipCreated = false;
+            done()
+          })
+          .catch(() => {
+            // catch error
+          })
     },
   },
 }

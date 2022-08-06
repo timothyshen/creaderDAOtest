@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: "CoverManagementPage"
+  name: "DisplayNFTPage"
 }
 </script>
 

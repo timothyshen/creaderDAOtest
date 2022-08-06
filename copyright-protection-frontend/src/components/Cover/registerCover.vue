@@ -29,6 +29,7 @@
       <el-table-column label="Short description" prop="description"></el-table-column>
       <el-table-column label="Edit" width="120">
         <template #default="scope">
+          <el-button link type="primary" size="small" @click="handleCreate(scope.row)">Create</el-button>
           <el-button link type="primary" size="small" @click="handleEdit(scope.row)">Edit</el-button>
         </template>
       </el-table-column>
@@ -108,14 +109,22 @@ export default {
         console.log(error);
       }
     },
-    handleEdit(row) {
+    handleCreate(row) {
       this.$router.push({
         name: "chapter",
         params: {
           id: row.id
         }
       });
-    }
+    },
+    handleEdit(row) {
+      this.$router.push({
+        name: "editCover",
+        params: {
+          id: row.id
+        }
+      });
+    },
   }
 }
 </script>
