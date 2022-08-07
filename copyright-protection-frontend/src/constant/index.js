@@ -1,6 +1,6 @@
 export const COPY_RIGHT_CONTRACT_ADDRESS = "0xad8A440aCD6625F4fAe3FB1f978eFAC63C224C35";
 export const COPYRIGHT_NFT_CONTRACT_ADDRESS = "0x48ea375df2F82ceFa1a55106060417AA95AE825F";
-export const ACCESS_TOKEN_CONTRACT_ADDRESS = "0x2A53184d2b159fA9C8702b383494e8983840319f";
+export const ACCESS_TOKEN_CONTRACT_ADDRESS = "0x91149688AD5468869325950cB7E88812742B422c";
 export const COPY_RIGHT_CONTRACT_ABI = [
     {
         "anonymous": false,
@@ -1620,40 +1620,11 @@ export const ACCESS_TOKEN_CONTRACT_ABI = [
                 "internalType": "uint256",
                 "name": "membershipId",
                 "type": "uint256"
-            },
-            {
-                "internalType": "string",
-                "name": "coverTitle",
-                "type": "string"
             }
         ],
         "name": "buyMembership",
         "outputs": [],
         "stateMutability": "payable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "coverId",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "tokenId",
-                "type": "uint256"
-            }
-        ],
-        "name": "checkOwnership",
-        "outputs": [
-            {
-                "internalType": "bool",
-                "name": "",
-                "type": "bool"
-            }
-        ],
-        "stateMutability": "view",
         "type": "function"
     },
     {
@@ -1781,6 +1752,30 @@ export const ACCESS_TOKEN_CONTRACT_ABI = [
             }
         ],
         "name": "isApprovedForAll",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_owner",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_coverId",
+                "type": "uint256"
+            }
+        ],
+        "name": "isOwner",
         "outputs": [
             {
                 "internalType": "bool",
@@ -2025,35 +2020,6 @@ export const ACCESS_TOKEN_CONTRACT_ABI = [
                 "internalType": "uint256",
                 "name": "",
                 "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "_tokenId",
-                "type": "uint256"
-            },
-            {
-                "internalType": "string",
-                "name": "coverTitle",
-                "type": "string"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_coverId",
-                "type": "uint256"
-            }
-        ],
-        "name": "tokenURI",
-        "outputs": [
-            {
-                "internalType": "string",
-                "name": "",
-                "type": "string"
             }
         ],
         "stateMutability": "view",

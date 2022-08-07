@@ -103,6 +103,8 @@ import {mapGetters} from 'vuex';
 import {getAccessTokenContract, getProviderOrSigner} from "../../utils/support.js";
 import {searchArweave} from "../../arweave/arweave.js";
 import NFTDetail from "./NFTDetail.vue";
+import {ElMessageBox } from 'element-plus';
+
 
 export default {
   name: "CoverDisplayPublic",
