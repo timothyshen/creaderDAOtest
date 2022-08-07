@@ -1,6 +1,7 @@
 import {initialize} from "./index";
 import * as arweave_wallet from './arweave-wallet.json';
 import ArDB from "ardb";
+import { cyrb53 } from "../utils/support.js";
 
 const arweave = initialize();
 const MIN_NUMBER_OF_CONFIRMATIONS = 2;
@@ -8,16 +9,15 @@ const MIN_NUMBER_OF_CONFIRMATIONS = 2;
 
 export const createArweaveTrans = async (data, ethAddress, bookTitle) => {
     try {
+        bookTitle = cyrb53(bookTitle);
         const transaction = await arweave.createTransaction({
             data: data, arweave_wallet
         });
         transaction.addTag('App-Name', import.meta.env.VITE_APP_NAME);
-        // transaction.addTag('Book-Title')
+        bookTitle = cyrb53(bookTitle);
         transaction.addTag('Content-Type', 'application/json');
         transaction.addTag('Address', ethAddress);
         transaction.addTag('Book-Title', bookTitle);
-
-        // transaction.addTag('Content-digest', contentDigest);
 
         await arweave.transactions.sign(transaction, arweave_wallet);
         let uploader = await arweave.transactions.getUploader(transaction);

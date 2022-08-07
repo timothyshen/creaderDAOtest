@@ -16,10 +16,11 @@ contract NewCopyright is ERC721URIStorage {
 
     //Struct
     struct Cover {
+        uint256 id;
         string title;
         string description;
-        address owner;
         string status;
+        address owner;
     }
 
     // URI
@@ -76,6 +77,7 @@ contract NewCopyright is ERC721URIStorage {
         uint256 _coverId = nextCoverId;
 
         covers[_coverId] = Cover({
+        id: _coverId,
         title: _title,
         description: _description,
         owner: msg.sender,

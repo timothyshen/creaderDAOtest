@@ -175,44 +175,14 @@ contract AccessToken is ERC721 {
         return string(abi.encodePacked(baseURI, "metadata"));
     }
 
-    function getMembership(uint id) public view returns (Membership memory) {
-        Membership memory membership;
-        for (uint256 i = 1; i < nextMembershipId; i++) {
-            if (memberships[i].coverId == id) {
-                membership = memberships[i];
-            }
-        }
-        return membership;
-    }
-
     function totalSupply(uint id) public view returns (uint256) {
         return memberships[id].quantity;
     }
 
-    function balanceOfToken(address user) public view returns (uint256) {
-        uint256 numberOfToken;
-        for (uint256 i = 0; i < nextTokenId; i++) {
-            if (userToToken[user] == i) {
-                numberOfToken++;
-            }
-        }
-        return numberOfToken;
-    }
 
-    function currentHoldings(address user) public view returns (Membership[] memory) {
-        uint256 numberOfToken;
-        for (uint256 i = 0; i < nextTokenId; i++) {
-            if (userToToken[user] == i) {
-                numberOfToken++;
-            }
-        }
-        Membership[] memory holdings = new Membership[](numberOfToken);
-        for (uint256 i = 0; i < nextTokenId; i++) {
-            if (userToToken[user] == i) {
-                holdings[i] = memberships[tokenToMembership[i]];
-            }
-        }
-        return holdings;
+   function checkOwnership(uint256 MembershipId, uint256 tokenId) public view returns (bool) {
+        require(tokenToMembership[tokenId] == MembershipId, "Token has not been sold yet");
+        return userToToken[msg.sender] == tokenId;
     }
 
     // ============ Private Methods ============

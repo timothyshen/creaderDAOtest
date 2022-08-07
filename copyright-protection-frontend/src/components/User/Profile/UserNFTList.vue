@@ -1,41 +1,104 @@
 <template>
-  <el-row>
-    <el-col>
-      <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">My NFTs</h2>
-      <section className='flex flex-wrap justify-center'>
-        <div v-if>
-          <NFTDetailCard :nftDetail="nftDetail"></NFTDetailCard>
-        </div>
-        <div v-else>No NFTs found</div>
-      </section>
+  <div class="px-4 py-5 sm:px-6">
+    <h3 class="text-lg leading-6 font-medium text-gray-900">My NFTs</h3>
+    <h4 class="leading-6 font-medium text-sm text-gray-500">Current holding:
+      <span class="text-gray-900">{{ totalCount }}</span>
+    </h4>
+  </div>
+  <div v-if="copyrightDetail || accessTokenDetail">
+    <section class='flex flex-wrap justify-center'>
 
-    </el-col>
-  </el-row>
+      <div class='flex flex-wrap justify-center'>
+        <p class="text-lg leading-6 mb-3 font-medium text-gray-900">Copyright NFTs</p>
+      </div>
+      <el-divider class="w-3/4"></el-divider>
+      <div class="w-1/4 mr-3 mb-4 bg-slate-100 rounded-md" v-for="nft in nftDetail">
+        <!--        <img class='w-full rounded-t-md' :key="nft.id" :src="nft.media[0].gateway">-->
+        <img class='w-full rounded-t-md' :key="nft.id"
+             src="https://bafkreihdl5mexbqpc7yn5bcjfd7qdzqtoicynujp3gfvbhpvusdua3quue.ipfs.nftstorage.link/">
+        <div class="p-3">
+          <div class="flex mb-3">
+            <div class="flex-grow">
+              <h3 class="text-xl">{{ nft.title ? nft.title : "CreaderDAO" }}</h3>
+              <p>{{ sliceString(nft.id.tokenId) }}</p>
+            </div>
+            <div class="flex mr-3">
+              <a target="_blank" class="text-blue-700"
+                 :href="formURL(nft.contract.address)">{{ sliceString(nft.contract.address) }}</a>
+            </div>
+          </div>
+          <p>{{ nft.description ? nft.description.slice(0, 200) : "This is for book test" }}</p>
+        </div>
+      </div>
+    </section>
+    <section class='flex flex-wrap justify-center'>
+
+      <h2 class="leading-6 font-medium text-lg text-gray-500">Accesstoken NFT</h2>
+      <el-divider class="w-3/4"></el-divider>
+      <div class="w-1/4 mr-3 mb-4 bg-slate-100 rounded-md" v-for="nft in nftDetail">
+        <!--        <img class='w-full rounded-t-md' :key="nft.id" :src="nft.media[0].gateway">-->
+        <img class='w-full rounded-t-md' :key="nft.id"
+             src="https://bafkreihdl5mexbqpc7yn5bcjfd7qdzqtoicynujp3gfvbhpvusdua3quue.ipfs.nftstorage.link/">
+        <div class="p-3">
+          <div class="flex mb-3">
+            <div class="flex-grow">
+              <h3 class="text-xl">{{ nft.title ? nft.title : "CreaderDAO" }}</h3>
+              <p>{{ sliceString(nft.id.tokenId) }}</p>
+            </div>
+            <div class="flex mr-3">
+              <a target="_blank" class="text-blue-700"
+                 :href="formURL(nft.contract.address)">{{ sliceString(nft.contract.address) }}</a>
+            </div>
+          </div>
+          <p>{{ nft.description ? nft.description.slice(0, 200) : "This is for book test" }}</p>
+        </div>
+      </div>
+    </section>
+  </div>
+  <div v-else>
+    No NFTs found
+  </div>
+
 </template>
 
 <script>
 import {COPYRIGHT_NFT_CONTRACT_ADDRESS} from "../../../constant";
 import {fetchNFTs} from '../../../utils/alchemy.js';
-import NFTDetailCard from './NFTDetailCard.vue'
+import {mapGetters} from "vuex";
+
 export default {
   name: "UserNFTList",
-  components: {NFTDetailCard},
+  components: {},
   data() {
     return {
-      nftDetail: {},
+      copyrightDetail: {},
+      accessTokenDetail: {},
+      totalCount: 0,
     };
   },
   computed: {
     ...mapGetters("wallet", ["getActiveAccount"]),
   },
-  mounted() {
-    fetchNFTs(this.getActiveAccount,COPYRIGHT_NFT_CONTRACT_ADDRESS).then(res => {
-      this.nftDetail = res;
-    }).catch(err => {
-      this.$message.error(err);
-    }).finally(() => {
-      this.$loading.finish();
-    });
+  created() {
+    this.fetchCopyrightNFTs();
+  },
+  methods: {
+    async fetchCopyrightNFTs() {
+      const nfts = await fetchNFTs(this.getActiveAccount, COPYRIGHT_NFT_CONTRACT_ADDRESS);
+      this.nftDetail = nfts.ownedNfts;
+      this.totalCount = nfts.totalCount;
+    },
+    async fetchAccessToken() {
+      const nfts = await fetchNFTs(this.getActiveAccount, COPYRIGHT_NFT_CONTRACT_ADDRESS);
+      // this.nftDetail.extend(nfts.ownedNfts);
+      this.totalCount += nfts.totalCount;
+    },
+    sliceString(string) {
+      return string.slice(0, 4) + "..." + string.slice(string.length - 4);
+    },
+    formURL(string) {
+      return "https://rinkeby.etherscan.io/token/" + string;
+    },
   },
 }
 </script>

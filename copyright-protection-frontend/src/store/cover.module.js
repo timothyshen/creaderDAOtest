@@ -29,14 +29,12 @@ const getters = {
 }
 
 const actions = {
-    async getCovers({commit}) {
+    async getAllCover({commit}) {
         try {
             const { ethereum } = window;
             const provider = await new ethers.providers.Web3Provider(ethereum);
-            // const provider = await getProviderOrSigner();
             const contract = getCopyrightNFTContract(provider);
             const cover = await contract.getAllCoypright();
-
             commit("setCovers", cover);
 
         } catch (error) {
@@ -56,8 +54,11 @@ const actions = {
     async getAuthorCover({commit}) {
         try {
             const signer = await getProviderOrSigner(true);
+            console.log(signer);
             const contract = getCopyrightNFTContract(signer);
+            console.log(contract);
             const cover = await contract.getAuthorCover();
+            console.log(cover);
             commit("setAuthorCovers", cover);
         } catch (error) {
             console.log(error);

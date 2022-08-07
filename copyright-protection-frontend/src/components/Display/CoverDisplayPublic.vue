@@ -4,57 +4,50 @@
       <el-row :gutter="24" class="book_detail">
         <el-col :span="6">
           <el-image
-              :src="url"
-              fit="none"
+              src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+              fit="fill"
           ></el-image>
         </el-col>
         <el-col :span="18" class="detail_header">
           <el-container>
             <el-header>
               <div>
-<!--                <h1 class="title">{{this.book_info.title}}</h1>-->
-<!--                <h2 class="subtitle">{{ book_info ? book_info.author.username : '' }}</h2>-->
+                <!--                <h1 class="title">{{this.book_info.title}}</h1>-->
+                <!--                <h2 class="subtitle">{{ book_info ? book_info.author.username : '' }}</h2>-->
                 <h1>
-                  title of book
+                  {{ this.getCover.title ? this.getCover.title : "Test cover" }}
                 </h1>
                 <h2>
-                  author of book
+                  {{ this.getCover.owner ? this.getCover.owner : "Test cover" }}
                 </h2>
               </div>
-              <el-rate
-                  v-model="value"
-                  disabled
-                  show-score
-                  text-color="#ff9900"
-                  score-template="{value}"
-              >
-              </el-rate>
+
             </el-header>
             <div class="short_des">
-<!--              <p>{{ this.book_info.description }}</p>-->
-              <p>description</p>
+              <!--              <p>{{ this.book_info.description }}</p>-->
+              <p>{{ this.getCover.description ? this.getCover.description : "lorem" }}</p>
             </div>
             <el-divider></el-divider>
-            <nav class="level">
-              <div class="level-item has-text-centered">
+            <nav class="flex mb-6">
+              <div class="w-1/4 ">
                 <div>
                   <p class="heading">View</p>
                   <p class="title total_click_styple">100</p>
                 </div>
               </div>
-              <div class="level-item has-text-centered">
+              <div class="w-1/4">
                 <div>
                   <p class="heading">Rating</p>
                   <p class="title">6</p>
                 </div>
               </div>
-              <div class="level-item has-text-centered">
+              <div class="w-1/4">
                 <div>
                   <p class="heading">Likes</p>
                   <p class="title">120</p>
                 </div>
               </div>
-              <div class="level-item has-text-centered">
+              <div class="w-1/4">
                 <div>
                   <p class="heading">Chapters</p>
                   <p class="title">50</p>
@@ -63,11 +56,10 @@
             </nav>
             <el-divider>
               <el-footer class="book_button">
-                <el-button type="primary" round>
-                  <i class="el-icon-notebook-2 el-icon--right"></i> Start Reading
-                </el-button>
-                <el-button type="primary" round><i class="el-icon-plus el-icon--right"></i></el-button>
-                <el-button type="primary" round><i class="el-icon-share el-icon--right"></i></el-button>
+                <button type="button"
+                        class="mt-2 text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                  Start Reading
+                </button>
               </el-footer>
             </el-divider>
           </el-container>
@@ -96,29 +88,24 @@
             <el-button :click="mintMyPass" :loading="loading">{{ mint }}</el-button>
           </el-main>
         </el-col>
-        <el-col>
-          <div class="infinite-list-wrapper" style="overflow:auto">
-            <ul
-                class="list columns is-multiline is-mobile has-text-centered	"
-                v-infinite-scroll="load"
-                style="overflow:auto"
-            >
-              <div v-for="i in chapters" class="column is-one-quarter">
-                <span>{{ i.bookName + 1 }}</span>. <span>{{ i.chaptername }}</span>
-              </div>
-            </ul>
-            <p v-if="loading">loading...</p>
-            <p v-if="noMore">No More</p>
-          </div>
-        </el-col>
+
       </el-row>
     </el-col>
   </el-row>
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
-  name: "CoverDisplayPublic"
+  name: "CoverDisplayPublic",
+  computed:{
+    ...mapGetters("cover", ["getCover"]),
+    ...mapGetters("accessToken", ["getAccessToken"])
+  },
+  created() {
+    this.$store.dispatch("cover/getSpecicCover", this.$route.params.id);
+  },
 }
 </script>
 
