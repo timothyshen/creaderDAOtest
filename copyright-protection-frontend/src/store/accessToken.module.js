@@ -10,6 +10,7 @@ const state = {
     currentHolding: {},
     tokenURI: "",
     balanceOf: 0,
+    isOwner: false,
 }
 
 const getters = {
@@ -30,6 +31,9 @@ const getters = {
     },
     getBalanceOf(state) {
         return state.balanceOf;
+    },
+    getIsOwner(state) {
+        return state.isOwner;
     }
 }
 
@@ -38,7 +42,7 @@ const actions = {
         try {
             const provider = await getProviderOrSigner();
             const contract = getAccessTokenContract(provider);
-            const accessToken = await contract.getMembership(0);
+            const accessToken = await contract.getMembership(id);
             commit("setAccessToken", accessToken);
         } catch (error) {
             console.log(error);
@@ -63,6 +67,19 @@ const actions = {
         } catch (error) {
             console.log(error);
         }
+    },
+    async isMembership({commit}, coverId, tokenId) {
+        try {
+            const provider = await getProviderOrSigner();
+            const contract = getAccessTokenContract(provider);
+            const isMembership = await contract.checkOwnership(coverId, tokenId);
+            commit("setIsOwner", isMembership);
+        } catch (error) {
+            console.log(error);
+        }
+    },
+    addTokentoHolding({commit}, tokenId) {
+        commit("setCurrentHolding", tokenId);
     }
 }
 
@@ -84,6 +101,9 @@ const mutations = {
     },
     setBalanceOf(state, balanceOf) {
         state.balanceOf = balanceOf;
+    },
+    setIsOwner(state, isOwner) {
+        state.isOwner = isOwner;
     }
 }
 

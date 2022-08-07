@@ -54,11 +54,11 @@ const actions = {
     async getAuthorCover({commit}) {
         try {
             const signer = await getProviderOrSigner(true);
-            console.log(signer);
+            // console.log(signer);
             const contract = getCopyrightNFTContract(signer);
-            console.log(contract);
+            // console.log(contract);
             const cover = await contract.getAuthorCover();
-            console.log(cover);
+            // console.log(cover);
             commit("setAuthorCovers", cover);
         } catch (error) {
             console.log(error);

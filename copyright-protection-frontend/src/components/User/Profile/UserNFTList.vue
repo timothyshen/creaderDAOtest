@@ -35,7 +35,7 @@
 
       <h2 class="leading-6 font-medium text-lg text-gray-500">Accesstoken NFT</h2>
       <el-divider class="w-3/4"></el-divider>
-      <div class="w-1/4 mr-3 mb-4 bg-slate-100 rounded-md" v-for="nft in nftDetail">
+      <div class="w-1/4 mr-3 mb-4 bg-slate-100 rounded-md" v-for="nft in accessTokenDetail">
         <!--        <img class='w-full rounded-t-md' :key="nft.id" :src="nft.media[0].gateway">-->
         <img class='w-full rounded-t-md' :key="nft.id"
              src="https://bafkreihdl5mexbqpc7yn5bcjfd7qdzqtoicynujp3gfvbhpvusdua3quue.ipfs.nftstorage.link/">
@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import {COPYRIGHT_NFT_CONTRACT_ADDRESS} from "../../../constant";
+import {COPYRIGHT_NFT_CONTRACT_ADDRESS, ACCESS_TOKEN_CONTRACT_ADDRESS} from "../../../constant";
 import {fetchNFTs} from '../../../utils/alchemy.js';
 import {mapGetters} from "vuex";
 
@@ -81,6 +81,7 @@ export default {
   },
   created() {
     this.fetchCopyrightNFTs();
+    this.fetchAccessToken();
   },
   methods: {
     async fetchCopyrightNFTs() {
@@ -89,8 +90,12 @@ export default {
       this.totalCount = nfts.totalCount;
     },
     async fetchAccessToken() {
-      const nfts = await fetchNFTs(this.getActiveAccount, COPYRIGHT_NFT_CONTRACT_ADDRESS);
-      // this.nftDetail.extend(nfts.ownedNfts);
+      const nfts = await fetchNFTs(this.getActiveAccount, ACCESS_TOKEN_CONTRACT_ADDRESS);
+      this.accessTokenDetail = nfts.ownedNfts;
+      this.accessTokenDetail.forEach(nft => {
+        let tokenId = nft.id.tokenId;
+        this.$store.dispatch("accessToken/addTokentoHolding", tokenId);
+      });
       this.totalCount += nfts.totalCount;
     },
     sliceString(string) {
