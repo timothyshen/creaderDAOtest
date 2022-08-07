@@ -17,6 +17,11 @@ const routes = [
         component: () => import('../views/CoverView.vue'),
     },
     {
+        path: '/cover/:id/:chapterId/',
+        name: 'chapter',
+        component: () => import('../views/ChapterView.vue'),
+    },
+    {
         path: '/author/cover/',
         name: 'author_cover',
         component: () => import('../views/DisplayProfileBook.vue'),

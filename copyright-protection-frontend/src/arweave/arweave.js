@@ -9,7 +9,6 @@ const MIN_NUMBER_OF_CONFIRMATIONS = 2;
 
 export const createArweaveTrans = async (data, ethAddress, bookTitle) => {
     try {
-        bookTitle = cyrb53(bookTitle);
         const transaction = await arweave.createTransaction({
             data: data, arweave_wallet
         });
@@ -51,12 +50,14 @@ export const getArweaveData = (id) => {
                     : 'pending';
             console.log(txStatus);
 
-            if (txStatus === 'confirmed') {
+            if (txStatus !== 'confirmed') {
+                throw new Error('Transaction not confirmed');
+            } else {
                 const tx = await arweave.transactions.get(id);
                 const tags = {};
                 (tx.get('tags')).forEach(tag => {
-                  const key = tag.get('name', { decode: true, string: true });
-                  tags[key] = tag.get('value', { decode: true, string: true });
+                    const key = tag.get('name', {decode: true, string: true});
+                    tags[key] = tag.get('value', {decode: true, string: true});
                 });
 
                 const block = txStatusRes.confirmed
@@ -65,15 +66,13 @@ export const getArweaveData = (id) => {
                 console.log(block);
                 const blockTime = block.timestamp;
                 const txTimestamp = blockTime ? new Date(blockTime * 1000) : null;
-                resolve({
+               await resolve({
                     id: id,
                     data: txData,
                     status: txStatus,
                     timestamp: txTimestamp,
                     tags,
                 })
-            } else {
-                throw new Error('Transaction not confirmed');
             }
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : "Unknown Error";
@@ -81,16 +80,6 @@ export const getArweaveData = (id) => {
         }
     });
 }
-// try {
-//     console.log(id)
-//     const txDataResp =await arweave.transactions.getData(id, {decode: true, string: true})
-//     console.log(txDataResp);
-//     const txData = JSON.parse(txDataResp);
-//     console.log(txData);
-//     const txStatusResp = await arweave.transactions.getStatus(id);
-// } catch (error) {
-//     console.error(error);
-// }
 
 
 const getData = async (txId) => {
@@ -102,17 +91,22 @@ const getData = async (txId) => {
     };
 };
 
-export const searchArweave = async (address) => {
+export const searchArweave = async (bookTitle, address=null  ) => {
     return new Promise(async (resolve, reject) => {
         try {
+            console.log(bookTitle);
             const ardb = new ArDB(arweave);
             const tags = [{name: 'App-Name', values: [import.meta.env.VITE_APP_NAME]}];
             const searchAddress = address;
+            bookTitle = cyrb53(bookTitle);
+            bookTitle = bookTitle.toString();
+
             if (searchAddress) {
                 tags.push({name: 'Address', values: [searchAddress]});
+                console.log(tags);
             }
+            tags.push({name: 'Book-Title', values: [bookTitle]});
             const txs = await ardb.search('transactions').tags(tags).find();
-
             const promises = txs.map((tx) => getData(tx._id));
             const data = await Promise.all(promises);
 

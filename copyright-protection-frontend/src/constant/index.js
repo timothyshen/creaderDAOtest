@@ -1,6 +1,6 @@
 export const COPY_RIGHT_CONTRACT_ADDRESS = "0xad8A440aCD6625F4fAe3FB1f978eFAC63C224C35";
 export const COPYRIGHT_NFT_CONTRACT_ADDRESS = "0x48ea375df2F82ceFa1a55106060417AA95AE825F";
-export const ACCESS_TOKEN_CONTRACT_ADDRESS = "0x6e382Fdb7eF946c3f055f0024D3B24aAf08F1764";
+export const ACCESS_TOKEN_CONTRACT_ADDRESS = "0x2A53184d2b159fA9C8702b383494e8983840319f";
 export const COPY_RIGHT_CONTRACT_ABI = [
     {
         "anonymous": false,
@@ -1617,33 +1617,43 @@ export const ACCESS_TOKEN_CONTRACT_ABI = [
     {
         "inputs": [
             {
-                "internalType": "address",
-                "name": "user",
-                "type": "address"
-            }
-        ],
-        "name": "balanceOfToken",
-        "outputs": [
-            {
                 "internalType": "uint256",
-                "name": "",
+                "name": "membershipId",
                 "type": "uint256"
+            },
+            {
+                "internalType": "string",
+                "name": "coverTitle",
+                "type": "string"
             }
         ],
-        "stateMutability": "view",
+        "name": "buyMembership",
+        "outputs": [],
+        "stateMutability": "payable",
         "type": "function"
     },
     {
         "inputs": [
             {
                 "internalType": "uint256",
-                "name": "membershipId",
+                "name": "coverId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "tokenId",
                 "type": "uint256"
             }
         ],
-        "name": "buyMembership",
-        "outputs": [],
-        "stateMutability": "payable",
+        "name": "checkOwnership",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "view",
         "type": "function"
     },
     {
@@ -1690,52 +1700,6 @@ export const ACCESS_TOKEN_CONTRACT_ABI = [
     {
         "inputs": [
             {
-                "internalType": "address",
-                "name": "user",
-                "type": "address"
-            }
-        ],
-        "name": "currentHoldings",
-        "outputs": [
-            {
-                "components": [
-                    {
-                        "internalType": "uint256",
-                        "name": "coverId",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "quantity",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "price",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "numSold",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "address payable",
-                        "name": "fundingRecipient",
-                        "type": "address"
-                    }
-                ],
-                "internalType": "struct AccessToken.Membership[]",
-                "name": "",
-                "type": "tuple[]"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
                 "internalType": "uint256",
                 "name": "tokenId",
                 "type": "uint256"
@@ -1756,7 +1720,7 @@ export const ACCESS_TOKEN_CONTRACT_ABI = [
         "inputs": [
             {
                 "internalType": "uint256",
-                "name": "id",
+                "name": "_coverId",
                 "type": "uint256"
             }
         ],
@@ -1764,6 +1728,11 @@ export const ACCESS_TOKEN_CONTRACT_ABI = [
         "outputs": [
             {
                 "components": [
+                    {
+                        "internalType": "uint256",
+                        "name": "id",
+                        "type": "uint256"
+                    },
                     {
                         "internalType": "uint256",
                         "name": "coverId",
@@ -1832,6 +1801,11 @@ export const ACCESS_TOKEN_CONTRACT_ABI = [
         ],
         "name": "memberships",
         "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "id",
+                "type": "uint256"
+            },
             {
                 "internalType": "uint256",
                 "name": "coverId",
@@ -1998,6 +1972,49 @@ export const ACCESS_TOKEN_CONTRACT_ABI = [
         "inputs": [
             {
                 "internalType": "uint256",
+                "name": "index",
+                "type": "uint256"
+            }
+        ],
+        "name": "tokenByIndex",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "owner",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "index",
+                "type": "uint256"
+            }
+        ],
+        "name": "tokenOfOwnerByIndex",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
                 "name": "",
                 "type": "uint256"
             }
@@ -2017,6 +2034,35 @@ export const ACCESS_TOKEN_CONTRACT_ABI = [
         "inputs": [
             {
                 "internalType": "uint256",
+                "name": "_tokenId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "string",
+                "name": "coverTitle",
+                "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_coverId",
+                "type": "uint256"
+            }
+        ],
+        "name": "tokenURI",
+        "outputs": [
+            {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
                 "name": "tokenId",
                 "type": "uint256"
             }
@@ -2027,6 +2073,19 @@ export const ACCESS_TOKEN_CONTRACT_ABI = [
                 "internalType": "string",
                 "name": "",
                 "type": "string"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "totalSupply",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
             }
         ],
         "stateMutability": "view",

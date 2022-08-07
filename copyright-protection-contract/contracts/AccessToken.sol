@@ -2,15 +2,17 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
+import "@openzeppelin/contracts/utils/Base64.sol";
 
-
-
-contract AccessToken is ERC721 {
+contract AccessToken is ERC721Enumerable {
 
 
     // ============ Structs ============
 
     struct Membership {
+        uint256 id;
         uint256 coverId;
         // The maximum number of tokens that can be sold.
         uint256 quantity;
@@ -33,8 +35,7 @@ contract AccessToken is ERC721 {
     mapping(uint256 => Membership) public memberships;
     // Mapping of token id to membership id.
     mapping(uint256 => uint256) public tokenToMembership;
-    // Mapping of user id to token id.
-    mapping(address => uint256) internal userToToken;
+
     // The amount of funds that have already been withdrawn for a given cover.
     mapping(uint256 => uint256) public withdrawnForMembership;
     // `nextTokenId` increments with each token purchased, globally across all covers.
@@ -84,6 +85,7 @@ contract AccessToken is ERC721 {
     ) external {
 
         memberships[nextMembershipId] = Membership({
+        id: nextMembershipId,
         coverId : coverId,
         quantity : quantity,
         price : price,
@@ -111,15 +113,16 @@ contract AccessToken is ERC721 {
             msg.value == memberships[membershipId].price,
             "Must send enough to purchase the membership."
         );
+
         // Increment the number of tokens sold for this membership.
         memberships[membershipId].numSold++;
         // Mint a new token for the sender, using the `nextTokenId`.
         _mint(msg.sender, nextTokenId);
         // Store the mapping of token id to the membership being purchased.
         tokenToMembership[nextTokenId] = membershipId;
-        // Store the mapping of the sender to the token id.
-        userToToken[msg.sender] = nextTokenId;
 
+
+        // set token URI
         emit MembershipPurchased(
             membershipId,
             nextTokenId, memberships[membershipId].numSold,
@@ -155,9 +158,9 @@ contract AccessToken is ERC721 {
     override
     returns (string memory)
     {
-        // If the token does not map to an memberships, it'll be 0.
+        // If the token does not map to an edition, it'll be 0.
         require(tokenToMembership[tokenId] > 0, "Token has not been sold yet");
-        // Concatenate the components, baseURI, membershipsId and tokenId, to create URI.
+        // Concatenate the components, baseURI, editionId and tokenId, to create URI.
         return
         string(
             abi.encodePacked(
@@ -175,14 +178,30 @@ contract AccessToken is ERC721 {
         return string(abi.encodePacked(baseURI, "metadata"));
     }
 
+    function getMembership(uint _coverId) public view returns (Membership memory) {
+        Membership memory membership;
+        for (uint i = 1; i < nextMembershipId; i++) {
+            if (memberships[i].coverId == _coverId) {
+                membership = memberships[i];
+            }
+        }
+        return membership;
+    }
+
+
     function totalSupply(uint id) public view returns (uint256) {
         return memberships[id].quantity;
     }
 
-
-   function checkOwnership(uint256 MembershipId, uint256 tokenId) public view returns (bool) {
-        require(tokenToMembership[tokenId] == MembershipId, "Token has not been sold yet");
-        return userToToken[msg.sender] == tokenId;
+    // if user owns the token to access the membership, without knowing the token id
+    function isOwner(address _owner, uint _coverId) public view returns (bool) {
+        uint256 membershipId = getMembership(_coverId).id;
+        for (uint i = 0; i < nextTokenId; i++) {
+            if (tokenToMembership[i] == membershipId && _owner == ownerOf(i)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // ============ Private Methods ============

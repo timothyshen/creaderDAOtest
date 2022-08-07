@@ -20,7 +20,7 @@
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="createMembershipCollection">Create</el-button>
+          <el-button @click="createMembershipCollection">{{ create }}</el-button>
           <el-button @click="dialogFormVisible = false">Cancel</el-button>
         </span>
       </template>
@@ -50,6 +50,7 @@ export default {
         title: '',
         price: '',
       },
+      create: 'Submit',
     };
   },
   watch: {
@@ -71,13 +72,14 @@ export default {
   methods: {
     async createMembershipCollection() {
       try {
+        this.create = 'Loading...';
         const decimals = 18;
         let price = ethers.utils.parseUnits(this.membership.price,decimals);
         const signer = await getProviderOrSigner(true);
-        console.log(signer);
+        // console.log(signer);
         const accessTokenContract = await getAccessTokenContract(signer);
         console.log(accessTokenContract);
-        console.log(price);
+        // console.log(price);
         const txn = await accessTokenContract.createMemberships(
             0,
             this.membership.title,
@@ -85,7 +87,10 @@ export default {
             this.getActiveAccount,
         );
         await txn.wait();
-        console.log(txn);
+        // console.log(txn);
+        this.create = 'Submitted';
+        this.isMembershipCreated = true;
+        this.membershipCreated = true;
       } catch (error) {
         console.log(error);
       }

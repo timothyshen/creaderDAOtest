@@ -68,8 +68,8 @@ async function main() {
     // for (cont of contract) {
     //     await publishContract(cont);
     // }
-    await NFTcontract();
-    // await AccessToken();
+    // await NFTcontract();
+    await AccessToken();
 }
 
 // We recommend this pattern to be able to use async/await everywhere

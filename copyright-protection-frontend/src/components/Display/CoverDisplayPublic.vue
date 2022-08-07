@@ -18,14 +18,16 @@
                   {{ this.getCover.title ? this.getCover.title : "Test cover" }}
                 </h1>
                 <h2>
-                  {{ this.getCover.owner ? this.getCover.owner : "Test cover" }}
+                  <!--                  {{ sliceString(this.getCover.owner) ? sliceString(this.getCover.owner) : "Test cover" }}-->
                 </h2>
               </div>
 
             </el-header>
             <div class="short_des">
               <!--              <p>{{ this.book_info.description }}</p>-->
-              <p>{{ this.getCover.description ? this.getCover.description : "lorem" }}</p>
+              <p>{{
+                  this.getCover.description ? this.getCover.description : "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempus mi vestibulum erat interdum, in convallis sapien convallis. Donec arcu massa, pulvinar ac ante id, fringilla venenatis augue. Nam vitae auctor mi, at facilisis lectus. Suspendisse potenti. Aenean convallis nisl justo, nec euismod tortor ornare tempus. "
+                }}</p>
             </div>
             <el-divider></el-divider>
             <nav class="flex mb-6">
@@ -68,9 +70,13 @@
       <el-row :gutter="24" style="text-align: justify">
         <el-col>
           <el-main>
-            <span>Detail</span>
-            <el-divider direction="vertical"></el-divider>
+
             <span>Table of content</span>
+            <div v-for="item in tableContent">
+              <div class="w-1/4 text-center h-10 bg-amber-100 p-2 rounded">
+                <a @click="toChapter(item.transactionId)">{{ item.buffer.title }}</a>
+              </div>
+            </div>
           </el-main>
         </el-col>
         <el-col>
@@ -84,27 +90,73 @@
             </el-space>
           </el-main>
           <el-main>
-            <div>Total Supply</div>
-            <el-button :click="mintMyPass" :loading="loading">{{ mint }}</el-button>
+            <NFTDetail></NFTDetail>
           </el-main>
         </el-col>
-
       </el-row>
     </el-col>
   </el-row>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import {mapGetters} from 'vuex';
+import {getAccessTokenContract, getProviderOrSigner} from "../../utils/support.js";
+import {searchArweave} from "../../arweave/arweave.js";
+import NFTDetail from "./NFTDetail.vue";
 
 export default {
   name: "CoverDisplayPublic",
-  computed:{
-    ...mapGetters("cover", ["getCover"]),
-    ...mapGetters("accessToken", ["getAccessToken"])
+  components: {
+    NFTDetail
   },
-  created() {
-    this.$store.dispatch("cover/getSpecicCover", this.$route.params.id);
+  data() {
+    return {
+      tableContent: [],
+      isAccess: false,
+    }
+  },
+  computed: {
+    ...mapGetters("wallet", ["getActiveAccount"]),
+    ...mapGetters("cover", ["getCover"]),
+    ...mapGetters("accessToken", ["getAccessToken", "getCurrentHolding"])
+  },
+  async created() {
+    await this.$store.dispatch("cover/getSpecicCover", this.$route.params.id);
+    this.$store.dispatch("accessToken/retrieveAccessToken", this.$route.params.id);
+    await this.searchArweave();
+    await this.checkAccess();
+  },
+  methods: {
+    async searchArweave() {
+      this.tableContent = await searchArweave(this.getCover.title);
+    },
+    async checkAccess() {
+      try {
+        const provider = await getProviderOrSigner();
+        const accessTokenContract = await getAccessTokenContract();
+        this.isAccess = await accessTokenContract.isOwner(
+            this.$route.params.id,
+            this.getActiveAccount
+        );
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    toChapter(transactionId) {
+      if (this.isAccess) {
+        this.$router.push({
+          name: "chapter",
+          params: {
+            id: this.$route.params.id,
+            chapterId: transactionId
+          }
+        });
+      } else {
+        ElMessageBox.alert('Please purchase a Access Token to read the content!', 'Title', {
+          confirmButtonText: 'OK',
+        })
+      }
+    }
   },
 }
 </script>
