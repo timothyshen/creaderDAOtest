@@ -1,12 +1,18 @@
 <template>
   <div class="container">
     <h1>Create a chapter!</h1>
-    <el-form>
+    <el-form
+        label-position="top"
+    >
       <el-form-item label="Title">
-        <el-input v-model="title" placeholder="Please insert title"></el-input>
+        <el-input
+            v-model="title" placeholder="Please insert title"></el-input>
       </el-form-item>
       <el-form-item label="Context">
-        <el-input v-model="context" placeholder="Context"></el-input>
+        <el-input
+            v-model="context"
+            type="textarea"
+            placeholder="Context"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button @click="register()">{{ create }}</el-button>
@@ -24,8 +30,8 @@
 <script>
 import {getCopyrightContract, getProviderOrSigner} from "../../utils/support";
 import {mapGetters} from "vuex";
-import { postChapterCreate } from "../../api/local_db";
-import { getArweaveData, searchArweave, createArweaveTrans } from "../../arweave/arweave";
+import {postChapterCreate} from "../../api/local_db";
+import {getArweaveData, searchArweave, createArweaveTrans} from "../../arweave/arweave";
 import axios from "axios";
 import Arweave from "arweave";
 
@@ -37,8 +43,6 @@ export default {
       context: '',
       create: 'Submit',
       loading: false,
-      arweave_chapter:{},
-      arweave_chapter_id: {},
     }
   },
   params: {
@@ -96,22 +100,6 @@ export default {
         console.log(error);
 
       }
-    },
-    clickArweaveData(id) {
-      getArweaveData(id).then(res => {
-        this.arweave_chapter = res;
-      }).catch(err => {
-        console.log(err);
-      });
-    },
-    clickforlist(){
-      const user = this.getActiveAccount;
-      searchArweave(user).then(res => {
-        this.arweave_chapter_id = res;
-        console.log(res);
-      }).catch(err => {
-        console.log(err);
-      });
     }
   }
 }
