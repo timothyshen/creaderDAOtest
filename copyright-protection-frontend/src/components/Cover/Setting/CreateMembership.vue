@@ -15,12 +15,12 @@
           <el-input v-model="membership.title"></el-input>
         </el-form-item>
         <el-form-item label="Price">
-          <el-input v-model="membership.title"></el-input>
+          <el-input v-model="membership.price"></el-input>
         </el-form-item>
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="handleCreate">Create</el-button>
+          <el-button @click="createMembershipCollection">Create</el-button>
           <el-button @click="dialogFormVisible = false">Cancel</el-button>
         </span>
       </template>
@@ -30,12 +30,17 @@
 
 <script>
 import {mapGetters} from "vuex";
-import {ethers} from "ethers";
+import {ethers, BigNumber} from "ethers";
 import {getProviderOrSigner, getAccessTokenContract} from "../../../utils/support";
 import {ElMessageBox} from "element-plus";
 
 export default {
   name: "CreateMembership",
+  props: {
+    coverId: {
+      type: Number,
+    },
+  },
   data() {
     return {
       isMembershipCreated: false,
@@ -66,16 +71,21 @@ export default {
   methods: {
     async createMembershipCollection() {
       try {
-        this.membership.price = ethers.utils.parseEther(this.membership.price);
-        const signer = getProviderOrSigner(true);
+        const decimals = 18;
+        let price = ethers.utils.parseUnits(this.membership.price,decimals);
+        const signer = await getProviderOrSigner(true);
+        console.log(signer);
         const accessTokenContract = await getAccessTokenContract(signer);
+        console.log(accessTokenContract);
+        console.log(price);
         const txn = await accessTokenContract.createMemberships(
+            0,
             this.membership.title,
-            this.membership.price,
+            price,
             this.getActiveAccount,
         );
         await txn.wait();
-
+        console.log(txn);
       } catch (error) {
         console.log(error);
       }

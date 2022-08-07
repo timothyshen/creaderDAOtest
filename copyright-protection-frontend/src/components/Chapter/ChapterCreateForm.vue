@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <h1>Create a chapter!</h1>
     <el-form>
       <el-form-item label="Title">
         <el-input v-model="title" placeholder="Please insert title"></el-input>
@@ -13,8 +14,6 @@
     </el-form>
     <div>
       <el-button @click="clickArweaveData('6ddzHMhMQvQbU0JqMsz_e8vsvBWsvgpKsgdokSIpLq0')">{{ create }}</el-button>
-      {{ arweave_chapter }}
-      <el-button @click="clickforlist">{{ create }}</el-button>
     </div>
     <div>
 
@@ -26,7 +25,7 @@
 import {getCopyrightContract, getProviderOrSigner} from "../../utils/support";
 import {mapGetters} from "vuex";
 import { postChapterCreate } from "../../api/local_db";
-import { getArweaveData, searchArweave } from "../../arweave/arweave";
+import { getArweaveData, searchArweave, createArweaveTrans } from "../../arweave/arweave";
 import axios from "axios";
 import Arweave from "arweave";
 
@@ -47,10 +46,13 @@ export default {
       type: Number,
       required: true,
     },
+    title: {
+      type: String,
+      required: true,
+    },
   },
   computed: {
     ...mapGetters("wallet", ["getActiveAccount", "getWeb3", "getWeb3Modal"]),
-    ...mapGetters("chapter", ["getChapter", "getLoading"]),
     ...mapGetters("cover", ["getCover", "getSpecicCover"]),
   },
   watch: {
@@ -71,7 +73,6 @@ export default {
     } else {
       this.$store.dispatch("wallet/initWeb3Modal");
       this.$store.dispatch("wallet/ethereumListener");
-      this.$store.dispatch("chapter/retrieveChapter", this.$route.params.id);
       this.$store.dispatch("cover/getSpecicCover", this.$route.params.id);
     }
   },

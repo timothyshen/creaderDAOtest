@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h1>Register</h1>
-    <el-form ref="form" :model="bookform" label-width="80px">
+    <h1>Create a Cover!</h1>
+    <el-form ref="form" :model="bookform" label-width="200px">
       <el-form-item label="Title">
         <el-input v-model="bookform.title"></el-input>
       </el-form-item>
@@ -17,23 +17,15 @@
       <!--    <el-form-item label="Cover image">-->
       <!--      <el-input v-model="bookform.imageHash"></el-input>-->
       <!--    </el-form-item>-->
+
       <el-form-item>
         <el-button @click="register()" :loading="loading">{{ create }}</el-button>
       </el-form-item>
+      <el-form-item label="Create your membership!" v-if="newCoverId != null">
+        <CreateMembership :coverId="newCoverId"></CreateMembership>
+      </el-form-item>
     </el-form>
-    <h1>Number of covers: {{ getNumberOfCovers }}</h1>
-    <el-table :data="this.getAuthorCovers" style="width:100%">
-      <el-table-column label="ID" prop="id"></el-table-column>
-      <el-table-column label="Author" prop="owner"></el-table-column>
-      <el-table-column label="Title" prop="title"></el-table-column>
-      <el-table-column label="Short description" prop="description"></el-table-column>
-      <el-table-column label="Edit" width="120">
-        <template #default="scope">
-          <el-button link type="primary" size="small" @click="handleCreate(scope.row)">Create</el-button>
-          <el-button link type="primary" size="small" @click="handleEdit(scope.row)">Edit</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+
   </div>
 </template>
 
@@ -41,9 +33,11 @@
 import {ethers} from "ethers";
 import {mapGetters,} from "vuex";
 import {getCopyrightContract, getProviderOrSigner, getCopyrightNFTContract} from "../../utils/support";
+import CreateMembership from "./Setting/CreateMembership.vue";
 
 export default {
   name: "registerCover",
+  components: {CreateMembership},
   data() {
     return {
       bookform: {
@@ -53,6 +47,7 @@ export default {
       novel: {},
       create: 'Submit',
       loading: false,
+      newCoverId: null,
     }
   },
   computed: {
@@ -67,8 +62,6 @@ export default {
 
       this.$store.dispatch("wallet/initWeb3Modal");
       this.$store.dispatch("wallet/ethereumListener");
-      this.$store.dispatch("cover/getCoverNum");
-      this.$store.dispatch("cover/getAuthorCover");
     }
   },
   watch: {
@@ -89,22 +82,31 @@ export default {
         this.loading = true;
         const provider = await getProviderOrSigner(true);
         const contract = getCopyrightNFTContract(provider);
-        console.log(contract);
+
         const txn = await contract.createCopyright(
             this.bookform.title,
             this.bookform.shortDescription,
             "active"
         );
         await txn.wait();
-        console.log(txn);
 
         contract.on("CoverCreation", (title, description, owner, status, CoverId) => {
           console.log(title, description, owner, status, CoverId);
+          this.newCoverId = CoverId;
+          this.newCoverId = this.newCoverId.toNumber();
         });
 
-        await this.$store.dispatch("cover/getCoverNum");
-        await this.$store.dispatch("cover/getAuthorCover");
         this.loading = false;
+        this.$message({
+          message: 'Successfully created!',
+          type: 'success'
+        });
+        this.$router.push({
+          name: 'author_cover',
+          params: {
+            id: this.newCoverId
+          }
+        });
       } catch (error) {
         console.log(error);
       }
@@ -119,10 +121,10 @@ export default {
     },
     handleEdit(row) {
       this.$router.push({
-        name: "editCover",
+        name: "cover_settings",
         params: {
-          id: row.id
-        }
+          id: 0,
+        },
       });
     },
   }

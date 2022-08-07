@@ -129,7 +129,7 @@ const mutations = {
         state.providerW3m = null;
         await state.web3Modal.clearCachedProvider();
 
-        window.location.href = '../'; // redirect to the Main page
+        window.location.href = '/'; // redirect to the Main page
     },
 
     setActiveAccount(state, selectedAddress) {

@@ -1,56 +1,40 @@
 <template>
   <el-row :gutter="20">
     <el-col :span="16" :offset="4">
-      <h2 class="font-medium leading-tight text-2xl mt-0 mb-2 ml-2 text-black text-left ">My Cover</h2>
+      <h2 class="font-medium leading-tight text-2xl mt-0 mb-2 ml-2 text-black text-left ">My Covers</h2>
       <el-divider></el-divider>
-      <div>
+      <div v-if="getAuthorCovers.length != 0" v-for="cover in getAuthorCovers">
         <el-row class="grid-content" :gutter="20">
           <el-col :span="8">
             <span class="item-span">Cover title</span>
-            <h3 class="item-content">Jane's Patisserie Celebrate! (Hardback)</h3>
+            <h3 class="item-content">{{ cover.title }}</h3>
           </el-col>
-          <el-col :span="8">
-            <span class="item-span">Last Update</span>
-            <h3 class="item-content">2019-01-01</h3>
+          <el-col :span="4">
+            <span class="item-span">Description</span>
+            <h3 class="item-content">{{ cover.description }}</h3>
+          </el-col>
+          <el-col :span="4">
+            <span class="item-span">Status</span>
+            <h3 class="item-content">{{ cover.status }}</h3>
           </el-col>
           <el-col class="item-button-group" :span="8">
 
             <button type="button"
                     class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                    @click="handleClick('cover_settings')">
+                    @click="handleClick('cover_settings', cover)">
               Edit
             </button>
             <button type="button"
-                    class="text-white bg-yellow-500 hover:bg-yellow-400 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-              View
+                    class="text-white bg-yellow-500 hover:bg-yellow-400 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                    @click="handleClick('chapter_create', cover)">
+              Chapters
             </button>
 
           </el-col>
         </el-row>
-        <el-row class="grid-content" :gutter="20">
-          <el-col :span="8">
-            <span class="item-span">Cover title</span>
-            <h3 class="item-content">Jane's Patisserie Celebrate! (Hardback)</h3>
-          </el-col>
-          <el-col :span="8">
-            <span class="item-span">Last Update</span>
-            <h3 class="item-content">2019-01-01</h3>
-          </el-col>
-          <el-col class="item-button-group" :span="8">
 
-            <button type="button"
-                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-              Edit
-            </button>
-            <button type="button"
-                    class="text-white bg-yellow-500 hover:bg-yellow-400 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-              View
-            </button>
-
-          </el-col>
-        </el-row>
       </div>
-      <div>
+      <div v-else>
         <el-row :gutter="20">
           <el-col :offset="6" :span="12">
             <h2 class="font-medium leading-tight text-2xl mt-0 mb-2 ml-2 text-black  ">You have no cover!</h2>
@@ -68,19 +52,31 @@
 </template>
 
 <script>
+import {mapGetters} from "vuex";
+
 export default {
   name: "CoverDisplay",
   data() {
-    return {
-
-    }
+    return {}
+  },
+  computed: {
+    ...mapGetters("cover", ["getAuthorCovers", "getNumberOfCovers"]),
+  },
+  created() {
+    this.$store.dispatch("wallet/initWeb3Modal");
+    this.$store.dispatch("wallet/ethereumListener");
+    this.$store.dispatch("cover/getCoverNum");
+    this.$store.dispatch("cover/getAuthorCover");
   },
   methods: {
-    handleClick(type) {
+    handleClick(type, cover) {
+      let coverId = cover.id.toNumber();
+      let coverTitle = cover.title;
       this.$router.push({
         name: type,
         params: {
-          id: 0
+          id: coverId,
+          title: coverTitle,
         }
       });
     }

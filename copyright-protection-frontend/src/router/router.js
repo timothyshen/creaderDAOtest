@@ -7,20 +7,35 @@ const routes = [
         component: () => import('../views/Home.vue'),
     },
     {
-        path: '/cover/',
+        path: '/profile/',
+        name: 'profile',
+        component: () => import('../views/DisplayNFTPage.vue'),
+    },
+    {
+        path: '/cover/:id/',
         name: 'cover',
+        component: () => import('../views/CoverView.vue'),
+    },
+    {
+        path: '/author/cover/',
+        name: 'author_cover',
         component: () => import('../views/DisplayProfileBook.vue'),
     },
     {
-        path: '/cover/:id/chapter',
-        name: 'chapter',
+        path: '/author/create/',
+        name: 'cover_create',
+        component: () => import('../views/CreateCoverPage.vue'),
+    },
+    {
+        path: '/author/cover/:id/chapter',
+        name: 'chapter_create',
         component: () => import('../views/CreateChapter.vue'),
     },
     {
-        path: '/cover/:id/settings',
+        path: '/author/cover/:id/settings',
         name: 'cover_settings',
         component: () => import('../views/CoverSettingPage.vue'),
-    }
+    },
 
 ];
 

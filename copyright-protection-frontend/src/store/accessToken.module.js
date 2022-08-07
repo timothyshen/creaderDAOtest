@@ -38,7 +38,7 @@ const actions = {
         try {
             const provider = await getProviderOrSigner();
             const contract = getAccessTokenContract(provider);
-            const accessToken = await contract.getMembership(id);
+            const accessToken = await contract.getMembership(0);
             commit("setAccessToken", accessToken);
         } catch (error) {
             console.log(error);
@@ -50,16 +50,6 @@ const actions = {
             const contract = getAccessTokenContract(provider);
             const balanceOf = await contract.balanceOf(address);
             commit("setBalanceOf", balanceOf);
-        } catch (error) {
-            console.log(error);
-        }
-    },
-    async retrieveCurrentHolding({commit}, address) {
-        try {
-            const provider = await getProviderOrSigner();
-            const contract = getAccessTokenContract(provider);
-            const currentHolding = await contract.currentHoldings(address);
-            commit("setCurrentHolding", currentHolding);
         } catch (error) {
             console.log(error);
         }

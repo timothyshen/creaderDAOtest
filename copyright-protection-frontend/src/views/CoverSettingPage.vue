@@ -24,6 +24,7 @@ import CoverSetting from "../components/Cover/Setting/CoverSetting.vue";
 export default {
   name: "CoverSettingPage",
   components: {CoverSetting, ProfileDisplay, BookSideDisplay},
+
 }
 </script>
 

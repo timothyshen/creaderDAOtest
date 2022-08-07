@@ -1,5 +1,5 @@
 export const COPY_RIGHT_CONTRACT_ADDRESS = "0xad8A440aCD6625F4fAe3FB1f978eFAC63C224C35";
-export const COPYRIGHT_NFT_CONTRACT_ADDRESS = "0x37AFC03844e237Fef254ff7B8f06503106E58E63";
+export const COPYRIGHT_NFT_CONTRACT_ADDRESS = "0x48ea375df2F82ceFa1a55106060417AA95AE825F";
 export const ACCESS_TOKEN_CONTRACT_ADDRESS = "0x6e382Fdb7eF946c3f055f0024D3B24aAf08F1764";
 export const COPY_RIGHT_CONTRACT_ABI = [
     {
@@ -862,6 +862,11 @@ export const COPYRIGHT_NFT_CONTRACT_ABI = [
         "name": "covers",
         "outputs": [
             {
+                "internalType": "uint256",
+                "name": "id",
+                "type": "uint256"
+            },
+            {
                 "internalType": "string",
                 "name": "title",
                 "type": "string"
@@ -872,14 +877,14 @@ export const COPYRIGHT_NFT_CONTRACT_ABI = [
                 "type": "string"
             },
             {
-                "internalType": "address",
-                "name": "owner",
-                "type": "address"
-            },
-            {
                 "internalType": "string",
                 "name": "status",
                 "type": "string"
+            },
+            {
+                "internalType": "address",
+                "name": "owner",
+                "type": "address"
             }
         ],
         "stateMutability": "view",
@@ -913,9 +918,36 @@ export const COPYRIGHT_NFT_CONTRACT_ABI = [
         "name": "fetchUserNFT",
         "outputs": [
             {
-                "internalType": "uint256[]",
+                "components": [
+                    {
+                        "internalType": "uint256",
+                        "name": "id",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "title",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "description",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "status",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "owner",
+                        "type": "address"
+                    }
+                ],
+                "internalType": "struct NewCopyright.Cover[]",
                 "name": "",
-                "type": "uint256[]"
+                "type": "tuple[]"
             }
         ],
         "stateMutability": "view",
@@ -928,6 +960,11 @@ export const COPYRIGHT_NFT_CONTRACT_ABI = [
             {
                 "components": [
                     {
+                        "internalType": "uint256",
+                        "name": "id",
+                        "type": "uint256"
+                    },
+                    {
                         "internalType": "string",
                         "name": "title",
                         "type": "string"
@@ -938,14 +975,14 @@ export const COPYRIGHT_NFT_CONTRACT_ABI = [
                         "type": "string"
                     },
                     {
-                        "internalType": "address",
-                        "name": "owner",
-                        "type": "address"
-                    },
-                    {
                         "internalType": "string",
                         "name": "status",
                         "type": "string"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "owner",
+                        "type": "address"
                     }
                 ],
                 "internalType": "struct NewCopyright.Cover[]",
@@ -982,6 +1019,11 @@ export const COPYRIGHT_NFT_CONTRACT_ABI = [
             {
                 "components": [
                     {
+                        "internalType": "uint256",
+                        "name": "id",
+                        "type": "uint256"
+                    },
+                    {
                         "internalType": "string",
                         "name": "title",
                         "type": "string"
@@ -992,14 +1034,14 @@ export const COPYRIGHT_NFT_CONTRACT_ABI = [
                         "type": "string"
                     },
                     {
-                        "internalType": "address",
-                        "name": "owner",
-                        "type": "address"
-                    },
-                    {
                         "internalType": "string",
                         "name": "status",
                         "type": "string"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "owner",
+                        "type": "address"
                     }
                 ],
                 "internalType": "struct NewCopyright.Cover[]",
@@ -1023,6 +1065,11 @@ export const COPYRIGHT_NFT_CONTRACT_ABI = [
             {
                 "components": [
                     {
+                        "internalType": "uint256",
+                        "name": "id",
+                        "type": "uint256"
+                    },
+                    {
                         "internalType": "string",
                         "name": "title",
                         "type": "string"
@@ -1033,14 +1080,14 @@ export const COPYRIGHT_NFT_CONTRACT_ABI = [
                         "type": "string"
                     },
                     {
-                        "internalType": "address",
-                        "name": "owner",
-                        "type": "address"
-                    },
-                    {
                         "internalType": "string",
                         "name": "status",
                         "type": "string"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "owner",
+                        "type": "address"
                     }
                 ],
                 "internalType": "struct NewCopyright.Cover",
@@ -1064,6 +1111,11 @@ export const COPYRIGHT_NFT_CONTRACT_ABI = [
             {
                 "components": [
                     {
+                        "internalType": "uint256",
+                        "name": "id",
+                        "type": "uint256"
+                    },
+                    {
                         "internalType": "string",
                         "name": "title",
                         "type": "string"
@@ -1074,14 +1126,14 @@ export const COPYRIGHT_NFT_CONTRACT_ABI = [
                         "type": "string"
                     },
                     {
-                        "internalType": "address",
-                        "name": "owner",
-                        "type": "address"
-                    },
-                    {
                         "internalType": "string",
                         "name": "status",
                         "type": "string"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "owner",
+                        "type": "address"
                     }
                 ],
                 "internalType": "struct NewCopyright.Cover",
@@ -1125,13 +1177,7 @@ export const COPYRIGHT_NFT_CONTRACT_ABI = [
             }
         ],
         "name": "mintCopyright",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
+        "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
     },
@@ -1701,6 +1747,52 @@ export const ACCESS_TOKEN_CONTRACT_ABI = [
                 "internalType": "address",
                 "name": "",
                 "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "id",
+                "type": "uint256"
+            }
+        ],
+        "name": "getMembership",
+        "outputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "uint256",
+                        "name": "coverId",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "quantity",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "price",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "numSold",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "address payable",
+                        "name": "fundingRecipient",
+                        "type": "address"
+                    }
+                ],
+                "internalType": "struct AccessToken.Membership",
+                "name": "",
+                "type": "tuple"
             }
         ],
         "stateMutability": "view",
