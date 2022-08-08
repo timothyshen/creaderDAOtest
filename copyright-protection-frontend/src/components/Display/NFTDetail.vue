@@ -47,7 +47,6 @@ export default {
         const accessTokenContract = await getAccessTokenContract(signer);
         const txn = await accessTokenContract.buyMembership(
             this.getAccessToken.id,
-            this.getCover.title,
             {
               from: this.getActiveAccount,
               gasLimit: 1000000,

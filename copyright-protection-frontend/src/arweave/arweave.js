@@ -9,8 +9,10 @@ const MIN_NUMBER_OF_CONFIRMATIONS = 2;
 
 export const createArweaveTrans = async (data, ethAddress, bookTitle) => {
     try {
+        const wallet = import.meta.env.VITE_ARWEAVE_WALLET;
+        const wallet_config = JSON.parse(wallet);
         const transaction = await arweave.createTransaction({
-            data: data, arweave_wallet
+            data: data, wallet_config
         });
         transaction.addTag('App-Name', import.meta.env.VITE_APP_NAME);
         bookTitle = cyrb53(bookTitle);

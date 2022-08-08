@@ -19,9 +19,6 @@
       </el-form-item>
     </el-form>
     <div>
-      <el-button @click="clickArweaveData('6ddzHMhMQvQbU0JqMsz_e8vsvBWsvgpKsgdokSIpLq0')">{{ create }}</el-button>
-    </div>
-    <div>
 
     </div>
   </div>
@@ -92,7 +89,10 @@ export default {
           const response = await createArweaveTrans(chapterData, this.getActiveAccount, this.getCover.title);
 
           console.log(response);
-
+          this.loading = false;
+          this.$router.push({
+            name: "author_cover",
+          });
         } else {
           window.alert("Please connect to a wallet");
         }

@@ -32,6 +32,11 @@ const routes = [
         component: () => import('../views/CreateCoverPage.vue'),
     },
     {
+        path: '/author/cover/:id/list/',
+        name: 'cover_list',
+        component: () => import('../views/DisplayProfileChapter.vue'),
+    },
+    {
         path: '/author/cover/:id/chapter',
         name: 'chapter_create',
         component: () => import('../views/CreateChapter.vue'),

@@ -120,7 +120,7 @@ export default {
       this.$router.push({
         name: 'cover',
         params: {
-          id: 0,
+          id: id,
         },
       });
     }

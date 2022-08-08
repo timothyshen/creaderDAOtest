@@ -103,7 +103,7 @@ import {mapGetters} from 'vuex';
 import {getAccessTokenContract, getProviderOrSigner} from "../../utils/support.js";
 import {searchArweave} from "../../arweave/arweave.js";
 import NFTDetail from "./NFTDetail.vue";
-import {ElMessageBox } from 'element-plus';
+import {ElMessageBox} from 'element-plus';
 
 
 export default {
@@ -135,16 +135,18 @@ export default {
     async checkAccess() {
       try {
         const provider = await getProviderOrSigner();
-        const accessTokenContract = await getAccessTokenContract();
-        this.isAccess = await accessTokenContract.isOwner(
-            this.$route.params.id,
-            this.getActiveAccount
+        const accessTokenContract = await getAccessTokenContract(provider);
+        const result = await accessTokenContract.isOwner(
+            this.getActiveAccount, this.$route.params.id
         );
+        console.log(result);
+        this.isAccess = result;
       } catch (e) {
         console.log(e);
       }
     },
     toChapter(transactionId) {
+      this.checkAccess();
       if (this.isAccess) {
         this.$router.push({
           name: "chapter",

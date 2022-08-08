@@ -1,7 +1,7 @@
 <template>
 
-  <div v-if="chapter">
-    <el-row :gutter="20">
+  <div>
+    <el-row :gutter="20" v-if="chapter">
       <el-col :offset="4" :span="16">
         <h2 class="font-medium leading-tight text-4xl mt-0 mb-2 text-blue-600">{{ chapter.data.title }}</h2>
         <h4 class="font-medium leading-tight text-sm mt-0 mb-2 text-blue-600">{{ chapter.tags.Address }}</h4>
@@ -15,6 +15,7 @@
             </a>
           </el-col>
         </el-row>
+        <button @click="backToCover">back</button>
       </el-col>
     </el-row>
   </div>

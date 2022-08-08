@@ -1,6 +1,6 @@
 <template>
   <el-row :gutter="20">
-    <el-col :span="16" :offset="4">
+    <el-col>
       <h2 class="font-medium leading-tight text-2xl mt-0 mb-2 ml-2 text-black text-left ">{{ getCover.title }}</h2>
       <el-divider></el-divider>
       <div v-if="chapters">
@@ -56,9 +56,9 @@ export default {
     ...mapGetters("cover", ["getCover"]),
     ...mapGetters("wallet", ["getActiveAccount"])
   },
-  created() {
-    this.$store.dispatch("cover/getSpecicCover", this.$route.params.id);
-    this.searchArweave();
+  async created() {
+    await this.$store.dispatch("cover/getSpecicCover", this.$route.params.id);
+    await this.searchArweave();
   },
   methods: {
     async searchArweave() {

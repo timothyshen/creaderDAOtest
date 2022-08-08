@@ -43,9 +43,9 @@ export default {
   computed: {
     ...mapGetters("cover", ["getCover"]),
   },
-  created() {
-    this.$store.dispatch("cover/getSpecicCover", this.$route.params.id);
-    this.getCoverData();
+  async created() {
+    await this.$store.dispatch("cover/getSpecicCover", this.$route.params.id);
+    await this.getCoverData();
   },
   methods: {
     getCoverData() {

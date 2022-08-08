@@ -27,5 +27,9 @@ export default {
 </script>
 
 <style scoped>
-
+.container-setting{
+  height: 100%;
+  width: 1080px;
+  margin: 0 auto;
+}
 </style>

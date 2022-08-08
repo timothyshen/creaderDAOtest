@@ -9,9 +9,12 @@ import footer_component from "./components/Global/footer_component.vue";
   <div id="app">
     <PageHeader></PageHeader>
     <router-view v-slot="{ Component }">
-      <transition name="fade" mode="out-in">
-        <component :is="Component" />
-      </transition>
+      <suspense>
+        <div>
+          <component :is="Component" />
+        </div>
+
+      </suspense>
     </router-view>
     <el-backtop :right="100" :bottom="100" />
     <footer_component></footer_component>

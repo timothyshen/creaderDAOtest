@@ -78,7 +78,7 @@ export default {
         const signer = await getProviderOrSigner(true);
         // console.log(signer);
         const accessTokenContract = await getAccessTokenContract(signer);
-        console.log(accessTokenContract);
+        // console.log(accessTokenContract);
         // console.log(price);
         const txn = await accessTokenContract.createMemberships(
             0,
