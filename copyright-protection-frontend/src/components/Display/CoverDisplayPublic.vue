@@ -72,10 +72,15 @@
           <el-main>
 
             <span>Table of content</span>
-            <div v-for="item in tableContent">
-              <div class="w-1/4 text-center h-10 bg-amber-100 p-2 rounded">
-                <a @click="toChapter(item.transactionId)">{{ item.buffer.title }}</a>
+            <div v-if="chapterConfirmed">
+              <div v-for="item in tableContent">
+                <div class="w-1/4 text-center h-10 bg-amber-100 p-2 rounded">
+                  <a @click="toChapter(item.transactionId)">{{ item.buffer.title }}</a>
+                </div>
               </div>
+            </div>
+            <div v-else>
+              <h2>Loading... Waiting for Arweave confirmation</h2>
             </div>
           </el-main>
         </el-col>
@@ -115,6 +120,7 @@ export default {
     return {
       tableContent: [],
       isAccess: false,
+      chapterConfirmed: false,
     }
   },
   computed: {
@@ -130,7 +136,12 @@ export default {
   },
   methods: {
     async searchArweave() {
-      this.tableContent = await searchArweave(this.getCover.title);
+      try{
+        this.tableContent = await searchArweave(this.getCover.title);
+        this.chapterConfirmed = true;
+      } catch (e) {
+        this.chapterConfirmed = false;
+      }
     },
     async checkAccess() {
       try {

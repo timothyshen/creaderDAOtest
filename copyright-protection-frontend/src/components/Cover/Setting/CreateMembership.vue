@@ -81,7 +81,7 @@ export default {
         // console.log(accessTokenContract);
         // console.log(price);
         const txn = await accessTokenContract.createMemberships(
-            0,
+            this.$route.params.id,
             this.membership.title,
             price,
             this.getActiveAccount,

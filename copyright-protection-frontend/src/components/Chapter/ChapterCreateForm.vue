@@ -16,6 +16,7 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="register()">{{ create }}</el-button>
+        <el-button @click="goBack()">Back</el-button>
       </el-form-item>
     </el-form>
     <div>
@@ -98,8 +99,12 @@ export default {
         }
       } catch (error) {
         console.log(error);
-
       }
+    },
+    goBack() {
+      this.$router.push({
+        name: "author_cover",
+      });
     }
   }
 }
