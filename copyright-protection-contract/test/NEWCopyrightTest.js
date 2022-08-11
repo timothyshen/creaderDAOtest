@@ -20,27 +20,27 @@ describe("New Copyright contract", function () {
         contract = await ContractFactory.deploy(metadata, "CreaderDAO Copyright", "CRD");
     });
 
-    // describe("Check default value at deployment", function () {
-    //     it("Total covers should be 0", async function () {
-    //         expect(await contract.nextCoverId()).to.equal(1);
-    //     });
-    //
-    //     it("BaseURI should be same as preset", async function () {
-    //         expect(await contract.contractURI()).to.include(metadata);
-    //     });
-    //
-    //     it("Name should be same as preset", async function () {
-    //        expect(await contract.name()).to.equal("CreaderDAO Copyright");
-    //     });
-    //
-    //     it("Symbol should be same as preset", async function () {
-    //           expect(await contract.symbol()).to.equal("CRD");
-    //     });
-    //
-    //     it("Cover id should start from 1", async function () {
-    //         expect(await contract.nextCoverId()).to.equal(1);
-    //     });
-    // })
+    describe("Check default value at deployment", function () {
+        it("Total covers should be 0", async function () {
+            expect(await contract.nextCoverId()).to.equal(1);
+        });
+
+        it("BaseURI should be same as preset", async function () {
+            expect(await contract.contractURI()).to.include(metadata);
+        });
+
+        it("Name should be same as preset", async function () {
+           expect(await contract.name()).to.equal("CreaderDAO Copyright");
+        });
+
+        it("Symbol should be same as preset", async function () {
+              expect(await contract.symbol()).to.equal("CRD");
+        });
+
+        it("Cover id should start from 1", async function () {
+            expect(await contract.nextCoverId()).to.equal(1);
+        });
+    })
 
     describe("Check cover creation", function () {
         it("Should create a new cover", async function () {

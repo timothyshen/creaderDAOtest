@@ -2135,3 +2135,4 @@ export const ACCESS_TOKEN_CONTRACT_ABI = [
 export const WEBSOCKET = "wss://eth-rinkeby.alchemyapi.io/v2/7PLCrh-h9RCXFZD4_yngC7EBIZm1kXdn";
 export const ALCHEMY_API_KEY = "BN9DWbX52YhckOSzkE6A8MM73TgemvrP";
 export const ALCHEMY_API_URL = `https://eth-rinkeby.alchemyapi.io/v2/${ALCHEMY_API_KEY}/`;
+

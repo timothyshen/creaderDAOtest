@@ -193,7 +193,6 @@ contract AccessToken is ERC721Enumerable {
         return memberships[id].quantity;
     }
 
-    // if user owns the token to access the membership, without knowing the token id
     function isOwner(address _owner, uint _coverId) public view returns (bool) {
         uint256 membershipId = getMembership(_coverId).id;
         for (uint i = 0; i < nextTokenId; i++) {
