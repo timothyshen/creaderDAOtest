@@ -4,7 +4,7 @@ const {waffle, ethers} = require("hardhat");
 const hre = require("hardhat");
 
 
-describe("Copyright contract", function () {
+describe("Access token contract", function () {
     let Membership;
     let membershipContract;
     let owner;
@@ -55,7 +55,6 @@ describe("Copyright contract", function () {
 
         it("Should get specific membership", async function () {
             await membershipContract.createMemberships(1, 1000, 10000000, owner.address);
-            console.log(await membershipContract.memberships(1));
             expect(await membershipContract.memberships(1)).to.be.an("array").that.include("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266");
         });
 
@@ -65,10 +64,9 @@ describe("Copyright contract", function () {
         });
 
         it("should allow user to purchase membership", async function () {
-            let etherUnit = parseEther("1");
-            await membershipContract.createMemberships(1, 1000, etherUnit, owner.address);
-            await membershipContract.connect(user1).buyMembership(1, {value: parseEther("1")});
-            expect(await membershipContract.ownerOf(1)).is.equal(user1.address);
+            await membershipContract.createMemberships(1, 1000, 1000, owner.address);
+            await membershipContract.connect(user1).buyMembership(1, {value: 1000});
+            expect(await membershipContract.ownerOf(0)).is.equal(user1.address);
         });
 
         it("should prevent user purchase membership do not exists", async function () {
@@ -77,18 +75,17 @@ describe("Copyright contract", function () {
         });
 
         it('should prevent user purchase membership when sold out', async function () {
-            await membershipContract.createMemberships(1, 1000, etherUnit, owner.address);
-            await membershipContract.connect(user1).buyMembership(1, {value: parseEther("1")});
-            await expect(membershipContract.connect(user2).buyMembership(1, {value: parseEther("1")}))
+            await membershipContract.createMemberships(1, 1, 1000, owner.address);
+            await membershipContract.connect(user1).buyMembership(1, {value: 1000});
+            await expect(membershipContract.connect(user2).buyMembership(1, {value: 1000}))
                 .to.be.revertedWith("This membership is already sold out");
 
         });
 
         it("should allow user to access after purchase", async function () {
-            let etherUnit = parseEther("1");
-            await membershipContract.createMemberships(1, 1000, etherUnit, owner.address);
-            await membershipContract.connect(user1).buyMembership(1, {value: parseEther("1")});
-            expect(await membershipContract.connect(user1).isOwner(1, user1.address)).to.be.true;
+            await membershipContract.createMemberships(1, 1000, 1000, owner.address);
+            await membershipContract.connect(user1).buyMembership(1, {value: 1000});
+            expect(await membershipContract.connect(user1).isOwner(user1.address, 1)).to.be.true;
         });
 
     });
