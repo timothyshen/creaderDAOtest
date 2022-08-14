@@ -1,5 +1,4 @@
 import {initialize} from "./index";
-import * as arweave_wallet from './arweave-wallet.json';
 import ArDB from "ardb";
 import { cyrb53 } from "../utils/support.js";
 
@@ -53,7 +52,7 @@ export const getArweaveData = (id) => {
             console.log(txStatus);
 
             if (txStatus !== 'confirmed') {
-                throw new Error('Transaction not confirmed');
+                reject('Transaction not confirmed');
             } else {
                 const tx = await arweave.transactions.get(id);
                 const tags = {};

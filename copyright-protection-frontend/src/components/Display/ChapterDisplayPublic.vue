@@ -1,7 +1,6 @@
 <template>
-
   <div>
-    <el-row :gutter="20" v-if="chapter">
+    <el-row :gutter="20" v-if="isLoading === false">
       <el-col :offset="4" :span="16">
         <h2 class="font-medium leading-tight text-4xl mt-0 mb-2 text-blue-600">{{ chapter.data.title }}</h2>
         <h4 class="font-medium leading-tight text-sm mt-0 mb-2 text-blue-600">{{ chapter.tags.Address }}</h4>
@@ -18,6 +17,9 @@
         <button @click="backToCover">back</button>
       </el-col>
     </el-row>
+    <div v-else>
+      Loading..
+    </div>
   </div>
 </template>
 
@@ -30,6 +32,7 @@ export default {
   data() {
     return {
       chapter: {},
+      isLoading: false,
     };
   },
   computed: {
@@ -41,12 +44,13 @@ export default {
   },
   methods: {
     async searchArweave() {
+      this.isLoading = true;
       this.chapter = await getArweaveData(this.$route.params.chapterId);
+      this.isLoading = false;
     },
     backToCover() {
       this.$router.push({
         name: "home",
-
       });
     },
   },

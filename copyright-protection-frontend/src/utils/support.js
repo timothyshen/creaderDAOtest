@@ -26,6 +26,7 @@ export const getAccessTokenContract = (providerOrSigner) => {
     );
 }
 
+
 export const getProviderOrSigner = async (needSigner = false) => {
     const provider = await store.state.wallet.web3Modal.connect();
     const Web3Provider = new providers.Web3Provider(provider);

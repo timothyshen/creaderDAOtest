@@ -2,8 +2,8 @@
   <div v-if="getAccessToken.quantity > 1">
     <div>Total Supply</div>
     <div>{{ getAccessToken.numSold }} / {{ getAccessToken.quantity }}</div>
-<!--    <div>{{ this.weiToEther()}} ETH</div>-->
-    <el-button :loading="loading" @click="mintNFT">{{ mint }}</el-button>
+    <div>{{ this.weiToEther()}} ETH</div>
+    <el-button :loading="loading" @click="mintNFT(this.weiToEther())">{{ mint }}</el-button>
   </div>
 </template>
 
@@ -40,7 +40,7 @@ export default {
       let wie = ethers.BigNumber.from(this.getAccessToken.price);
       return ethers.utils.formatEther(wie);
     },
-    async mintNFT() {
+    async mintNFT(price) {
       try {
         this.loading = true;
         const signer = await getProviderOrSigner(true);
@@ -50,9 +50,15 @@ export default {
             {
               from: this.getActiveAccount,
               gasLimit: 1000000,
-              value: ethers.utils.parseEther("0.01")
+              value: ethers.utils.parseEther(price)
             }
         )
+        await txn.wait();
+        this.$message({
+          message: "Mint Success!",
+          type: "success"
+        });
+        this.loading = false;
       } catch (e) {
         console.log(e);
       }
