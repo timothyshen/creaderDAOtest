@@ -1,6 +1,7 @@
 // import * as constant from "../constant";
-const apiKey = "BN9DWbX52YhckOSzkE6A8MM73TgemvrP";
-const endpoint = `https://eth-rinkeby.alchemyapi.io/v2/${apiKey}`;
+
+const endpoint = import.meta.env.VITE_ALCHEMY_RINKEBY_API_KEY_URL;
+
 
 export const fetchNFTs = async (owner, contractAddress, retryAttempt) => {
     console.log(`fetchNFTs: ${owner} ${contractAddress} ${retryAttempt}`);

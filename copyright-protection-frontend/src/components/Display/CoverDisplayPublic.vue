@@ -4,7 +4,7 @@
       <el-row :gutter="24" class="book_detail">
         <el-col :span="6">
           <el-image
-              src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+              src="https://d1csarkz8obe9u.cloudfront.net/posterpreviews/action-thriller-book-cover-design-template-3675ae3e3ac7ee095fc793ab61b812cc.jpg?ts=1637008457"
               fit="fill"
           ></el-image>
         </el-col>
@@ -15,7 +15,7 @@
                 <!--                <h1 class="title">{{this.book_info.title}}</h1>-->
                 <!--                <h2 class="subtitle">{{ book_info ? book_info.author.username : '' }}</h2>-->
                 <h1>
-                  {{ this.getCover.title ? this.getCover.title : "Test cover" }}
+                  {{ this.getCover.title ? "The King of Drugs" : "" }}
                 </h1>
                 <h2>
                   <!--                  {{ sliceString(this.getCover.owner) ? sliceString(this.getCover.owner) : "Test cover" }}-->
@@ -26,7 +26,7 @@
             <div class="short_des">
               <!--              <p>{{ this.book_info.description }}</p>-->
               <p>{{
-                  this.getCover.description ? this.getCover.description : "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempus mi vestibulum erat interdum, in convallis sapien convallis. Donec arcu massa, pulvinar ac ante id, fringilla venenatis augue. Nam vitae auctor mi, at facilisis lectus. Suspendisse potenti. Aenean convallis nisl justo, nec euismod tortor ornare tempus. "
+                  this.getCover.description ? "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempus mi vestibulum erat interdum, in convallis sapien convallis. Donec arcu massa, pulvinar ac ante id, fringilla venenatis augue. Nam vitae auctor mi, at facilisis lectus. Suspendisse potenti. Aenean convallis nisl justo, nec euismod tortor ornare tempus. " : "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempus mi vestibulum erat interdum, in convallis sapien convallis. Donec arcu massa, pulvinar ac ante id, fringilla venenatis augue. Nam vitae auctor mi, at facilisis lectus. Suspendisse potenti. Aenean convallis nisl justo, nec euismod tortor ornare tempus. "
                 }}</p>
             </div>
             <el-divider></el-divider>

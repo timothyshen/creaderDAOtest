@@ -91,9 +91,9 @@ export default {
 
           console.log(response);
           this.loading = false;
-          this.$router.push({
-            name: "author_cover",
-          });
+          // this.$router.push({
+          //   name: "author_cover",
+          // });
         } else {
           window.alert("Please connect to a wallet");
         }
