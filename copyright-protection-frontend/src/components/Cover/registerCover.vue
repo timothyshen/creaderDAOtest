@@ -20,6 +20,7 @@
 
       <el-form-item>
         <el-button @click="register()" :loading="loading">{{ create }}</el-button>
+        <el-button @click="goBack()" >Back</el-button>
       </el-form-item>
       <el-form-item label="Create your membership!" v-if="newCoverId != null">
         <CreateMembership :coverId="newCoverId"></CreateMembership>
@@ -127,6 +128,11 @@ export default {
         },
       });
     },
+    goBack() {
+      this.$router.push({
+        name: "author_cover",
+      });
+    }
   }
 }
 </script>

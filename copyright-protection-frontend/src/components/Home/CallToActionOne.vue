@@ -7,19 +7,19 @@
           <p class="mt-2 text-3xl leading-8 font-bold tracking-tight text-gray-900 sm:text-4xl sm:tracking-tight">A better way to write your dream</p>
           <p class="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">Lorem ipsum dolor sit amet consect adipisicing elit. Possimus magnam voluptatum cupiditate veritatis in accusamus quisquam.</p>
         </div>
-        <div class="mt-3">
-          <div>
-            <img />
-          </div>
-          <div>
-            <h2>title</h2>
-            <p>Author</p>
-            <el-button>Read now</el-button>
-            <el-button></el-button>
-            <p>description</p>
+<!--        <div class="mt-3">-->
+<!--          <div>-->
+<!--            <img />-->
+<!--          </div>-->
+<!--          <div>-->
+<!--            <h2>title</h2>-->
+<!--            <p>Author</p>-->
+<!--            <el-button>Read now</el-button>-->
+<!--            <el-button></el-button>-->
+<!--            <p>description</p>-->
 
-          </div>
-        </div>
+<!--          </div>-->
+<!--        </div>-->
 
       </div>
 

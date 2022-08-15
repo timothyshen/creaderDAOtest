@@ -2,7 +2,7 @@
   <div class="container-setting">
     <el-container>
       <el-header>
-        <profile-display></profile-display>
+        <ProfileDisplayChapter></ProfileDisplayChapter>
       </el-header>
       <el-container>
         <el-aside width="200px">
@@ -18,11 +18,12 @@
 
 <script>
 import ProfileDisplay from "../components/Global/ProfileDisplay.vue";
+import ProfileDisplayChapter from "../components/Global/ProfileDisplayChapter.vue";
 import ChapterListDisplay from "../components/Chapter/ChapterListDisplay.vue";
 import BookSideDisplay from "../components/Global/BookSideDisplay.vue";
 export default {
   name: "DisplayProfileChapter",
-  components: {ChapterListDisplay, ProfileDisplay, BookSideDisplay},
+  components: {ChapterListDisplay, ProfileDisplayChapter, BookSideDisplay},
 }
 </script>
 

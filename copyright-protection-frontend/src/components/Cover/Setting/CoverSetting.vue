@@ -13,7 +13,7 @@
           Update
         </el-button>
         <el-divider></el-divider>
-        <div>
+        <div v-if="this.getAccessToken.quantity <= 0">
           <CreateMembership></CreateMembership>
         </div>
         <div>
@@ -42,9 +42,11 @@ export default {
   },
   computed: {
     ...mapGetters("cover", ["getCover"]),
+    ...mapGetters("accessToken", ["getAccessToken"]),
   },
   async created() {
     await this.$store.dispatch("cover/getSpecicCover", this.$route.params.id);
+    await this.$store.dispatch("accessToken/retrieveAccessToken", this.$route.params.id);
     await this.getCoverData();
   },
   methods: {

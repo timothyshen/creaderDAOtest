@@ -26,12 +26,8 @@
 </template>
 
 <script>
-import {getCopyrightContract, getProviderOrSigner} from "../../utils/support";
 import {mapGetters} from "vuex";
-import {postChapterCreate} from "../../api/local_db";
-import {getArweaveData, searchArweave, createArweaveTrans} from "../../arweave/arweave";
-import axios from "axios";
-import Arweave from "arweave";
+import {createArweaveTrans} from "../../arweave/arweave";
 
 export default {
   name: "ChapterCreateForm",
@@ -91,9 +87,9 @@ export default {
 
           console.log(response);
           this.loading = false;
-          // this.$router.push({
-          //   name: "author_cover",
-          // });
+          this.$router.push({
+            name: "author_cover",
+          });
         } else {
           window.alert("Please connect to a wallet");
         }
