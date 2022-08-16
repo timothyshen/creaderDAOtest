@@ -1,11 +1,19 @@
 <template>
-  <el-row :gutter="20">
+  <el-row class="mt-3" :gutter="20">
     <el-col :span="12" :offset="6">
+      <div>
+        <h1 class="font-medium leading-tight text-5xl mt-0 mb-2 text-blue-600">All books</h1>
+      </div>
+      <el-divider>
+
+      </el-divider>
       <section class='flex flex-wrap justify-center'>
         <div class="w-1/5 mr-3 mb-4 bg-slate-100 rounded-md" v-for="cover in getCovers">
           <!--        <img class='w-full rounded-t-md' :key="nft.id" :src="nft.media[0].gateway">-->
           <img class='w-full rounded-t-md' :key="cover.id.toNumber()"
-               src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg">
+               src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+                alt="cover"
+          >
           <div class="p-3">
             <div class="flex mb-3">
               <div class="flex-grow">
@@ -20,7 +28,7 @@
               </div>
             </div>
             <p>{{
-                cover.description ? cover.description : "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ac condimentum dolor. Etiam vel venenatis lacus. Fusce erat urna, congue ac pellentesque ven"
+                cover.description ? cover.description.substring(0, 200) : "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ac condimentum dolor."
               }}</p>
             <button type="button"
                     @click="handleClick(cover.id.toNumber())"
@@ -45,6 +53,19 @@ export default {
   created() {
     this.$store.dispatch("cover/getAllCover");
   },
+  methods: {
+    handleClick(id) {
+      this.$router.push({
+        name: "cover",
+        params: {
+          id: id
+        }
+      });
+    },
+    sliceAddress(address) {
+      return address.slice(0, 6) + "...";
+    },
+  }
 }
 </script>
 

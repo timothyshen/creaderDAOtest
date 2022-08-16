@@ -1,28 +1,28 @@
 // import * as constant from "../constant";
-
-const endpoint = import.meta.env.VITE_ALCHEMY_RINKEBY_API_KEY_URL;
-
-
-export const fetchNFTs = async (owner, contractAddress, retryAttempt) => {
-    console.log(`fetchNFTs: ${owner} ${contractAddress} ${retryAttempt}`);
-    if (retryAttempt === 5) {
-        return;
+import axios from "axios";
+const apiKey = import.meta.env.VITE_ALCHEMY_RINKEBY_API_KEY;
+const baseURL = `https://eth-rinkeby.alchemyapi.io/v2/${apiKey}/getNFTs`;
+export const getAlchemy = async (owner, contractAddress, retryAttempt) => {
+    if (retryAttempt > 0) {
+        return await getAlchemy(owner, contractAddress, retryAttempt - 1);
     }
     if (owner) {
         let data;
         try {
-            if (contractAddress) {
-                data = await fetch(`${endpoint}/getNFTs?owner=${owner}&contractAddresses%5B%5D=${contractAddress}`)
-                    .then(data => data.json());
-
+            if(contractAddress) {
+                await axios.get(`${baseURL}/?owner=${owner}&contractAddresses%5B%5D=${contractAddress}`)
+                    .then(res => {
+                        data = res.data;
+                    });
             } else {
-                data = await fetch(`${endpoint}/getNFTs?owner=${owner}`)
-                    .then(data => data.json());
+                await axios.get(`${baseURL}/?owner=${owner}`)
+                    .then(res => {
+                        data = res.data;
+                    });
             }
-        } catch (e) {
+            return data
+        }catch (e) {
             console.log(e);
         }
-        return data
     }
 }
-

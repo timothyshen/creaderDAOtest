@@ -63,7 +63,7 @@
 
 <script>
 import {COPYRIGHT_NFT_CONTRACT_ADDRESS, ACCESS_TOKEN_CONTRACT_ADDRESS} from "../../../constant";
-import {fetchNFTs} from '../../../utils/alchemy.js';
+import {getAlchemy} from '../../../utils/alchemy.js';
 import {mapGetters} from "vuex";
 
 export default {
@@ -85,12 +85,12 @@ export default {
   },
   methods: {
     async fetchCopyrightNFTs() {
-      const nfts = await fetchNFTs(this.getActiveAccount, COPYRIGHT_NFT_CONTRACT_ADDRESS);
+      const nfts = await getAlchemy(this.getActiveAccount, COPYRIGHT_NFT_CONTRACT_ADDRESS);
       this.nftDetail = nfts.ownedNfts;
       this.totalCount = nfts.totalCount;
     },
     async fetchAccessToken() {
-      const nfts = await fetchNFTs(this.getActiveAccount, ACCESS_TOKEN_CONTRACT_ADDRESS);
+      const nfts = await getAlchemy(this.getActiveAccount, ACCESS_TOKEN_CONTRACT_ADDRESS);
       this.accessTokenDetail = nfts.ownedNfts;
       this.accessTokenDetail.forEach(nft => {
         let tokenId = nft.id.tokenId;

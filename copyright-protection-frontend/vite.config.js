@@ -57,6 +57,7 @@ export default ({mode}) => {
             },
             commonjsOptions: {
                 transformMixedEsModules: true,
+                exclude: [ 'node_modules/lodash-es/**', 'node_modules/@types/lodash-es/**', ]
             },
         },
         resolve: {

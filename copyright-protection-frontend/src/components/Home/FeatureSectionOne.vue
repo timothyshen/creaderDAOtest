@@ -59,7 +59,7 @@ export default {
           icon: BookOpenIcon,
           text: 'To the BOOKS',
           to: {
-            name: 'books',
+            name: 'all_cover',
           },
         },
       ],
@@ -76,7 +76,7 @@ export default {
     },
     handleClick(id) {
       this.$router.push({
-        name: 'cover',
+        name: 'all_cover',
         params: {
           id: id,
         },

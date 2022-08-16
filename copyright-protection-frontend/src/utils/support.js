@@ -41,6 +41,18 @@ export const getProviderOrSigner = async (needSigner = false) => {
     return Web3Provider;
 }
 
+export const chainSwitch = async () => {
+    try {
+        const ethereum = window.ethereum;
+        await ethereum.request({
+            method: 'wallet_switchEthereumChain',
+            params: [{ chainId: '0x4' }],
+        });
+    } catch (error) {
+        console.error(error);
+    }
+}
+
 export const cyrb53 = function(str, seed = 0) {
     let h1 = 0xdeadbeef ^ seed, h2 = 0x41c6ce57 ^ seed;
     for (let i = 0, ch; i < str.length; i++) {

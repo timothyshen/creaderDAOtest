@@ -2,7 +2,6 @@
 
 import {ethers} from "ethers";
 import Web3Modal from "web3modal";
-import {getProviderOrSigner} from "../utils/support";
 
 
 const state = {
@@ -161,9 +160,6 @@ const mutations = {
                 break;
             case "0x539": // 1337 (often used on localhost)
             case "0x1691": // 5777 (default in Ganache)
-            default:
-                state.chainName = "Localhost";
-                break;
         }
     },
 

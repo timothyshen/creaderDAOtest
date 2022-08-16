@@ -24,3 +24,4 @@ dist-ssr
 *.sw?
 constant/index.js
 src/arweave/arweave-wallet.json
+.vercel

@@ -7,6 +7,11 @@ const routes = [
         component: () => import('../views/Home.vue'),
     },
     {
+        path: '/cover',
+        name: 'all_cover',
+        component: () => import('../views/ViewAllBooks.vue'),
+    },
+    {
         path: '/profile/',
         name: 'profile',
         component: () => import('../views/DisplayNFTPage.vue'),
