@@ -4,15 +4,19 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
-import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
+import "@openzeppelin/contracts/utils/Base64.sol";
 
 /**
  * @title SampleERC721
  * @dev Create a sample ERC721 standard token
  */
 contract NewCopyright is ERC721URIStorage {
-    using Strings for string;
+    using Strings for uint256;
+    using Counters for Counters.Counter;
+    Counters.Counter private _tokenIds;
+    Counters.Counter public _coverIds;
 
     //Struct
     struct Cover {
@@ -30,10 +34,6 @@ contract NewCopyright is ERC721URIStorage {
     mapping(uint256 => Cover) public covers;
 
     mapping(uint256 => uint256) public tokenToCover;
-
-    uint256 private nextTokenId = 1;
-
-    uint256 public nextCoverId = 1;
 
     event CoverCreation(
         string title,
@@ -73,45 +73,42 @@ contract NewCopyright is ERC721URIStorage {
         require(bytes(_title).length > 0, "Title must be non-empty");
         require(bytes(_description).length > 0, "Description must be non-empty");
         require(bytes(_status).length > 0, "Status must be non-empty");
+        _coverIds.increment();
+        uint256 newCoverId = _coverIds.current();
 
-        uint256 _coverId = nextCoverId;
-
-        covers[_coverId] = Cover({
-        id: _coverId,
-        title: _title,
-        description: _description,
-        owner: msg.sender,
-        status: _status
+        covers[newCoverId] = Cover({
+        id : newCoverId,
+        title : _title,
+        description : _description,
+        owner : msg.sender,
+        status : _status
         });
 
-        emit CoverCreation(_title, _description, msg.sender, _status, _coverId);
+        emit CoverCreation(_title, _description, msg.sender, _status, newCoverId);
 
-        mintCopyright(_coverId);
-
-        _coverId++;
-
-        nextCoverId = _coverId;
+        mintCopyright(newCoverId);
     }
 
-    function mintCopyright(uint256 coverId) public  {
+    function mintCopyright(uint256 coverId) public {
         // Check that the Cover exists.
         require(bytes(covers[coverId].title).length > 0, "Cover does not exist");
         require(covers[coverId].owner == msg.sender, "Caller is not the owner");
-        require(nextTokenId > tokenToCover[coverId], "Cover NFT exists");
+        require(!_exists(coverId), "Token does exist");
 
-
-        // Mint a new token for the sender, using the `nextTokenId`.
-        _mint(msg.sender, nextTokenId);
+        _tokenIds.increment();
+        uint256 newItemId = _tokenIds.current();
+        // Mint a new token for the sender, using the `newItemId`.
+        _safeMint(msg.sender, newItemId);
         // Store the mapping of token id to the Copyright being purchased.
-        tokenToCover[nextTokenId] = coverId;
+        tokenToCover[newItemId] = coverId;
 
         emit CoverMint(
             coverId,
-            nextTokenId,
+            newItemId,
             msg.sender
         );
 
-        nextTokenId++;
+        _setTokenURI(newItemId, getTokenURI(newItemId));
     }
 
 
@@ -124,8 +121,9 @@ contract NewCopyright is ERC721URIStorage {
     }
 
     function getAllCoypright() public view returns (Cover[] memory) {
-        Cover[] memory result = new Cover[](nextCoverId);
-        for (uint256 i = 0; i < nextCoverId; i++) {
+        uint coverId = _coverIds.current();
+        Cover[] memory result = new Cover[](coverId);
+        for (uint256 i = 0; i < coverId; i++) {
             result[i] = covers[i];
         }
         return result;
@@ -135,20 +133,27 @@ contract NewCopyright is ERC721URIStorage {
         return covers[_id];
     }
 
-    function getCoverByToken(uint256 _tokenId) public view returns (Cover memory) {
-        return covers[tokenToCover[_tokenId]];
+    function getCoverByToken(uint256 tokenId) public view returns (Cover memory) {
+        return covers[tokenToCover[tokenId]];
+    }
+
+    function getTitle(uint tokenId) public view returns (string memory) {
+        return covers[tokenToCover[tokenId]].title;
+    }
+    function getAuthor() public view returns (string memory) {
+        return Strings.toHexString(uint256(uint160(msg.sender)), 20);
     }
 
     function getAuthorCover() external view returns (Cover[] memory){
         uint256 resultCount;
-        for (uint256 i = 0; i < nextCoverId; i++) {
+        for (uint256 i = 0; i < _coverIds.current(); i++) {
             if (covers[i].owner == msg.sender) {
                 resultCount++;
             }
         }
         Cover[] memory result = new Cover[](resultCount);
         uint j;
-        for (uint256 i = 0; i < nextCoverId; i++) {
+        for (uint256 i = 0; i < _coverIds.current(); i++) {
             if (covers[i].owner == msg.sender) {
                 result[j] = covers[i];
                 j++;
@@ -158,7 +163,7 @@ contract NewCopyright is ERC721URIStorage {
     }
 
     function fetchUserNFT() public view returns (Cover[] memory) {
-        uint totalNFTCount = nextTokenId;
+        uint totalNFTCount = _tokenIds.current();
         uint itemCount = 0;
         uint currentIndex = 0;
         for (uint256 i = 0; i < totalNFTCount; i++) {
@@ -175,31 +180,39 @@ contract NewCopyright is ERC721URIStorage {
         }
         return result;
     }
-    // Returns e.g. https://creader.io/Copyright/[CopyrightId]/[tokenId]
-    function tokenURI(uint256 tokenId)
-    public
-    view
-    override
-    returns (string memory)
-    {
-        // If the token does not map to an Copyright, it'll be 0.
-        require(tokenToCover[tokenId] > 0, "Token has not been sold yet");
-        // Concatenate the components, baseURI, Copyright and tokenId, to create URI.
-        return
-        string(
+    // ############## Token URI Function###############
+
+    function generateCoverImage(uint256 tokenId) public returns (string memory) {
+        bytes memory coverImage = abi.encodePacked(
+            '<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMin meet" viewBox="0 0 350 350">',
+            '<style>.base { fill: white; font-family: serif; font-size: 14px; }</style>',
+            '<rect width="100%" height="100%" fill="black" />',
+            '<text x="50%" y="40%" class="base" dominant-baseline="middle" text-anchor="middle">',"Title: ",getTitle(tokenId),'</text>',
+            '<text x="50%" y="50%" class="base" dominant-baseline="middle" text-anchor="middle">', "Author: ",getAuthor(),'</text>',
+            '</svg>'
+        );
+        return string(
             abi.encodePacked(
-                baseURI,
-                Strings.toString(tokenToCover[tokenId]),
-                "/",
-                Strings.toString(tokenId)
+                "data:image/svg+xml;base64,",
+                Base64.encode(coverImage)
             )
         );
     }
 
-    // Returns e.g. https://mirror-api.com/Copyright/metadata
-    function contractURI() public view returns (string memory) {
-        // Concatenate the components, baseURI, CopyrightId and tokenId, to create URI.
-        return string(abi.encodePacked(baseURI, "metadata"));
+    function getTokenURI(uint tokenId) public returns (string memory) {
+        bytes memory dataURI = abi.encodePacked(
+            '{',
+            '"name": "CreaderDAO Copyright ', getTitle(tokenId), ' #', tokenId.toString(), '",',
+            '"description": "Creader Copyright is a Unique NFT built based on the ERC721 standard to represent the ownership of the book. We want to use this token to help pushing the use of NFT in copyright and IP law",',
+            '"image": "', generateCoverImage(tokenId), '"',
+            '}'
+        );
+        return string(
+            abi.encodePacked(
+                "data:application/json;base64,",
+                Base64.encode(dataURI)
+            )
+        );
     }
 
 }
