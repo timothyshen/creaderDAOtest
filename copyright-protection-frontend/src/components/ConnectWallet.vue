@@ -24,7 +24,7 @@
            @click="handleProfile"/>
       <a href="#"
          class="ml-4 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-gray-600 bg-amber-300 hover:bg-amber-500"
-         @click="disconnectWeb3Modal">
+         @click="handleDashboard">
         Dashboard
       </a>
       <a href="#"
