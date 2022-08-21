@@ -15,7 +15,9 @@
       <div class="w-1/4 mr-3 mb-4 bg-slate-100 rounded-md" v-for="nft in nftDetail">
         <!--        <img class='w-full rounded-t-md' :key="nft.id" :src="nft.media[0].gateway">-->
         <img class='w-full rounded-t-md' :key="nft.id"
-             src="https://bafkreihdl5mexbqpc7yn5bcjfd7qdzqtoicynujp3gfvbhpvusdua3quue.ipfs.nftstorage.link/">
+             src="https://bafkreihdl5mexbqpc7yn5bcjfd7qdzqtoicynujp3gfvbhpvusdua3quue.ipfs.nftstorage.link/"
+            alt="Copyright NFT">
+        >
         <div class="p-3">
           <div class="flex mb-3">
             <div class="flex-grow">
@@ -38,7 +40,8 @@
       <div class="w-1/4 mr-3 mb-4 bg-slate-100 rounded-md" v-for="nft in accessTokenDetail">
         <!--        <img class='w-full rounded-t-md' :key="nft.id" :src="nft.media[0].gateway">-->
         <img class='w-full rounded-t-md' :key="nft.id"
-             src="https://bafkreihdl5mexbqpc7yn5bcjfd7qdzqtoicynujp3gfvbhpvusdua3quue.ipfs.nftstorage.link/">
+             src="https://bafkreihdl5mexbqpc7yn5bcjfd7qdzqtoicynujp3gfvbhpvusdua3quue.ipfs.nftstorage.link/"
+             alt="Access right NFT">
         <div class="p-3">
           <div class="flex mb-3">
             <div class="flex-grow">
@@ -62,7 +65,7 @@
 </template>
 
 <script>
-import {COPYRIGHT_NFT_CONTRACT_ADDRESS, ACCESS_TOKEN_CONTRACT_ADDRESS} from "../../../constant";
+import {COPYRIGHT_NFT_CONTRACT_ADDRESS_POLY, ACCESS_TOKEN_CONTRACT_ADDRESS_POLY} from "../../../constant";
 import {getAlchemy} from '../../../utils/alchemy.js';
 import {mapGetters} from "vuex";
 
@@ -85,12 +88,12 @@ export default {
   },
   methods: {
     async fetchCopyrightNFTs() {
-      const nfts = await getAlchemy(this.getActiveAccount, COPYRIGHT_NFT_CONTRACT_ADDRESS);
+      const nfts = await getAlchemy(this.getActiveAccount, COPYRIGHT_NFT_CONTRACT_ADDRESS_POLY);
       this.nftDetail = nfts.ownedNfts;
       this.totalCount = nfts.totalCount;
     },
     async fetchAccessToken() {
-      const nfts = await getAlchemy(this.getActiveAccount, ACCESS_TOKEN_CONTRACT_ADDRESS);
+      const nfts = await getAlchemy(this.getActiveAccount, ACCESS_TOKEN_CONTRACT_ADDRESS_POLY);
       this.accessTokenDetail = nfts.ownedNfts;
       this.accessTokenDetail.forEach(nft => {
         let tokenId = nft.id.tokenId;
