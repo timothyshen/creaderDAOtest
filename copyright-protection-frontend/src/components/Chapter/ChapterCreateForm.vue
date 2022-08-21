@@ -86,7 +86,7 @@ export default {
           const response = await createArweaveTrans(chapterData, this.getActiveAccount, this.getCover.title);
 
           console.log(response);
-          this.loading = false;
+          this.loading = response.status;
           this.$router.push({
             name: "author_cover",
           });

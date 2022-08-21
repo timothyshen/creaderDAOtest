@@ -31,9 +31,8 @@
 </template>
 
 <script>
-import {ethers} from "ethers";
 import {mapGetters,} from "vuex";
-import {getCopyrightContract, getProviderOrSigner, getCopyrightNFTContract} from "../../utils/support";
+import { getProviderOrSigner, getCopyrightNFTContract} from "../../utils/support";
 import CreateMembership from "./Setting/CreateMembership.vue";
 
 export default {
@@ -124,7 +123,7 @@ export default {
       this.$router.push({
         name: "cover_settings",
         params: {
-          id: 0,
+          id: row.id,
         },
       });
     },

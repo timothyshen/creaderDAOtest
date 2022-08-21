@@ -8,7 +8,7 @@
 
       </el-divider>
       <section class='flex flex-wrap justify-center'>
-        <div class="w-1/5 mr-3 mb-4 bg-slate-100 rounded-md" v-for="cover in getCovers">
+        <div class="w-1/4 mr-3 mb-4 bg-slate-100 rounded-md" v-for="cover in getCovers">
           <!--        <img class='w-full rounded-t-md' :key="nft.id" :src="nft.media[0].gateway">-->
           <img class='w-full rounded-t-md' :key="cover.id.toNumber()"
                src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"

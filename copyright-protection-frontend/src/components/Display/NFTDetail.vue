@@ -1,4 +1,5 @@
 <template>
+
   <div v-if="getAccessToken.quantity > 1">
     <div>Total Supply</div>
     <div>{{ getAccessToken.numSold }} / {{ getAccessToken.quantity }}</div>

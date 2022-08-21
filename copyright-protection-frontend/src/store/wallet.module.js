@@ -160,6 +160,9 @@ const mutations = {
                 break;
             case "0x539": // 1337 (often used on localhost)
             case "0x1691": // 5777 (default in Ganache)
+            case "0x13881":
+                state.chainName = "Mumbai";
+                break;
         }
     },
 

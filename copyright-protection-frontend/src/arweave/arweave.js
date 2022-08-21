@@ -8,11 +8,8 @@ const MIN_NUMBER_OF_CONFIRMATIONS = 2;
 
 export const createArweaveTrans = async (data, ethAddress, bookTitle) => {
     try {
-        console.log(bookTitle);
         const wallet = import.meta.env.VITE_ARWEAVE_API_KEY;
         const wallet_config = JSON.parse(wallet);
-        console.log(wallet_config);
-        console.log(data);
         const transaction = await arweave.createTransaction({
             data: data, wallet_config
         });
@@ -22,16 +19,14 @@ export const createArweaveTrans = async (data, ethAddress, bookTitle) => {
         transaction.addTag('Address', ethAddress);
         transaction.addTag('Book-Title', bookTitle);
         await arweave.transactions.sign(transaction, wallet_config);
-        console.log(transaction);
         let uploader = await arweave.transactions.getUploader(transaction);
-        console.log("uploader",uploader);
 
         while (!uploader.isComplete) {
             await uploader.uploadChunk();
             console.log(`${uploader.pctComplete}% complete, ${uploader.uploadedChunks}/${uploader.totalChunks}`);
         }
         console.log('Upload complete!');
-        return transaction.id;
+        return {transaction:transaction.id, status:true};
     } catch (e) {
         console.error(e);
     }

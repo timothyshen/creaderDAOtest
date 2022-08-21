@@ -45,7 +45,7 @@ const actions = {
         try {
             const provider = await getProviderOrSigner();
             const contract = getCopyrightNFTContract(provider);
-            const number = await contract.nextCoverId();
+            const number = await contract._coverIds();
             commit("setNumberOfCovers", number.toString());
         } catch (error) {
             console.log(error);
@@ -54,11 +54,8 @@ const actions = {
     async getAuthorCover({commit}) {
         try {
             const signer = await getProviderOrSigner(true);
-            // console.log(signer);
             const contract = getCopyrightNFTContract(signer);
-            // console.log(contract);
             const cover = await contract.getAuthorCover();
-            // console.log(cover);
             commit("setAuthorCovers", cover);
         } catch (error) {
             console.log(error);
@@ -70,15 +67,6 @@ const actions = {
         const contract = getCopyrightNFTContract(provider);
         const cover = await contract.covers(id);
         commit("setCover", cover);
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    async fetchNFT({commit}) {
-      try {
-        const provider = await getProviderOrSigner();
-        const contract = getCopyrightNFTContract(provider);
-        return await contract.fetchUserNFT()
       } catch (error) {
         console.log(error);
       }
