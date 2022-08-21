@@ -2,26 +2,26 @@ import { Contract, providers } from "ethers";
 import * as constant from "../constant";
 import store from "../store/store";
 
-export const getCopyrightContract = (providerOrSigner) => {
+export const getCopyrightNFTContract = (providerOrSigner) => {
     return new Contract(
-        constant.COPY_RIGHT_CONTRACT_ADDRESS,
-        constant.COPY_RIGHT_CONTRACT_ABI,
+        constant.COPYRIGHT_NFT_CONTRACT_ADDRESS_POLY,
+        constant.COPYRIGHT_NFT_CONTRACT_ABI_POLY,
         providerOrSigner
     );
 }
 
-export const getCopyrightNFTContract = (providerOrSigner) => {
+export const getCopyrightNFTContract_poly = (providerOrSigner) => {
     return new Contract(
-        constant.COPYRIGHT_NFT_CONTRACT_ADDRESS,
-        constant.COPYRIGHT_NFT_CONTRACT_ABI,
+        constant.COPYRIGHT_NFT_CONTRACT_ADDRESS_POLY,
+        constant.COPYRIGHT_NFT_CONTRACT_ABI_POLY,
         providerOrSigner
     );
 }
 
 export const getAccessTokenContract = (providerOrSigner) => {
     return new Contract(
-        constant.ACCESS_TOKEN_CONTRACT_ADDRESS,
-        constant.ACCESS_TOKEN_CONTRACT_ABI,
+        constant.ACCESS_TOKEN_CONTRACT_ADDRESS_POLY,
+        constant.ACCESS_TOKEN_CONTRACT_ABI_POLY,
         providerOrSigner
     );
 }
@@ -31,9 +31,9 @@ export const getProviderOrSigner = async (needSigner = false) => {
     const provider = await store.state.wallet.web3Modal.connect();
     const Web3Provider = new providers.Web3Provider(provider);
     const {chainId} = await Web3Provider.getNetwork();
-    if (chainId !== 4) {
-        window.alert("Please connect to the Rinkeby test network");
-        throw new Error("Only Ethereum Rinkeby test network is supported");
+    if (chainId !== 80001) {
+        window.alert("Please connect to the Mumbai test network");
+        throw new Error("Only Ethereum Mumbai test network is supported");
     }
     if (needSigner) {
         return Web3Provider.getSigner();
@@ -46,7 +46,7 @@ export const chainSwitch = async () => {
         const ethereum = window.ethereum;
         await ethereum.request({
             method: 'wallet_switchEthereumChain',
-            params: [{ chainId: '0x4' }],
+            params: [{ chainId: '0x13881' }],
         });
     } catch (error) {
         console.error(error);

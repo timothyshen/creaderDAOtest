@@ -3,11 +3,17 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/utils/Base64.sol";
+import "./NewCopyright.sol";
 
-contract AccessToken is ERC721Enumerable {
-
+contract AccessToken is ERC721URIStorage, ERC721Enumerable {
+    using Strings for uint256;
+    using Counters for Counters.Counter;
+    Counters.Counter private _tokenIds;
+    address private copyrightContract;
+    string private coverTitle;
 
     // ============ Structs ============
 
@@ -38,8 +44,6 @@ contract AccessToken is ERC721Enumerable {
 
     // The amount of funds that have already been withdrawn for a given cover.
     mapping(uint256 => uint256) public withdrawnForMembership;
-    // `nextTokenId` increments with each token purchased, globally across all covers.
-    uint256 private nextTokenId;
     // Membership start at 1, in order that unsold tokens don't map to the first cover.
     uint256 private nextMembershipId = 1;
 
@@ -65,11 +69,17 @@ contract AccessToken is ERC721Enumerable {
         require(id <= memberships[_tokenId].numSold && id > 0, "Invalid id");
         _;
     }
-
+    modifier OnlyOwner(uint256 _id) {
+        NewCopyright _newCopyright = NewCopyright(copyrightContract);
+        address ownerOfCover = _newCopyright.getAuthor(_id);
+        require( ownerOfCover == msg.sender, "Caller is not the owner");
+        _;
+    }
     // ============ Constructor ============
 
-    constructor(string memory baseURI_, string memory _name, string memory _symbol) ERC721(_name, _symbol) {
+    constructor( address _copyrightContract, string memory baseURI_, string memory _name, string memory _symbol) ERC721(_name, _symbol) {
         baseURI = baseURI_;
+        copyrightContract = _copyrightContract;
     }
 
     // ============ Cover Methods ============
@@ -82,10 +92,10 @@ contract AccessToken is ERC721Enumerable {
         uint256 price,
     // The account that should receive the revenue.
         address payable fundingRecipient
-    ) external {
+    ) external OnlyOwner(coverId) {
 
         memberships[nextMembershipId] = Membership({
-        id: nextMembershipId,
+        id : nextMembershipId,
         coverId : coverId,
         quantity : quantity,
         price : price,
@@ -113,23 +123,26 @@ contract AccessToken is ERC721Enumerable {
             msg.value == memberships[membershipId].price,
             "Must send enough to purchase the membership."
         );
+        NewCopyright _newCopyright = NewCopyright(copyrightContract);
+        coverTitle = _newCopyright.getTitle(memberships[membershipId].coverId);
 
+        uint256 newTokenId = _tokenIds.current();
+        _tokenIds.increment();
         // Increment the number of tokens sold for this membership.
         memberships[membershipId].numSold++;
-        // Mint a new token for the sender, using the `nextTokenId`.
-        _mint(msg.sender, nextTokenId);
+        // Mint a new token for the sender, using the `_tokenIds`.
+        _safeMint(msg.sender, newTokenId);
         // Store the mapping of token id to the membership being purchased.
-        tokenToMembership[nextTokenId] = membershipId;
+        tokenToMembership[newTokenId] = membershipId;
 
-
+        _setTokenURI(newTokenId, getTokenURI(newTokenId));
         // set token URI
         emit MembershipPurchased(
             membershipId,
-            nextTokenId, memberships[membershipId].numSold,
+            newTokenId, memberships[membershipId].numSold,
             msg.sender
         );
 
-        nextTokenId++;
     }
 
     // ============ Operational Methods ============
@@ -151,32 +164,7 @@ contract AccessToken is ERC721Enumerable {
 
     // ============ NFT Methods ============
 
-    // Returns e.g. https://creader.io/membership/[membershipId]/[tokenId]
-    function tokenURI(uint256 tokenId)
-    public
-    view
-    override
-    returns (string memory)
-    {
-        // If the token does not map to an edition, it'll be 0.
-        require(tokenToMembership[tokenId] > 0, "Token has not been sold yet");
-        // Concatenate the components, baseURI, editionId and tokenId, to create URI.
-        return
-        string(
-            abi.encodePacked(
-                baseURI,
-                Strings.toString(tokenToMembership[tokenId]),
-                "/",
-                Strings.toString(tokenId)
-            )
-        );
-    }
 
-    // Returns e.g. https://creader.io/memberships/metadata
-    function contractURI() public view returns (string memory) {
-        // Concatenate the components, baseURI, membershipsId and tokenId, to create URI.
-        return string(abi.encodePacked(baseURI, "metadata"));
-    }
 
     function getMembership(uint _coverId) public view returns (Membership memory) {
         Membership memory membership;
@@ -195,12 +183,46 @@ contract AccessToken is ERC721Enumerable {
 
     function isOwner(address _owner, uint _coverId) public view returns (bool) {
         uint256 membershipId = getMembership(_coverId).id;
-        for (uint i = 0; i < nextTokenId; i++) {
+        uint256 totalIdCount = _tokenIds.current();
+        for (uint i = 0; i < totalIdCount; i++) {
             if (tokenToMembership[i] == membershipId && _owner == ownerOf(i)) {
                 return true;
             }
         }
         return false;
+    }
+
+    function generateMembershipImage(uint256 _tokenId) public view returns (string memory) {
+        bytes memory MembershipImage = abi.encodePacked(
+            '<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMin meet" viewBox="0 0 350 350">',
+            '<style>.base { fill: white; font-family: serif; font-size: 14px; }</style>',
+            '<rect width="100%" height="100%" fill="black" />',
+            '<text x="50%" y="40%" class="base" dominant-baseline="middle" text-anchor="middle">',"Title: ", coverTitle ,'</text>',
+            '<text x="50%" y="50%" class="base" dominant-baseline="middle" text-anchor="middle">', "Membership ID: #", _tokenId ,'</text>',
+            '</svg>'
+        );
+        return string(
+            abi.encodePacked(
+                "data:image/svg+xml;base64,",
+                Base64.encode(MembershipImage))
+        );
+    }
+
+    function getTokenURI(uint tokenId) public view returns (string memory) {
+        uint quality = memberships[tokenToMembership[tokenId]].quantity;
+        bytes memory dataURI = abi.encodePacked(
+            '{',
+            '"name": "Membership ', coverTitle, ' #', tokenId.toString(), '",',
+            '"description": "This is a collection of ',quality,' NFT for book ',coverTitle,' mainly to represent early contributors and early supports. With the token you can freely access the book and other loyalty benefits",',
+            '"image": "', generateMembershipImage(tokenId), '"',
+            '}'
+        );
+        return string(
+            abi.encodePacked(
+                "data:application/json;base64,",
+                Base64.encode(dataURI)
+            )
+        );
     }
 
     // ============ Private Methods ============
@@ -213,5 +235,34 @@ contract AccessToken is ERC721Enumerable {
 
         (bool success,) = recipient.call{value : amount}("");
         require(success, "Unable to send value: recipient may have reverted");
+    }
+
+    function _beforeTokenTransfer(address from, address to, uint256 tokenId)
+    internal
+    override(ERC721, ERC721Enumerable)
+    {
+        super._beforeTokenTransfer(from, to, tokenId);
+    }
+
+    function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
+        super._burn(tokenId);
+    }
+
+    function tokenURI(uint256 tokenId)
+    public
+    view
+    override(ERC721, ERC721URIStorage)
+    returns (string memory)
+    {
+        return super.tokenURI(tokenId);
+    }
+
+    function supportsInterface(bytes4 interfaceId)
+    public
+    view
+    override(ERC721, ERC721Enumerable)
+    returns (bool)
+    {
+        return super.supportsInterface(interfaceId);
     }
 }

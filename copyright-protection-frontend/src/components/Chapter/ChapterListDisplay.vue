@@ -69,8 +69,6 @@ export default {
     async searchArweave() {
       this.isloading = true;
       this.chapters = await searchArweave(this.getCover.title, this.getActiveAccount);
-      console.log(this.chapters[0]);
-      console.log(this.chapters.length);
       this.isloading = false;
     },
     handleList() {

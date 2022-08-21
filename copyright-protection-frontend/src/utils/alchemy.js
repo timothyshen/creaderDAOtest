@@ -1,7 +1,7 @@
 // import * as constant from "../constant";
 import axios from "axios";
-const apiKey = import.meta.env.VITE_ALCHEMY_RINKEBY_API_KEY;
-const baseURL = `https://eth-rinkeby.alchemyapi.io/v2/${apiKey}/getNFTs`;
+const apiKey = import.meta.env.VITE_ALCHEMY_POLYGON_API_KEY;
+const baseURL = `https://polygon-mumbai.g.alchemy.com/v2/${apiKey}/getNFTs`;
 export const getAlchemy = async (owner, contractAddress, retryAttempt) => {
     if (retryAttempt > 0) {
         return await getAlchemy(owner, contractAddress, retryAttempt - 1);

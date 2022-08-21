@@ -2,6 +2,7 @@ const {expect} = require("chai");
 const {parseEther} = require('ethers/lib/utils');
 const {waffle, ethers} = require("hardhat");
 const hre = require("hardhat");
+const {BigNumber} = require("ethers");
 
 describe("New Copyright contract", function () {
     let contract;
@@ -22,11 +23,8 @@ describe("New Copyright contract", function () {
 
     describe("Check default value at deployment", function () {
         it("Total covers should be 0", async function () {
-            expect(await contract.nextCoverId()).to.equal(1);
-        });
-
-        it("BaseURI should be same as preset", async function () {
-            expect(await contract.contractURI()).to.include(metadata);
+            expect(await contract._coverIds()).to.equal(BigNumber.from(0));
+            console.log(await contract._coverIds());
         });
 
         it("Name should be same as preset", async function () {
@@ -38,15 +36,14 @@ describe("New Copyright contract", function () {
         });
 
         it("Cover id should start from 1", async function () {
-            expect(await contract.nextCoverId()).to.equal(1);
+            expect(await contract._coverIds()).to.equal(0);
         });
     })
 
     describe("Check cover creation", function () {
         it("Should create a new cover", async function () {
             await contract.createCopyright("Test cover", "Test author", "Active");
-            expect(await contract.nextCoverId()).to.equal(2);
-
+            expect(await contract._coverIds()).to.equal(1);
             it("Should create a NFT", async function () {
                 expect(await contract.tokenToCover(1)).to.equal(1);
             });
@@ -60,7 +57,7 @@ describe("New Copyright contract", function () {
             for (let i = 0; i < 10; i++) {
                 await contract.createCopyright("Test cover", "Test author", "Active");
             }
-            expect(await contract.getAllCoypright()).to.have.lengthOf(11);
+            expect(await contract.getAllCoypright()).to.have.lengthOf(10);
         });
 
         it("should get all covers by author", async function () {
@@ -74,9 +71,7 @@ describe("New Copyright contract", function () {
         it("should get all NFTs", async function () {
             await contract.createCopyright("Test cover", "Test author", "Active");
             await contract.createCopyright("cover", "author", "Active");
-            expect(await contract.fetchUserNFT()).to.have.lengthOf(2);
-
-            expect(await contract.tokenURI(1)).to.include(metadata);
+            expect(await contract.tokenURI(1)).to.exist;
         });
 
         it("should get cover by NFT id", async function () {

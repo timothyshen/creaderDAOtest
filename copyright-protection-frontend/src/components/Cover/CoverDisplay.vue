@@ -3,7 +3,7 @@
     <el-col :span="16" :offset="4">
       <h2 class="font-medium leading-tight text-2xl mt-0 mb-2 ml-2 text-black text-left ">My Covers</h2>
       <el-divider></el-divider>
-      <div v-if="getAuthorCovers.length != 0" v-for="cover in getAuthorCovers">
+      <div v-if="getAuthorCovers.length !== 0" v-for="cover in getAuthorCovers">
         <el-row class="grid-content" :gutter="20">
           <el-col :span="8">
             <span class="item-span">Cover title</span>
@@ -48,7 +48,6 @@
             <button type="button"
                     class="w-full inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded-full shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
                     @click="handleCreate('cover_create')">
-            >
               Create
             </button>
           </el-col>
@@ -74,6 +73,7 @@ export default {
     this.$store.dispatch("wallet/ethereumListener");
     this.$store.dispatch("cover/getCoverNum");
     this.$store.dispatch("cover/getAuthorCover");
+    this.$store.dispatch("cover/getAllCover");
   },
   methods: {
     handleClick(type, cover) {
@@ -122,8 +122,5 @@ export default {
   font-size: large;
 }
 
-.item-button-group {
-  text-align: right;
-}
 
 </style>

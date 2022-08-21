@@ -72,12 +72,15 @@
           <el-main>
 
             <span>Table of content</span>
-            <div v-if="chapterConfirmed">
+            <div v-if="chapterConfirmed && tableContent.length > 0">
               <div v-for="item in tableContent">
                 <div class="w-1/4 text-center h-10 bg-amber-100 p-2 rounded">
                   <a @click="toChapter(item.transactionId)">{{ item.buffer.title }}</a>
                 </div>
               </div>
+            </div>
+            <div v-else-if="chapterConfirmed && tableContent.length === 0">
+              <h2>No chapter found...</h2>
             </div>
             <div v-else>
               <h2>Loading... Waiting for Arweave confirmation</h2>
@@ -139,6 +142,7 @@ export default {
       try{
         this.tableContent = await searchArweave(this.getCover.title);
         this.chapterConfirmed = true;
+        console.log(this.tableContent.length);
       } catch (e) {
         this.chapterConfirmed = false;
       }
