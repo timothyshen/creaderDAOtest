@@ -1,11 +1,16 @@
 <template>
-
-  <div v-if="getAccessToken.quantity > 1">
-    <div>Total Supply</div>
-    <div>{{ getAccessToken.numSold }} / {{ getAccessToken.quantity }}</div>
-    <div>{{ this.weiToEther()}} ETH</div>
-    <el-button :loading="loading" @click="mintNFT(this.weiToEther())">{{ mint }}</el-button>
+<section class="flex flex-wrap justify-center">
+  <div class="w-3/4 m-4 h-60 bg-indigo-50 rounded-3xl">
+    <div v-if="getAccessToken.quantity > 1" class="top-10 text-center m-4">
+      <div>Total Supply</div>
+      <div>{{ getAccessToken.numSold }} / {{ getAccessToken.quantity }}</div>
+      <div>{{ this.weiToEther()}} Matic</div>
+      <el-button :loading="loading" @click="mintNFT(this.weiToEther())">{{ mint }}</el-button>
+    </div>
   </div>
+
+</section>
+
 </template>
 
 <script>
@@ -50,7 +55,6 @@ export default {
             this.getAccessToken.id,
             {
               from: this.getActiveAccount,
-              gasLimit: 1000000,
               value: ethers.utils.parseEther(price)
             }
         )

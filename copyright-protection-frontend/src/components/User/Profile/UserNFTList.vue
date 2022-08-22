@@ -15,9 +15,8 @@
       <div class="w-1/4 mr-3 mb-4 bg-slate-100 rounded-md" v-for="nft in nftDetail">
         <!--        <img class='w-full rounded-t-md' :key="nft.id" :src="nft.media[0].gateway">-->
         <img class='w-full rounded-t-md' :key="nft.id"
-             src="https://bafkreihdl5mexbqpc7yn5bcjfd7qdzqtoicynujp3gfvbhpvusdua3quue.ipfs.nftstorage.link/"
+             :src="nft.media[0].gateway"
             alt="Copyright NFT">
-        >
         <div class="p-3">
           <div class="flex mb-3">
             <div class="flex-grow">
@@ -40,7 +39,7 @@
       <div class="w-1/4 mr-3 mb-4 bg-slate-100 rounded-md" v-for="nft in accessTokenDetail">
         <!--        <img class='w-full rounded-t-md' :key="nft.id" :src="nft.media[0].gateway">-->
         <img class='w-full rounded-t-md' :key="nft.id"
-             src="https://bafkreihdl5mexbqpc7yn5bcjfd7qdzqtoicynujp3gfvbhpvusdua3quue.ipfs.nftstorage.link/"
+             :src="nft.media[0].gateway"
              alt="Access right NFT">
         <div class="p-3">
           <div class="flex mb-3">
@@ -91,6 +90,8 @@ export default {
       const nfts = await getAlchemy(this.getActiveAccount, COPYRIGHT_NFT_CONTRACT_ADDRESS_POLY);
       this.nftDetail = nfts.ownedNfts;
       this.totalCount = nfts.totalCount;
+      // console.log(this.nftDetail);
+      // console.log(this.nftDetail.media[0].gateway);
     },
     async fetchAccessToken() {
       const nfts = await getAlchemy(this.getActiveAccount, ACCESS_TOKEN_CONTRACT_ADDRESS_POLY);
