@@ -92,6 +92,7 @@ const getData = async (txId) => {
 };
 
 export const searchArweave = async (bookTitle, address=null  ) => {
+    // TODO: if search fail it should return some data
     return new Promise(async (resolve, reject) => {
         try {
             console.log(bookTitle);

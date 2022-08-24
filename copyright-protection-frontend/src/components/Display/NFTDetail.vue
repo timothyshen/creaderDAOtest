@@ -1,4 +1,5 @@
 <template>
+  <!--TODO: reformate the style-->
 <section class="flex flex-wrap justify-center">
   <div class="w-3/4 m-4 h-60 bg-indigo-50 rounded-3xl">
     <div v-if="getAccessToken.quantity > 1" class="top-10 text-center m-4">

@@ -90,8 +90,7 @@ export default {
       const nfts = await getAlchemy(this.getActiveAccount, COPYRIGHT_NFT_CONTRACT_ADDRESS_POLY);
       this.nftDetail = nfts.ownedNfts;
       this.totalCount = nfts.totalCount;
-      // console.log(this.nftDetail);
-      // console.log(this.nftDetail.media[0].gateway);
+
     },
     async fetchAccessToken() {
       const nfts = await getAlchemy(this.getActiveAccount, ACCESS_TOKEN_CONTRACT_ADDRESS_POLY);
