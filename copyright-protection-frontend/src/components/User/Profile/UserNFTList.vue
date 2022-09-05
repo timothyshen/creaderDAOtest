@@ -99,6 +99,7 @@ export default {
         let tokenId = nft.id.tokenId;
         this.$store.dispatch("accessToken/addTokentoHolding", tokenId);
       });
+      console.log(this.accessTokenDetail);
       this.totalCount += nfts.totalCount;
     },
     sliceString(string) {
