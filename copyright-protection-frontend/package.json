@@ -23,6 +23,7 @@
     "@vue-hero-icons/outline": "^1.7.2",
     "alchemy-sdk": "^2.0.1",
     "ardb": "^1.1.8",
+    "arseeding-arbundles": "^0.6.19",
     "arweave": "^1.10.22",
     "axios": "^0.27.2",
     "cors": "^2.8.5",

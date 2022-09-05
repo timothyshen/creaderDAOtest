@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import {onBeforeMount} from "vue";
 
 const routes = [
     {
@@ -53,6 +54,7 @@ const routes = [
     },
 
 ];
+onBeforeMount(())
 
 const router = createRouter({
     history: createWebHistory(),
