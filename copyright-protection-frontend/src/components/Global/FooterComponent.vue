@@ -32,20 +32,21 @@
     </div>
     <div class="text-center p-6 bg-gray-200">
       <span>© 2021 Copyright:</span>
-      <a class="text-gray-600 font-semibold" href="https://Creader.io/">CreaderDAO</a>
+      <a class="text-gray-600 font-semibold" :href="links.redirect">CreaderDAO</a>
     </div>
   </footer>
 </template>
 
 <script>
 export default {
-  name: "footer_component",
+  name: "FooterComponent",
   data() {
     return {
       links: {
-        twitter: '',
-        discord: '',
-        github: 'https://github.com/timothyshen/creaderDAOtest'
+        twitter: 'https://twitter.com/CreaderDao',
+        discord: 'https://discord.gg/QSukBUCwzc',
+        github: 'https://github.com/timothyshen/creaderDAOtest',
+        redirect: 'https://www.creader.io/'
       }
     }
   }

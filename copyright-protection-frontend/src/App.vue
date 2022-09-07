@@ -2,13 +2,13 @@
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 import PageHeader from "./components/Global/PageHeader.vue";
-import footer_component from "./components/Global/footer_component.vue";
+import FooterComponent from "./components/Global/FooterComponent.vue";
 </script>
 
 <template>
   <div id="app">
     <PageHeader></PageHeader>
-    <router-view v-slot="{ Component }">
+    <router-view v-slot="{ Component }" id="page_content">
       <suspense>
         <div>
           <component :is="Component" />
@@ -17,7 +17,7 @@ import footer_component from "./components/Global/footer_component.vue";
       </suspense>
     </router-view>
     <el-backtop :right="100" :bottom="100" />
-    <footer_component></footer_component>
+    <FooterComponent></FooterComponent>
   </div>
 
 
@@ -30,5 +30,10 @@ import footer_component from "./components/Global/footer_component.vue";
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+}
+
+#page_content{
+  min-height: 1920px;
+  margin-bottom: 100px;
 }
 </style>
