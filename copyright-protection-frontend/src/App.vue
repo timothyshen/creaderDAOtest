@@ -16,7 +16,7 @@ import FooterComponent from "./components/Global/FooterComponent.vue";
 
       </suspense>
     </router-view>
-    <el-backtop :right="100" :bottom="100" />
+    <el-backtop class="hidden md:flex" :right="50" :bottom="50" />
     <FooterComponent></FooterComponent>
   </div>
 
