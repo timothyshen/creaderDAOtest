@@ -7,6 +7,7 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/utils/Base64.sol";
 import "./NewCopyright.sol";
+import "hardhat/console.sol";
 
 contract AccessToken is ERC721URIStorage, ERC721Enumerable {
     using Strings for uint256;
@@ -198,9 +199,10 @@ contract AccessToken is ERC721URIStorage, ERC721Enumerable {
             '<style>.base { fill: white; font-family: serif; font-size: 14px; }</style>',
             '<rect width="100%" height="100%" fill="black" />',
             '<text x="50%" y="40%" class="base" dominant-baseline="middle" text-anchor="middle">',"Title: ", coverTitle ,'</text>',
-            '<text x="50%" y="50%" class="base" dominant-baseline="middle" text-anchor="middle">', "Membership ID: #", _tokenId ,'</text>',
+            '<text x="50%" y="50%" class="base" dominant-baseline="middle" text-anchor="middle">', "Membership ID: #", _tokenId.toString() ,'</text>',
             '</svg>'
         );
+        console.log("MembershipImage", string(MembershipImage));
         return string(
             abi.encodePacked(
                 "data:image/svg+xml;base64,",

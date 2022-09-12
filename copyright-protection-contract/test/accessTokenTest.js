@@ -18,8 +18,11 @@ describe("Access token contract", function () {
         [owner, user1, user2, ...addrs] = await ethers.getSigners();
         metadata = "ipfs://bafkreihdl5mexbqpc7yn5bcjfd7qdzqtoicynujp3gfvbhpvusdua3quue;"
         // Create the Copyright contract
+        let ContractFactory = await ethers.getContractFactory("NewCopyright", owner);
+        let contract = await ContractFactory.deploy(metadata, "CreaderDAO Copyright", "CRD");
+        await contract.deployed();
         Membership = await ethers.getContractFactory("AccessToken", owner);
-        membershipContract = await Membership.deploy(metadata, "CreaderDAOAccess", "CRDAT");
+        membershipContract = await Membership.deploy(contract.address, metadata, "CreaderDAOAccess", "CRDAT");
 
     });
 
