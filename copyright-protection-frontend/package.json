@@ -25,6 +25,7 @@
     "alchemy-sdk": "^2.0.1",
     "ardb": "^1.1.8",
     "arseeding-arbundles": "^0.6.19",
+    "arseeding-js": "^0.0.14",
     "arweave": "^1.10.22",
     "axios": "^0.27.2",
     "cors": "^2.8.5",

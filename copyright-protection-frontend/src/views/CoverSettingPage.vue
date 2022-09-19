@@ -1,13 +1,14 @@
 <template>
   <div class="container-setting">
     <el-container>
-      <el-header>
-        <profile-display></profile-display>
-      </el-header>
+
+      <el-aside width="200px">
+        <BookSideDisplay></BookSideDisplay>
+      </el-aside>
       <el-container>
-        <el-aside width="200px">
-          <BookSideDisplay></BookSideDisplay>
-        </el-aside>
+        <el-header class="mb-2">
+          <profile-display></profile-display>
+        </el-header>
         <el-main>
           <cover-setting></cover-setting>
         </el-main>

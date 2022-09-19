@@ -1,13 +1,16 @@
 <template>
   <el-row :gutter="20">
     <el-col>
-      <h1>{{}} Setting</h1>
-      <el-form ref="form" :model="coverUpdate" label-width="80px">
+      <h3 class="font-medium leading-tight text-3xl mt-0 mb-2 text-black mb-5"> Setting</h3>
+      <el-form ref="form" :model="coverUpdate" label-width="160px">
         <el-form-item label="Title">
           <el-input v-model="coverUpdate.title"></el-input>
         </el-form-item>
         <el-form-item label="Short description">
-          <el-input v-model="coverUpdate.description"></el-input>
+          <el-input
+              :autosize="{ minRows: 2, maxRows: 4 }"
+              type="textarea"
+              v-model="coverUpdate.description"></el-input>
         </el-form-item>
         <el-button @click="handleUpdate()">
           Update

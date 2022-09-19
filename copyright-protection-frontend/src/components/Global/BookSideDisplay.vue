@@ -1,16 +1,16 @@
 <template>
   <div>
-    <div>
+    <div class="text-lg mb-2">
       <el-page-header content="Cover" @back="goBack" />
     </div>
-    <div>
+    <div class="my-4 leading-normal">
       <el-image
           src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
           fit="fill"
       ></el-image>
     </div>
-    <div>
-      <p>Book Name:</p>
+    <div class="text-left leading-relaxed	mb-2">
+      <p class="font-bold">Book Name:</p>
       <p>{{ getCover.title }}</p>
     </div>
     <div>

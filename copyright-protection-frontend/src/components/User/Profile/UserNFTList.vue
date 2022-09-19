@@ -88,6 +88,7 @@ export default {
   methods: {
     async fetchCopyrightNFTs() {
       const nfts = await getAlchemy(this.getActiveAccount, COPYRIGHT_NFT_CONTRACT_ADDRESS_POLY);
+      console.log(nfts);
       this.nftDetail = nfts.ownedNfts;
       this.totalCount = nfts.totalCount;
 
@@ -95,6 +96,7 @@ export default {
     async fetchAccessToken() {
       const nfts = await getAlchemy(this.getActiveAccount, ACCESS_TOKEN_CONTRACT_ADDRESS_POLY);
       this.accessTokenDetail = nfts.ownedNfts;
+      console.log(nfts);
       this.accessTokenDetail.forEach(nft => {
         let tokenId = nft.id.tokenId;
         this.$store.dispatch("accessToken/addTokentoHolding", tokenId);

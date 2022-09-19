@@ -3,6 +3,7 @@
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 import PageHeader from "./components/Global/PageHeader.vue";
 import FooterComponent from "./components/Global/FooterComponent.vue";
+
 </script>
 
 <template>

@@ -1,5 +1,5 @@
 <template>
-  <el-row class="grid-content  leading-6" :gutter="20">
+  <el-row class="grid-content  leading-6 ml" :gutter="20" >
     <el-col class="profile-avatar" :offset="4" :span="2">
       <el-avatar>
       </el-avatar>
