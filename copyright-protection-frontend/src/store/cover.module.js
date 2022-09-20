@@ -61,7 +61,7 @@ const actions = {
             console.log(error);
         }
     },
-    async getSpecicCover({commit}, id) {
+    async getSpecificCover({commit}, id) {
       try {
         const provider = await getProviderOrSigner();
         const contract = getCopyrightNFTContract(provider);

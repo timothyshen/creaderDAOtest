@@ -1,5 +1,5 @@
 <template>
-  <el-row :gutter="20">
+  <el-row :gutter="20" class="mt-3">
     <el-col :span="12" :offset="6">
       <el-row :gutter="24" class="book_detail">
         <el-col :span="6">
@@ -14,8 +14,8 @@
               <div>
                 <!--                <h1 class="title">{{this.book_info.title}}</h1>-->
                 <!--                <h2 class="subtitle">{{ book_info ? book_info.author.username : '' }}</h2>-->
-                <h1>
-                  {{ this.getCover.title ? "The King of Drugs" : "" }}
+                <h1 class="font-medium leading-tight text-5xl mt-0 mb-5">
+                  {{ this.getCover.title ? this.getCover.title : "The King of Drugs" }}
                 </h1>
                 <h2>
                   <!--                  {{ sliceString(this.getCover.owner) ? sliceString(this.getCover.owner) : "Test cover" }}-->
@@ -26,7 +26,7 @@
             <div class="short_des">
               <!--              <p>{{ this.book_info.description }}</p>-->
               <p>{{
-                  this.getCover.description ? "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempus mi vestibulum erat interdum, in convallis sapien convallis. Donec arcu massa, pulvinar ac ante id, fringilla venenatis augue. Nam vitae auctor mi, at facilisis lectus. Suspendisse potenti. Aenean convallis nisl justo, nec euismod tortor ornare tempus. " : "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempus mi vestibulum erat interdum, in convallis sapien convallis. Donec arcu massa, pulvinar ac ante id, fringilla venenatis augue. Nam vitae auctor mi, at facilisis lectus. Suspendisse potenti. Aenean convallis nisl justo, nec euismod tortor ornare tempus. "
+                  this.getCover.description ? this.getCover.description : ''
                 }}</p>
             </div>
             <el-divider></el-divider>
@@ -71,10 +71,10 @@
         <el-col>
           <el-main>
 
-            <span>Table of content</span>
-            <div v-if="chapterConfirmed && tableContent.length > 0">
+            <h2 class="my-5 text-center text-2xl font-bold text-gray-500">Table of content</h2>
+            <div v-if="chapterConfirmed && tableContent.length > 0" class="grid grid-cols-4 gap-2">
               <div v-for="item in tableContent">
-                <div class="w-1/4 text-center h-10 bg-amber-100 p-2 rounded">
+                <div class="w-full block text-center h-10 bg-amber-100 p-2 m-2 rounded hover:cursor-pointer">
                   <a @click="toChapter(item.transactionId)">{{ item.buffer.title }}</a>
                 </div>
               </div>
@@ -132,14 +132,14 @@ export default {
     ...mapGetters("accessToken", ["getAccessToken", "getCurrentHolding"])
   },
   async created() {
-    await this.$store.dispatch("cover/getSpecicCover", this.$route.params.id);
+    await this.$store.dispatch("cover/getSpecificCover", this.$route.params.id);
     this.$store.dispatch("accessToken/retrieveAccessToken", this.$route.params.id);
     await this.searchArweave();
     await this.checkAccess();
   },
   methods: {
     async searchArweave() {
-      try{
+      try {
         this.tableContent = await searchArweave(this.getCover.title);
         this.chapterConfirmed = true;
         console.log(this.tableContent.length);

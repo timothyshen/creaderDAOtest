@@ -39,7 +39,7 @@ export default {
     ...mapGetters("cover", ["getCover"]),
   },
   created() {
-    this.$store.dispatch("cover/getSpecicCover", this.$route.params.id);
+    this.$store.dispatch("cover/getSpecificCover", this.$route.params.id);
     this.searchArweave();
   },
   methods: {
@@ -49,9 +49,7 @@ export default {
       this.isLoading = false;
     },
     backToCover() {
-      this.$router.push({
-        name: "home",
-      });
+      this.$router.go(-1);
     },
   },
 }
