@@ -1,7 +1,6 @@
 <template>
   <div class="container-setting">
-    <el-container>
-
+    <el-container class="mt-10">
       <el-aside width="200px">
         <BookSideDisplay></BookSideDisplay>
       </el-aside>

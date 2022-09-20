@@ -17,21 +17,41 @@
       change chain
     </button>
     <div v-if="getIsConnected && getChainId === '0x13881'">
-      <img
-          class="inline-block h-10 w-10 rounded-full ring-2 ring-white focus:ring-black hover:ring-black hover:cursor-pointer"
-          src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
-          alt="user avatar"
-          @click="handleProfile"/>
-      <a href="#"
-         class="w-full whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-gray-600 bg-amber-300 hover:bg-amber-500 md:w-2/5 md:ml-4"
-         @click="handleDashboard">
-        Dashboard
-      </a>
-      <a href="#"
-         class="ml-2 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-gray-600 bg-amber-300 hover:bg-amber-500"
-         @click="disconnectWeb3Modal">
-        Disconnect {{ getActiveAccount.substring(0, 7) }}...
-      </a>
+      <el-popover
+          :width="300"
+          popper-style="box-shadow: rgb(14 18 22 / 35%) 0px 10px 38px -10px, rgb(14 18 22 / 20%) 0px 10px 20px -15px; padding: 20px;"
+      >
+        <template #reference>
+          <img
+              class="inline-block h-10 w-10 rounded-full ring-2 ring-white focus:ring-black hover:ring-black hover:cursor-pointer"
+              src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
+              alt="user avatar"
+              />
+        </template>
+        <template #default>
+          <div>
+            <a
+                class="w-full my-2 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-gray-600 bg-amber-300 hover:bg-amber-500"
+                @click="handleProfile"
+            >
+              Profile
+            </a>
+            <a
+                class="w-full my-2 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-gray-600 bg-amber-300 hover:bg-amber-500"
+                @click="handleDashboard"
+            >
+              Dashboard
+            </a>
+            <a
+                class=" w-full my-2 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-gray-600 bg-amber-300 hover:bg-amber-500"
+                @click="disconnectWeb3Modal">
+              Disconnect
+            </a>
+          </div>
+        </template>
+      </el-popover>
+      <span> Username </span>
+      <span> {{getActiveAccount.substring(0,7)}} ... </span>
     </div>
   </div>
 </template>
