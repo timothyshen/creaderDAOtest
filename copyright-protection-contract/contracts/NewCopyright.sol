@@ -70,6 +70,12 @@ contract NewCopyright is ERC721URIStorage {
         string memory _description,
         string memory _status
     ) external {
+        /*
+        * @dev Create a new cover
+        * @param _title string
+        * @param _description string
+        * @param _status string
+        */
         require(bytes(_title).length > 0, "Title must be non-empty");
         require(bytes(_description).length > 0, "Description must be non-empty");
         require(bytes(_status).length > 0, "Status must be non-empty");
@@ -89,6 +95,10 @@ contract NewCopyright is ERC721URIStorage {
     }
 
     function mintCopyright(uint256 coverId) public {
+        /*
+        * @dev Mint a new token
+        * @param coverId uint256
+        */
         // Check that the Cover exists.
         require(bytes(covers[coverId].title).length > 0, "Cover does not exist");
         require(covers[coverId].owner == msg.sender, "Caller is not the owner");
@@ -112,6 +122,13 @@ contract NewCopyright is ERC721URIStorage {
 
 
     function updateCover(uint256 _id, string memory _title, string memory _description) external onlyOwner(_id) returns (uint256)  {
+        /*
+        * @dev Update a cover
+        * @param _id uint256
+        * @param _title string
+        * @param _description string
+        */
+
         Cover storage cover = covers[_id];
         cover.title = _title;
         cover.description = _description;
@@ -120,6 +137,9 @@ contract NewCopyright is ERC721URIStorage {
     }
 
     function getAllCoypright() public view returns (Cover[] memory) {
+        /*
+        * @dev Get all covers
+        */
         uint coverId = _coverIds.current();
         Cover[] memory result = new Cover[](coverId);
         for (uint256 i = 0; i < coverId; i++) {
@@ -151,6 +171,9 @@ contract NewCopyright is ERC721URIStorage {
     }
 
     function getAuthorCover() external view returns (Cover[] memory){
+        /*
+        * @dev Get all covers by author
+        */
         uint256 resultCount;
         for (uint256 i = 0; i < _coverIds.current(); i++) {
             if (covers[i].owner == msg.sender) {
@@ -174,6 +197,11 @@ contract NewCopyright is ERC721URIStorage {
     // ############## Token URI Function###############
 
     function generateCoverImage(uint256 tokenId) public view returns (string memory) {
+        /*
+        * @dev Generate cover image
+        * @param tokenId uint256
+        */
+
         bytes memory coverImage = abi.encodePacked(
             '<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMin meet" viewBox="0 0 350 350">',
             '<style>.base { fill: white; font-family: serif; font-size: 14px; }</style>',
@@ -190,15 +218,13 @@ contract NewCopyright is ERC721URIStorage {
         );
     }
 
-    //    function getSVGToImageURI(string memory svg) public returns (string memory) {
-    //        string memory baseURL = "data:image/svg+xml;base64,";
-    //        string memory svgBase64Encoded = Base64.encode(bytes(abi.encodePacked(svg)));
-    //        string memory imageURI = abi.encodePacked(baseURI, svgBase64Encoded)
-    //        return imageURI;
-    //    }
-
 
     function getTokenURI(uint tokenId) public view returns (string memory) {
+        /*
+        * @dev Get token URI
+        * @param tokenId uint256
+        */
+
         bytes memory dataURI = abi.encodePacked(
             '{',
             '"name": "CreaderDAO Copyright ', getTitleByToken(tokenId), ' #', tokenId.toString(), '",',

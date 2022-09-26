@@ -26,28 +26,26 @@ describe("Access token contract", function () {
 
     });
 
-    // describe("Check default value at deployement", function () {
-    //     it("Total Membership should be 0", async function () {
-    //         expect(membershipContract.memberships()).to.have.lengthOf(0);
-    //     });
-    //     it("BaseURI should be same as preset", async function () {
-    //         expect(await membershipContract.contractURI()).to.include(metadata);
-    //     });
-    //
-    //     it("Name should be same as preset", async function () {
-    //         expect(await membershipContract.name()).to.equal("CreaderDAOAccess");
-    //     });
-    //
-    //     it("Symbol should be same as preset", async function () {
-    //         expect(await membershipContract.symbol()).to.equal("CRDAT");
-    //     });
-    //
-    //     // it("Membership id should start from 1", async function () {
-    //     //     expect(await membershipContract.nextMembershipId()).to.equal(1);
-    //     // });
-    //
-    //
-    // });
+    describe("Check default value at deployement", function () {
+        it("Total Membership should be 0", async function () {
+            expect(membershipContract.memberships()).to.have.lengthOf(0);
+        });
+        it("BaseURI should be same as preset", async function () {
+            expect(await membershipContract.contractURI()).to.include(metadata);
+        });
+
+        it("Name should be same as preset", async function () {
+            expect(await membershipContract.name()).to.equal("CreaderDAOAccess");
+        });
+
+        it("Symbol should be same as preset", async function () {
+            expect(await membershipContract.symbol()).to.equal("CRDAT");
+        });
+
+        // it("Membership id should start from 1", async function () {
+        //     expect(await membershipContract.nextMembershipId()).to.equal(1);
+        // });
+    });
 
     describe("Check Membership creation", function () {
         // should create a new membership

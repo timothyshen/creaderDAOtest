@@ -10,6 +10,9 @@ require("@nomiclabs/hardhat-etherscan");
 require("dotenv").config({ path: ".env" });
 
 async function NFTcontract() {
+    /*
+     this is the NFT contract deployment function
+     */
     const metadata = "ipfs://bafkreihdl5mexbqpc7yn5bcjfd7qdzqtoicynujp3gfvbhpvusdua3quue"
     const ContractFactory = await hre.ethers.getContractFactory("NewCopyright");
     const contract = await ContractFactory.deploy(metadata,"CreaderDAO Copyright", "CRD");
@@ -24,6 +27,9 @@ async function NFTcontract() {
 }
 
 async function AccessToken(nftAddress) {
+    /*
+    this is the access token contract deployment function
+    */
     const metadata = "ipfs://bafkreihdl5mexbqpc7yn5bcjfd7qdzqtoicynujp3gfvbhpvusdua3quue"
     const ContractFactory = await hre.ethers.getContractFactory("AccessToken");
     const contract = await ContractFactory.deploy(nftAddress, metadata,"CreaderDAOAccess", "CRDAT");

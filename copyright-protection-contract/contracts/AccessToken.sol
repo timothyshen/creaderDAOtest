@@ -94,6 +94,12 @@ contract AccessToken is ERC721URIStorage, ERC721Enumerable {
     // The account that should receive the revenue.
         address payable fundingRecipient
     ) external OnlyOwner(coverId) {
+        /*
+        Create a new membership.
+        */
+        require(quantity > 0, "Quantity must be greater than 0");
+        require(price > 0, "Price must be greater than 0");
+        require(fundingRecipient != address(0), "Recipient must be non-zero address");
 
         memberships[nextMembershipId] = Membership({
         id : nextMembershipId,
@@ -111,6 +117,7 @@ contract AccessToken is ERC721URIStorage, ERC721Enumerable {
 
 
     function buyMembership(uint256 membershipId) external payable {
+        /* Purchase the membership. */
         // Check that the membership exists. Note: this is redundant
         // with the next check, but it is useful for clearer error messaging.
         require(memberships[membershipId].quantity > 0, "Membership does not exist");
@@ -165,9 +172,12 @@ contract AccessToken is ERC721URIStorage, ERC721Enumerable {
 
     // ============ NFT Methods ============
 
-
-
     function getMembership(uint _coverId) public view returns (Membership memory) {
+        /*
+        * @dev Get membership of a cover
+        * @param _coverId The id of the cover
+        * @return Membership
+        */
         Membership memory membership;
         for (uint i = 1; i < nextMembershipId; i++) {
             if (memberships[i].coverId == _coverId) {
@@ -179,10 +189,21 @@ contract AccessToken is ERC721URIStorage, ERC721Enumerable {
 
 
     function totalSupply(uint id) public view returns (uint256) {
+        /*
+        * @dev Get total supply of a specific membership
+        * @param id The id of the membership
+        * @return uint256 total supply for a specific membership
+        */
         return memberships[id].quantity;
     }
 
     function isOwner(address _owner, uint _coverId) public view returns (bool) {
+        /*
+        * @dev Check if an address is the owner of a cover
+        * @param _owner The address of the owner
+        * @param _coverId The id of the cover
+        * @return bool
+        */
         uint256 membershipId = getMembership(_coverId).id;
         uint256 totalIdCount = _tokenIds.current();
         for (uint i = 0; i < totalIdCount; i++) {
@@ -194,6 +215,11 @@ contract AccessToken is ERC721URIStorage, ERC721Enumerable {
     }
 
     function generateMembershipImage(uint256 _tokenId) public view returns (string memory) {
+        /*
+        * @dev Generate a membership image
+        * @param _tokenId The id of the token
+        * @return string Encoded image abi
+        */
         bytes memory MembershipImage = abi.encodePacked(
             '<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMin meet" viewBox="0 0 350 350">',
             '<style>.base { fill: white; font-family: serif; font-size: 14px; }</style>',
@@ -211,6 +237,11 @@ contract AccessToken is ERC721URIStorage, ERC721Enumerable {
     }
 
     function getTokenURI(uint tokenId) public view returns (string memory) {
+        /*
+        * @dev Get token URI
+        * @param tokenId The id of the token
+        * @return string Token URI
+        */
         uint quality = memberships[tokenToMembership[tokenId]].quantity;
         bytes memory dataURI = abi.encodePacked(
             '{',
