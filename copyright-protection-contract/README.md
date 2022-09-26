@@ -23,9 +23,16 @@ The example file fore .env, this is a global environment configuration file for 
 ## contracts
 This folder contains all the contracts for the project
 
+### AccessToken.sol
+This is the contract for the access token, where the user can generate a membership collection with specific cover Id.
+
+### NewCopyright.sol
+This is the contract for the new copyright, where the user can generate a new copyright contract with specific cover Id.
+
 ## scripts
 This folder contains the deployment scripts operate by hardhat
 
 ## Test
 
 This folder contains all the test cases for the contracts.
+
