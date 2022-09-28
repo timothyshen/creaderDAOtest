@@ -14,10 +14,17 @@ const state = {
 }
 
 const getters = {
+
     getAccessToken(state) {
+        /*
+        * @dev: get access token
+         */
         return state.accessToken;
     },
     getNumberOfToken(state) {
+        /*
+        * @dev: get number of token
+         */
         return state.numberOfToken;
     },
     getQuantity(state) {

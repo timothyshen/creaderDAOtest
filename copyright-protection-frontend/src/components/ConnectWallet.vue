@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- Wallet Connect button -->
     <button
         type="button"
         class="flex w-full items-center justify-center rounded-md border border-transparent px-4 py-2 text-base font-medium shadow-sm text-white bg-yellow-400 hover:bg-gray-100 "
@@ -8,6 +9,7 @@
     >
       Connect with Wallet
     </button>
+    <!-- Change Chain button -->
     <button
         type="button"
         class="flex w-full items-center justify-center rounded-md border border-transparent px-4 py-2 text-base font-medium shadow-sm text-white bg-yellow-400 hover:bg-gray-100 transition duration-150 ease-in-out"
@@ -16,6 +18,7 @@
     >
       change chain
     </button>
+    <!-- Profile dropdown -->
     <div v-if="getIsConnected && getChainId === '0x13881'">
       <el-popover
           :width="300"
