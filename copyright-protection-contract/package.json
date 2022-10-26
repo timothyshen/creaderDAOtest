@@ -21,6 +21,7 @@
     "dotenv": "^16.0.1",
     "hardhat-deploy": "^0.11.10",
     "hardhat-gas-reporter": "^1.0.8",
-    "solidity-coverage": "^0.7.21"
+    "solidity-coverage": "^0.7.21",
+    "yarn": "^1.22.19"
   }
 }
