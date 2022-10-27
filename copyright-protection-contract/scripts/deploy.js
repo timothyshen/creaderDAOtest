@@ -9,28 +9,45 @@ const fs = require("fs");
 require("@nomiclabs/hardhat-etherscan");
 require("dotenv").config({ path: ".env" });
 
-const contract = ['Copyright'];
-
-async function publishContract(contractName) {
-
-    const ContractFactory = await hre.ethers.getContractFactory(contractName);
-    const contract = await ContractFactory.deploy();
+async function NFTcontract() {
+    /*
+     this is the NFT contract deployment function
+     */
+    const metadata = "ipfs://bafkreihdl5mexbqpc7yn5bcjfd7qdzqtoicynujp3gfvbhpvusdua3quue"
+    const ContractFactory = await hre.ethers.getContractFactory("NewCopyright");
+    const contract = await ContractFactory.deploy(metadata,"CreaderDAO Copyright", "CRD");
     const address = contract.address;
     await contract.deployed();
-    console.log(contractName + " contract address: " + address);
-
-    await sleep(10000);
-    await hre.run("verify:verify", {
-        address: address,
-        constructorArguments: [],
-    });
-
-    // copy the contract JSON file to front-end and add the address field in it
+    console.log("Copyright NFT contract address: " + address);
     fs.copyFileSync(
-        path.join(__dirname, "../artifacts/contracts/" + contractName + ".sol/" + contractName + ".json"), //source
-        path.join(__dirname, "../../copyright-protection-frontend/src/api/" + contractName + ".json") // destination
+        path.join(__dirname, "../artifacts/contracts/" + "NewCopyright" + ".sol/" + "NewCopyright" + ".json"), //source
+        path.join(__dirname, "../../copyright-protection-frontend/src/api/" + "NewCopyright" + ".json") // destination
+    );
+    return address;
+}
+
+async function AccessToken(nftAddress) {
+    /*
+    this is the access token contract deployment function
+    */
+    const metadata = "ipfs://bafkreihdl5mexbqpc7yn5bcjfd7qdzqtoicynujp3gfvbhpvusdua3quue"
+    const ContractFactory = await hre.ethers.getContractFactory("AccessToken");
+    const contract = await ContractFactory.deploy(nftAddress, metadata,"CreaderDAOAccess", "CRDAT");
+    const address = contract.address;
+    await contract.deployed();
+    console.log("AccessToken NFT contract address: " + address);
+    fs.copyFileSync(
+        path.join(__dirname, "../artifacts/contracts/" + "AccessToken" + ".sol/" + "AccessToken" + ".json"), //source
+        path.join(__dirname, "../../copyright-protection-frontend/src/api/" + "AccessToken" + ".json") // destination
     );
 
+    await sleep(30000);
+
+    // Verify the contract after deploying
+    await hre.run("verify:verify", {
+        address: contract.address,
+        constructorArguments: [nftAddress, metadata,"CreaderDAOAccess", "CRDAT"],
+    });
 }
 
 function sleep(ms) {
@@ -38,15 +55,8 @@ function sleep(ms) {
 }
 
 async function main() {
-    // Hardhat always runs the compile task when running scripts with its command
-    // line interface.
-    //
-    // If this script is run directly using `node` you may want to call compile
-    // manually to make sure everything is compiled
-    // await hre.run('compile');
-    for (cont of contract) {
-        await publishContract(cont);
-    }
+    let NFTaddress = await NFTcontract();
+    await AccessToken(NFTaddress);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

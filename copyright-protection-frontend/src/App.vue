@@ -1,16 +1,24 @@
 <script setup>
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-import ConnectWallet from "./components/ConnectWallet.vue";
-import RegisterCover from "./components/registerCover.vue";
-import DisplayBook from "./components/DisplayBook.vue";
+import PageHeader from "./components/Global/PageHeader.vue";
+import FooterComponent from "./components/Global/FooterComponent.vue";
+
 </script>
 
 <template>
   <div id="app">
-    <connect-wallet></connect-wallet>
-    <register-cover></register-cover>
-    <display-book></display-book>
+    <PageHeader></PageHeader>
+    <router-view v-slot="{ Component }" id="page_content">
+      <suspense>
+        <div>
+          <component :is="Component" />
+        </div>
+
+      </suspense>
+    </router-view>
+    <el-backtop class="hidden md:flex" :right="50" :bottom="50" />
+    <FooterComponent></FooterComponent>
   </div>
 
 
@@ -23,6 +31,10 @@ import DisplayBook from "./components/DisplayBook.vue";
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+}
+
+#page_content{
+  min-height: 1920px;
+  margin-bottom: 100px;
 }
 </style>

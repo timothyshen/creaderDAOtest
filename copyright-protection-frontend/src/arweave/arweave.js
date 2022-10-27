@@ -1,135 +1,121 @@
-import {initialize} from 'lib/arweave';
+import {initialize} from "./index";
+import ArDB from "ardb";
+import { cyrb53 } from "../utils/support.js";
 
 const arweave = initialize();
 const MIN_NUMBER_OF_CONFIRMATIONS = 2;
 
-const TransactionStatusE = {
-    CONFIRMED: 1,
-    NOT_CONFIRMED: 0,
 
-}
+export const createArweaveTrans = async (data, ethAddress, bookTitle) => {
+    try {
+        const wallet = import.meta.env.VITE_ARWEAVE_API_KEY;
+        const wallet_config = JSON.parse(wallet);
+        const transaction = await arweave.createTransaction({
+            data: data, wallet_config
+        });
+        transaction.addTag('App-Name', import.meta.env.VITE_APP_NAME);
+        bookTitle = cyrb53(bookTitle);
+        transaction.addTag('Content-Type', 'application/json');
+        transaction.addTag('Address', ethAddress);
+        transaction.addTag('Book-Title', bookTitle);
+        await arweave.transactions.sign(transaction, wallet_config);
+        let uploader = await arweave.transactions.getUploader(transaction);
 
-export const initArweave = async (data) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            const wallet = await JSON.parse(process.env.ARWEAVE_WALLET);
-            const transaction = await arweave.createTransaction({
-                data: data,
-                wallet
-            });
-            transaction.addTag('App-Name', process.env.APP_NAME);
-            transaction.addTag('Content-Type', 'application/json');
-            transaction.addTag('Address', address);
-
-            await arweave.transactions.sign(transaction, wallet);
-            await arweave.transactions.post(transaction);
-            return resolve(transaction.id);
-        } catch (e) {
-            console.error(e);
+        while (!uploader.isComplete) {
+            await uploader.uploadChunk();
+            console.log(`${uploader.pctComplete}% complete, ${uploader.uploadedChunks}/${uploader.totalChunks}`);
         }
-    });
-
+        console.log('Upload complete!');
+        return {transaction:transaction.id, status:true};
+    } catch (e) {
+        console.error(e);
+    }
 }
 
-export const getArweaveData = async (id) => {
+export const getArweaveData = (id) => {
     return new Promise(async (resolve, reject) => {
         try {
-
-            const txDataResp = (await arweave.transactions.getData(
-                id,
-                {
-                    decode: true,
-                    string: true,
-                },
-            ));
+            const txDataResp = await arweave.transactions.getData(id, {
+                decode: true, string: true,
+            });
             const txData = JSON.parse(txDataResp);
-
-            const txStatusResp = await arweave.transactions.getStatus(
-                id,
-            );
+            console.log(txData);
+            const txStatusRes = await arweave.transactions.getStatus(id);
+            console.log(txStatusRes);
             const txStatus =
-                txStatusResp.status === 200 &&
-                txStatusResp.confirmed &&
-                txStatusResp.confirmed.number_of_confirmations >=
-                MIN_NUMBER_OF_CONFIRMATIONS
-                    ? TransactionStatusE.CONFIRMED
-                    : TransactionStatusE.NOT_CONFIRMED;
+                txStatusRes.status === 200 &&
+                txStatusRes.confirmed &&
+                txStatusRes.confirmed.number_of_confirmations >= MIN_NUMBER_OF_CONFIRMATIONS
+                    ? 'confirmed'
+                    : 'pending';
+            console.log(txStatus);
 
-            if (txStatus === TransactionStatusE.CONFIRMED) {
+            if (txStatus !== 'confirmed') {
+                reject('Transaction not confirmed');
+            } else {
                 const tx = await arweave.transactions.get(id);
-
                 const tags = {};
-                (tx.get('tags')
-                ).forEach((tag) => {
+                (tx.get('tags')).forEach(tag => {
                     const key = tag.get('name', {decode: true, string: true});
                     tags[key] = tag.get('value', {decode: true, string: true});
                 });
 
-                const block = txStatusResp.confirmed
-                    ? await arweave.blocks.get(txStatusResp.confirmed.block_indep_hash)
+                const block = txStatusRes.confirmed
+                    ? await arweave.blocks.get(txStatusRes.confirmed.block_indep_hash)
                     : null;
-
-                await resolve.status(200).json({
+                console.log(block);
+                const blockTime = block.timestamp;
+                const txTimestamp = blockTime ? new Date(blockTime * 1000) : null;
+               await resolve({
                     id: id,
                     data: txData,
                     status: txStatus,
-                    timestamp: block?.timestamp,
+                    timestamp: txTimestamp,
                     tags,
-                });
-            } else {
-                throw new Error('Transaction not confirmed');
+                })
             }
         } catch (error) {
-            const errorMessage =
-                error instanceof Error ? error.message : "Unknown Error";
-            await reject.status(500).json(errorMessage);
+            const errorMessage = error instanceof Error ? error.message : "Unknown Error";
+            reject(errorMessage);
         }
     });
 }
 
-const getData = async (txId: string) => {
+
+const getData = async (txId) => {
     const buffer = (await arweave.transactions.getData(txId, {
-        decode: true,
-        string: true,
+        decode: true, string: true,
     }));
     return {
-        transactionId: txId,
-        buffer: JSON.parse(buffer),
+        transactionId: txId, buffer: JSON.parse(buffer),
     };
 };
 
-export default async function (
-    _req: NextApiRequest,
-    res: NextApiResponse<DataT[] | string>,
-): Promise<any> {
-    try {
-        const {query} = _req.query;
+export const searchArweave = async (bookTitle, address=null  ) => {
+    // TODO: if search fail it should return some data
+    return new Promise(async (resolve, reject) => {
+        try {
+            console.log(bookTitle);
+            const ardb = new ArDB(arweave);
+            const tags = [{name: 'App-Name', values: [import.meta.env.VITE_APP_NAME]}];
+            const searchAddress = address;
+            bookTitle = cyrb53(bookTitle);
+            bookTitle = bookTitle.toString();
 
-        // Initialize ArDB
-        // More information about ArDB can be found here: https://www.npmjs.com/package/ardb
+            if (searchAddress) {
+                tags.push({name: 'Address', values: [searchAddress]});
+                console.log(tags);
+            }
+            tags.push({name: 'Book-Title', values: [bookTitle]});
+            const txs = await ardb.search('transactions').tags(tags).find();
+            const promises = txs.map((tx) => getData(tx._id));
+            const data = await Promise.all(promises);
 
-        const ardb = new ArDB(arweave);
-        const tags = [{name: 'App-Name', values: [process.env.APP_NAME]}];
-
-        // Retrieve searchAddress
-        const searchAddress = query && query[0];
-        // Build tags
-
-        if (searchAddress) {
-            tags.push({name: 'Address', values: [searchAddress]});
+            resolve(data);
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : "Unknown Error";
+            await reject(errorMessage);
         }
+    });
+};
 
-        // Search for transaction withs App-Name and Address (optional) tags
-        // More information can be found here: https://www.npmjs.com/package/ardb
-        const txs = await ardb.search('transactions').tags(tags).limit(10).find();
-
-        const promises = txs.map((tx: any) => getData(tx._id));
-        const data = await Promise.all(promises);
-
-        await res.status(200).json(data);
-    } catch (error) {
-        const errorMessage =
-            error instanceof Error ? error.message : 'Unknown Error';
-        await res.status(500).json(errorMessage);
-    }
-}

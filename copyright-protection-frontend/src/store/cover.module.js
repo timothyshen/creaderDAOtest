@@ -1,19 +1,12 @@
-import {Contract, providers, BigNumber} from "ethers";
-import store from "./store";
-import {
-    getCopyrightContract,
-    getProviderOrSigner
-} from "../utils/support";
-
-import {
-    COPY_RIGHT_CONTRACT_ADDRESS,
-    COPY_RIGHT_CONTRACT_ABI
-} from "../constants";
+import {ethers} from "ethers";
+import {getCopyrightNFTContract, getProviderOrSigner} from "../utils/support";
 
 
 const state = {
     numberOfCovers: 0,
     covers: [],
+    authorCovers: [],
+    cover: {},
     loading: false,
 }
 
@@ -21,21 +14,27 @@ const getters = {
     getNumberOfCovers(state) {
         return state.numberOfCovers;
     },
-    getCover(state) {
+    getCovers(state) {
         return state.covers;
+    },
+    getAuthorCovers(state) {
+        return state.authorCovers;
     },
     getLoading(state) {
         return state.loading;
+    },
+    getCover(state) {
+        return state.cover;
     }
 }
 
 const actions = {
-    async getCovers({commit, rootState}) {
+    async getAllCover({commit}) {
         try {
-            const provider = await getProviderOrSigner();
-            const contract = getCopyrightContract(provider);
-            const cover = await contract.getAllcover();
-            console.log("cover",cover);
+            const { ethereum } = window;
+            const provider = await new ethers.providers.Web3Provider(ethereum);
+            const contract = getCopyrightNFTContract(provider);
+            const cover = await contract.getAllCoypright();
             commit("setCovers", cover);
 
         } catch (error) {
@@ -45,11 +44,39 @@ const actions = {
     async getCoverNum({commit}) {
         try {
             const provider = await getProviderOrSigner();
-            const contract = getCopyrightContract(provider);
-            console.log("contract", contract);
-            const number = await contract.numCovers();
-            console.log("number", number);
+            const contract = getCopyrightNFTContract(provider);
+            const number = await contract._coverIds();
             commit("setNumberOfCovers", number.toString());
+        } catch (error) {
+            console.log(error);
+        }
+    },
+    async getAuthorCover({commit}) {
+        try {
+            const signer = await getProviderOrSigner(true);
+            const contract = getCopyrightNFTContract(signer);
+            const cover = await contract.getAuthorCover();
+            commit("setAuthorCovers", cover);
+        } catch (error) {
+            console.log(error);
+        }
+    },
+    async getSpecificCover({commit}, id) {
+      try {
+        const provider = await getProviderOrSigner();
+        const contract = getCopyrightNFTContract(provider);
+        const cover = await contract.covers(id);
+        commit("setCover", cover);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getCoverByTokenId({commit}, id) {
+        try {
+            const provider = await getProviderOrSigner();
+            const contract = getCopyrightNFTContract(provider);
+            const cover = await contract.getCoverByToken(id);
+            commit("setCover", cover);
         } catch (error) {
             console.log(error);
         }
@@ -65,6 +92,12 @@ const mutations = {
     },
     setLoading(state, loading) {
         state.loading = loading;
+    },
+    setAuthorCovers(state, authorCovers) {
+        state.authorCovers = authorCovers;
+    },
+    setCover(state, cover) {
+        state.cover = cover;
     }
 }
 

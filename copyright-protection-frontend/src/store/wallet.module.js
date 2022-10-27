@@ -2,7 +2,6 @@
 
 import {ethers} from "ethers";
 import Web3Modal from "web3modal";
-import {getProviderOrSigner} from "../utils/support";
 
 
 const state = {
@@ -79,9 +78,7 @@ const actions = {
 
     async connectWeb3Modal({commit}) {
         let providerW3m = await state.web3Modal.connect();
-        console.log("provider", providerW3m);
         let provider = new ethers.providers.Web3Provider(providerW3m);
-        console.log("provider", provider);
         commit('setIsConnected', true);
         commit('setActiveAccount', window.ethereum.selectedAddress);
         commit('setChainData', window.ethereum.chainId);
@@ -131,7 +128,7 @@ const mutations = {
         state.providerW3m = null;
         await state.web3Modal.clearCachedProvider();
 
-        window.location.href = '../'; // redirect to the Main page
+        window.location.href = '/'; // redirect to the Main page
     },
 
     setActiveAccount(state, selectedAddress) {
@@ -163,8 +160,8 @@ const mutations = {
                 break;
             case "0x539": // 1337 (often used on localhost)
             case "0x1691": // 5777 (default in Ganache)
-            default:
-                state.chainName = "Localhost";
+            case "0x13881":
+                state.chainName = "Mumbai";
                 break;
         }
     },

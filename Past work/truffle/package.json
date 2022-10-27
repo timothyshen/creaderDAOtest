@@ -1,8 +1,0 @@
-{
-  "name": "smart contract",
-  "version": "1.0.0",
-  "dependencies": {
-    "ganache-cli": "^6.12.2",
-    "web3": "^1.7.0"
-  }
-}
