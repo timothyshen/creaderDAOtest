@@ -8,7 +8,7 @@ contract NFTFactory {
 
 
 
-    function CopyrightDepoly(address copyright, string memory baseURI, string memory name, string memory symbol){
+    function CopyrightDeploy(address copyright, string memory baseURI, string memory name, string memory symbol){
         require(accessCollections[msg.sender] == AccessToken(msg.sender), "Only one collection per book");
         accessCollections[msg.sender] = new AccessToken(copyright, baseURI, name, symbol);
     }
