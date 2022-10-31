@@ -1,29 +1,14 @@
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
-import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20BurnableUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20SnapshotUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/draft-ERC20Permit.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol";
 
-contract MyToken is Initializable, ERC20Upgradeable, ERC20BurnableUpgradeable, ERC20SnapshotUpgradeable, OwnableUpgradeable {
-    /// @custom:oz-upgrades-unsafe-allow constructor
-    constructor() {
-        _disableInitializers();
-    }
-
-    function initialize() initializer public {
-        __ERC20_init("MyToken", "MTK");
-        __ERC20Burnable_init();
-        __ERC20Snapshot_init();
-        __Ownable_init();
-
-        _mint(msg.sender, 10000000000 * 10 ** decimals());
-    }
-
-    function snapshot() public onlyOwner {
-        _snapshot();
-    }
+contract CreaderToken is ERC20, ERC20Burnable, Ownable, ERC20Permit, ERC20Votes {
+    constructor() ERC20("Creader", "CRD") ERC20Permit("Creader") {}
 
     function mint(address to, uint256 amount) public onlyOwner {
         _mint(to, amount);
@@ -31,10 +16,24 @@ contract MyToken is Initializable, ERC20Upgradeable, ERC20BurnableUpgradeable, E
 
     // The following functions are overrides required by Solidity.
 
-    function _beforeTokenTransfer(address from, address to, uint256 amount)
+    function _afterTokenTransfer(address from, address to, uint256 amount)
     internal
-    override(ERC20Upgradeable, ERC20SnapshotUpgradeable)
+    override(ERC20, ERC20Votes)
     {
-        super._beforeTokenTransfer(from, to, amount);
+        super._afterTokenTransfer(from, to, amount);
+    }
+
+    function _mint(address to, uint256 amount)
+    internal
+    override(ERC20, ERC20Votes)
+    {
+        super._mint(to, amount);
+    }
+
+    function _burn(address account, uint256 amount)
+    internal
+    override(ERC20, ERC20Votes)
+    {
+        super._burn(account, amount);
     }
 }
