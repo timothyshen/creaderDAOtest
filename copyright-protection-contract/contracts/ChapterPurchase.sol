@@ -21,8 +21,6 @@ contract ChapterPurchase {
         _;
     }
 
-
-
     function setTokenAddress(address _tokenAddress) public {
         tokenAddress = _tokenAddress;
     }
