@@ -1,3 +1,5 @@
 interface ChapterPurchaseInterface {
-    chapterId: string;
+    id: number;
+    address: string;
+    chapter
 }
